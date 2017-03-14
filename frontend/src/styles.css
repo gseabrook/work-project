@@ -1,0 +1,53 @@
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+div.container {
+    width: 500px;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+
+md-dialog-container.mat-dialog-container {
+    padding: 0px;
+}
+
+div.container {
+    width: 400px;
+    margin: 4em auto;
+    background: #fafafa;
+    border: 1px solid #ebebeb;
+    box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
+}
+
+div.md2-datepicker-header {
+    background: #673ab7 !important;
+}
+
+div.md2-button {
+    color: #673ab7 !important;
+}
+
+div.md2-calendar-day.today {
+    color: #673ab7 !important;
+}
+
+md2-datepicker:focus:not(.md2-datepicker-disabled) .md2-datepicker-input {
+    color: #673ab7 !important;
+    border-color: #673ab7 !important;
+}
+
+div.md2-datepicker-panel {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.md2-datepicker-icon {
+    display: none !important;
+}
+
+div.md2-datepicker-trigger {
+    padding-left: 0px !important;
+}
+
+@media (max-width: 600px) {
+    div.cdk-overlay-pane, md-dialog-container.mat-dialog-container {
+        width: 100%;
+        max-width: 100%;
+    }
+}

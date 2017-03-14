@@ -1,0 +1,19 @@
+table.material-table {
+	width: 100%;
+}
+
+table.material-table th {
+    color: rgba(0, 0, 0, 0.54);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    font-weight: 400;
+    text-align: left;
+}
+
+table.material-table td {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+div.container {
+	width: 750px;
+	min-height: 200px;
+}

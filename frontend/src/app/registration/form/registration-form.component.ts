@@ -1,0 +1,66 @@
+import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MdDialog } from '@angular/material';
+
+import { Registration } from '../model/registration';
+import { RegistrationService } from '../registration.service';
+import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
+
+
+@Component({
+	selector: 'registration-form',
+	templateUrl: './registration-form.component.html',
+	styleUrls: ['./registration-form.component.css']
+})
+export class RegistrationFormComponent {
+
+	constructor(
+		private registrationService: RegistrationService,
+		private dialog: MdDialog,
+		private location: Location,
+		private router: Router
+	) { }
+
+	model: Registration = Registration.newRegistration();
+
+	idTypes = [
+		{ value: 'PASSPORT_NUMBER', viewValue: 'Passport Number' },
+		{ value: 'NRIC', viewValue: 'NRIC' },
+		{ value: 'OLD_IC', viewValue: 'Old IC' },
+		{ value: 'BUSINESS_REGISTRATION_NUMBER', viewValue: 'Business Registration' }
+	];
+
+	bankNames = [
+		'Affin Bank', 'Bank Islam', 'Bank of America', 'Bank Rakyat', 'CIMB Bank', 'Citibank', 'Deutsche Bank', 'Hong Leong Bank',
+		'HSBC Bank', 'JPMorgan', 'Maybank', 'OCBC Bank', 'Public Bank', 'RHB Bank', 'Standard Chartered Bank', 'TPAREVENUE'
+	];
+
+	frequencyTypes = [
+		{ value: 'DAILY', viewValue: 'Daily' },
+		{ value: 'WEEKLY', viewValue: 'Weekly' },
+		{ value: 'MONTHLY', viewValue: 'Monthly' },
+		{ value: 'QUARTERLY', viewValue: 'Quarterly' },
+		{ value: 'YEARLY', viewValue: 'Yearly'}
+	];
+
+	save(registrationForm: NgForm) {
+		if (registrationForm.valid) {
+			let dialogRef = this.dialog.open(FpxAuthenticationComponent, {
+				data: {
+					registration: this.model
+				}
+			});
+
+			// dialogRef.afterClosed().subscribe(success => {
+				// if (success) {
+					this.registrationService.save(this.model).then(result => {
+						this.router.navigate(['/registration-complete']);
+					});
+				// }
+			// });
+		}
+	}
+}

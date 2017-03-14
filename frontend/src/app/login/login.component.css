@@ -1,0 +1,9 @@
+form {
+    display: flex;
+    padding: 2em 2em 2em 2em;
+    flex-direction: column
+}
+
+md-input-container {
+	margin-bottom: 24px;
+}
