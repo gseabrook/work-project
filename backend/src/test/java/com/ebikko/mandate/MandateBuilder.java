@@ -10,16 +10,19 @@ public class MandateBuilder {
                 "'amount': '123.45', " +
                 "'frequency': 'MONTHLY', " +
                 "'customer': {" +
-                "'name': 'Joe'," +
-                "'emailAddress': 'test@example.com'," +
-                "'id': {" +
-                "'id': '123456'," +
-                "'idType': 'PASSPORT_NUMBER'" +
-                "}," +
-                "'bankAccount': {" +
-                "'bankName': 'HSBC', " +
-                "'accountNumber': '242536' " +
-                "}" +
+                    "'name': 'Joe'," +
+                    "'emailAddress': 'test@example.com'," +
+                    "'id': {" +
+                        "'value': '123456'," +
+                        "'type': 'PASSPORT_NUMBER'" +
+                    "}," +
+                    "'bankAccount': {" +
+                        "'bank': { " +
+                            "'code': 'HSBC', " +
+                            "'name': 'HSBC' " +
+                        "}, " +
+                        "'accountNumber': '242536' " +
+                    "}" +
                 "}" +
                 "}";
         return s.replaceAll("'", "\"");

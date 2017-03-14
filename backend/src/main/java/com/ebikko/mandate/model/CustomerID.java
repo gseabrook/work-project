@@ -2,21 +2,21 @@ package com.ebikko.mandate.model;
 
 public class CustomerID {
 
-    private String id;
-    private IDType idType;
+    private String value;
+    private IDType type;
 
     public CustomerID() {}
 
-    public CustomerID(String id, IDType idType) {
-        this.id = id;
-        this.idType = idType;
+    public CustomerID(String value, IDType type) {
+        this.value = value;
+        this.type = type;
     }
 
-    public String getId() {
-        return id;
+    public String getValue() {
+        return value;
     }
 
-    public IDType getIdType() {
-        return idType;
+    public IDType getType() {
+        return type;
     }
 }

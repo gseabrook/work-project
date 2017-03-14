@@ -5,6 +5,8 @@ import java.util.Date;
 
 public class Mandate {
 
+    public static final String MANDATE_NODE_TYPE = "eMandate Form";
+
     private String referenceNumber;
     private Date registrationDate;
     private BigDecimal amount;

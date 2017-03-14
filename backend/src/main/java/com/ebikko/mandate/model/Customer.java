@@ -6,11 +6,11 @@ public class Customer {
     private String emailAddress;
     private String phoneNumber;
     private CustomerID id;
-    private BankAccount bankAccount;
+    private CustomerBankAccount bankAccount;
 
     public Customer() {}
 
-    public Customer(String name, String emailAddress, String phoneNumber, CustomerID id, BankAccount bankAccount) {
+    public Customer(String name, String emailAddress, String phoneNumber, CustomerID id, CustomerBankAccount bankAccount) {
         this.name = name;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
@@ -34,7 +34,7 @@ public class Customer {
         return id;
     }
 
-    public BankAccount getBankAccount() {
+    public CustomerBankAccount getBankAccount() {
         return bankAccount;
     }
 }

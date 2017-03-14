@@ -13,6 +13,7 @@ backend/.idea
 backend/target
 backend/src/main/resources/static/
 backend/logs
+backend/src/test/resources/db/dump.sql
 
 frontend/node_modules
 **/*.iml

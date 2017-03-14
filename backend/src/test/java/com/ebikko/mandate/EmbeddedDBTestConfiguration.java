@@ -3,10 +3,7 @@ package com.ebikko.mandate;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.config.DirectDebitApplication;
-import ebikko.BaseObject;
-import ebikko.Filter;
-import ebikko.Repository;
-import ebikko.Session;
+import ebikko.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -55,22 +52,22 @@ public class EmbeddedDBTestConfiguration {
         when(repository.getConnection()).thenReturn(dataSource().getConnection());
         when(repository.getDriver()).thenReturn("mysql");
 
-        when(repository.getProperty("buyerIdRestrictedCharacters.lookupSetId")).thenReturn("f40f623dd8d84804b648648c5a635913");
-        when(repository.getProperty("sellerOrderNoRestrictedCharacters.lookupSetId")).thenReturn("e7ee0a336ced4f5dabbe7f942a72c17b");
-        when(repository.getProperty("saffron.db.jdbcUrl")).thenReturn("jdbc:hsqldb:mem:testdb");
-        when(repository.getProperty("saffron.db.username")).thenReturn("sa");
-        when(repository.getProperty("saffron.db.password")).thenReturn("");
-        when(repository.getProperty("saffron.db.driver")).thenReturn("org.hsqldb.jdbcDriver");
         when(repository.getProperty("web.defaultTimeZone")).thenReturn("Asia/Kuala_Lumpur");
 
         Constructor<Session> constructor = Session.class.getDeclaredConstructor(Repository.class, String.class);
         constructor.setAccessible(true);
         Session session = constructor.newInstance(repository, "ebikkoservices");
 
+        Principal principal = mock(Principal.class);
+        when(principal.getUserName()).thenReturn("testusername");
+        when(principal.getName()).thenReturn("Test User");
+
         final Session spy = spy(session);
         doReturn(true).when(spy).canSee(any(BaseObject.class));
         doReturn(true).when(spy).canChange(any(BaseObject.class));
+        doReturn(true).when(spy).canCreate(any(BaseObject.class));
         doReturn(true).when(spy).canGiveAccess(any(BaseObject.class));
+        doReturn(principal).when(spy).getLoginDetails();
 
         when(mockSessionService.loadRepositoryProperty(anyString())).thenCallRealMethod();
         when(mockSessionService.performSessionAction(any(SessionAction.class))).thenAnswer(new Answer<Object>() {

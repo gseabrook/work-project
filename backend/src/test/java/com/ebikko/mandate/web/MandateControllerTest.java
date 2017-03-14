@@ -59,11 +59,11 @@ public class MandateControllerTest {
         assertThat(customer.getEmailAddress(), is("test@example.com"));
 
         CustomerID id = customer.getId();
-        assertThat(id.getId(), is("123456"));
-        assertThat(id.getIdType(), is(IDType.PASSPORT_NUMBER));
+        assertThat(id.getValue(), is("123456"));
+        assertThat(id.getType(), is(IDType.PASSPORT_NUMBER));
 
-        BankAccount bankAccount = customer.getBankAccount();
-        assertThat(bankAccount.getBank().getName(), is("HSBC"));
-        assertThat(bankAccount.getAccountNumber(), is("242536"));
+        CustomerBankAccount customerBankAccount = customer.getBankAccount();
+        assertThat(customerBankAccount.getBank().getName(), is("HSBC"));
+        assertThat(customerBankAccount.getAccountNumber(), is("242536"));
     }
 }

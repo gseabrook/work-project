@@ -7,9 +7,12 @@ import javax.persistence.Entity;
 public class Bank {
 
     @Column(name = "Bank Code")
-    private final String code;
+    private String code;
     @Column(name = "Bank Name")
-    private final String name;
+    private String name;
+
+    public Bank() {
+    }
 
     public Bank(String code, String name) {
         this.code = code;
@@ -23,4 +26,5 @@ public class Bank {
     public String getCode() {
         return code;
     }
+
 }

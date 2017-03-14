@@ -3,9 +3,9 @@ package com.ebikko.mandate.model;
 public enum IDType implements DisplayEnum {
 
     PASSPORT_NUMBER("Passport Number"),
-    NRIC("NRIC"),
-    OLD_IC("Old IC"),
-    BUSINESS_REGISTRATION_NUMBER("Business Registration");
+    NRIC("New IC Number"),
+    OLD_IC("Old IC Number"),
+    BUSINESS_REGISTRATION_NUMBER("Business Registration Number");
 
     private final String displayValue;
 
