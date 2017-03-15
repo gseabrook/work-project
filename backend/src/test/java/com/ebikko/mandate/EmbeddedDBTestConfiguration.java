@@ -58,9 +58,14 @@ public class EmbeddedDBTestConfiguration {
         constructor.setAccessible(true);
         Session session = constructor.newInstance(repository, "ebikkoservices");
 
+        ebikko.Profile profile = mock(ebikko.Profile.class);
+        when(profile.canDo(anyInt())).thenReturn(true);
+
         Principal principal = mock(Principal.class);
         when(principal.getUserName()).thenReturn("testusername");
         when(principal.getName()).thenReturn("Test User");
+        when(principal.getUid()).thenReturn("123235adkl2");
+        when(principal.getProfile()).thenReturn(profile);
 
         final Session spy = spy(session);
         doReturn(true).when(spy).canSee(any(BaseObject.class));
@@ -68,6 +73,8 @@ public class EmbeddedDBTestConfiguration {
         doReturn(true).when(spy).canCreate(any(BaseObject.class));
         doReturn(true).when(spy).canGiveAccess(any(BaseObject.class));
         doReturn(principal).when(spy).getLoginDetails();
+        doReturn(principal).when(spy).getPrincipalByUserName(anyString());
+        doReturn("root").when(spy).getUserName();
 
         when(mockSessionService.loadRepositoryProperty(anyString())).thenCallRealMethod();
         when(mockSessionService.performSessionAction(any(SessionAction.class))).thenAnswer(new Answer<Object>() {

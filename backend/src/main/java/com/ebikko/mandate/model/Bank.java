@@ -2,10 +2,13 @@ package com.ebikko.mandate.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity(name = "Bank Information")
+@ReferenceData
 public class Bank {
 
+    @Id
     @Column(name = "Bank Code")
     private String code;
     @Column(name = "Bank Name")

@@ -247,19 +247,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.2</version>
-                <configuration>
-                    <classpathDependencyExcludes>
-                        <classpathDependencyExclude>com.hazelcast:hazelcast</classpathDependencyExclude>
-                    </classpathDependencyExcludes>
-                </configuration>
-            </plugin>
-            -->
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -312,7 +299,7 @@
             </plugin>
         </plugins>
 
-        <finalName>ebikko-fpx</finalName>
+        <finalName>mydirectdebit</finalName>
 
     </build>
 

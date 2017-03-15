@@ -6,7 +6,9 @@
 -- Data for Name: container_containee; Type: TABLE DATA; Schema: mdd; Owner: mdd
 --
 
-
+INSERT INTO principal (uid, name, extid, username, password, isgroup, acl_uid, security_level_uid, isinternal, issuspended, gender, email, profile_uid, canlogin, active_from, active_to, date_registered, barcode, external_barcode, ptype, date_last_modified_of_password, loginmessage, address, ic_passport_no, date_of_birth, nationality, business_occupation, phone_number, mobile_phone) VALUES ('00000000000000000000000000000000', 'ROOT', 'ROOT', 'root', 'sha256{eYZ+ccNLBk6i45JBIP4nIj6NPjcbREM2n7uB2F6R0J4IiSthQfEzd5YeHVCc5x09}', 0, NULL, NULL, 1, 0, 3, NULL, '00000000000000000000000000000000', 1, NULL, NULL, NULL, 'P00000000R', NULL, 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO principal (uid, name, extid, username, password, isgroup, acl_uid, security_level_uid, isinternal, issuspended, gender, email, profile_uid, canlogin, active_from, active_to, date_registered, barcode, external_barcode, ptype, date_last_modified_of_password, loginmessage, address, ic_passport_no, date_of_birth, nationality, business_occupation, phone_number, mobile_phone) VALUES ('00000000000000000000000000000002', '$.EBIKKO.SERVICE', '$.EBIKKO.SERVICE', '$service', 'sha256{G0HORmolOpFoDBNjxdh9JSJSuOvfo7qFt/enCsJisr8ygzfxOAwMEoNeEkIxVnVN}', 0, NULL, NULL, 1, 0, 3, NULL, '00000000000000000000000000000000', 1, NULL, NULL, NULL, 'P00000000S', NULL, 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO principal (uid, name, extid, username, password, isgroup, acl_uid, security_level_uid, isinternal, issuspended, gender, email, profile_uid, canlogin, active_from, active_to, date_registered, barcode, external_barcode, ptype, date_last_modified_of_password, loginmessage, address, ic_passport_no, date_of_birth, nationality, business_occupation, phone_number, mobile_phone) VALUES ('00000000000000000000000000000001', '$.EBIKKO.IMPERSONATOR', '$.EBIKKO.IMPERSONATOR', '$impersonator', 'sha256{IYHHSaJBHejsGZpbwkU1bxrnqZimzp+rsGWVX6NB69Ap/8cI0XKw4/VbsoUJYsKr}', 0, NULL, NULL, 1, 0, 3, NULL, '00000000000000000000000000000005', 1, NULL, NULL, NULL, 'P00000000I', NULL, 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Data for Name: record_node; Type: TABLE DATA; Schema: mdd; Owner: mdd
@@ -1518,64 +1520,6 @@ INSERT INTO nodetype_c408fbc0ea084ec19b7ee3f4d94e7711 (uid, acl_uid, owner_uid, 
 --
 -- Data for Name: nodetype_dc8e3bc6f41f4f15aa445184108a680a; Type: TABLE DATA; Schema: mdd; Owner: mdd
 --
-
-
-
---
--- Data for Name: nodetype_eb50047853d6486b8c7f78ad91d4f454; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-INSERT INTO nodetype_eb50047853d6486b8c7f78ad91d4f454 (uid, acl_uid, owner_uid, classification_uid, secondary_classification_uid, tertiary_classification_uid, record_number, retention_schedule_uid, hold_uid, disposition_status, title, combined_title, description, date_registered, creator_name, creator_username, notes, home_uid, assignee_uid, is_finalized, is_hybrid, date_finalized, barcode, external_barcode, external_uid, integrity_check, security_level_uid, date_last_modified, date_last_modified_of_contents, client_uid, date_closed, next_enclosure_number, enclosure_number_increment, uncompressed_record_number, security_based_on_container, bypass_referenced_acls, opened_temporarily, date_created, author, batch_id, date_archived, date_made_inactive, date_of_last_enclosure, date_enclosed, record_class, container_record_number, classification_full_number, secondary_classification_full_number, tertiary_classification_full_number, assignee_name, home_name, owner_name, retention_schedule_number, security_level_number, client_name, is_container_removed_on_ret_trig, is_set_home_on_container_ret_trig, retention_schedule_new_home, is_misfiled, master_uid, hybrid_remarks, date_last_modified_of_security_level, is_declassify, is_imported, enforce_single_creation_in_a_workflow, check_in_as_new_version, check_in_as_override_previous_content, is_declassify_alias, is_auto_update_security_level, is_auto_update_security_level_on_particular_date, security_level_trigger_date, is_update_security_level_on_triggered_event, security_level_triggered_event, security_level_triggered_event_type, security_level_triggered_event_duration, security_level_triggered_event_property, auto_update_security_level_id, fdc659695c944890b9c1720de461db2e, j8e43ac4e85940c6a15e4c35f0a5a7e5, h763e35b6288452895b143ec4bad9d02, c7b15198b7a844d2bbe56fa6116f9018, ac587b9bdb0545d9a4bb872848b12755) VALUES ('eb50047853d6486b8c7f78ad91d4f454-e8c43936e5964fa78934b38a440e1ab8', NULL, '00000000000000000000000000000000', NULL, NULL, NULL, 'CUST-BANK-14032017-1', NULL, NULL, 0, 'Maybank Account', 'Maybank Account', NULL, '2017-03-14 04:29:13.681', 'ROOT', 'root', NULL, NULL, '00000000000000000000000000000000', 0, 0, NULL, 'NrD81ab859', NULL, NULL, NULL, NULL, '2017-03-14 04:36:13.403', NULL, NULL, NULL, 1, 1, 'CUST-BANK-14032017-000000000000001', 0, 0, 0, NULL, '', '', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 'ROOT', NULL, 'ROOT', NULL, 0, NULL, 0, 0, NULL, 0, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, 0, 0, NULL, 0, 0, 0, 1, NULL, NULL, 'b7bc8b7449614d159ce0869306f04d36-ca9dbe06eacc4662a1de95dd14c4b3a9', '118904562345', 'Michelle Lim', '890910147890', 'New IC Number');
-INSERT INTO nodetype_eb50047853d6486b8c7f78ad91d4f454 (uid, acl_uid, owner_uid, classification_uid, secondary_classification_uid, tertiary_classification_uid, record_number, retention_schedule_uid, hold_uid, disposition_status, title, combined_title, description, date_registered, creator_name, creator_username, notes, home_uid, assignee_uid, is_finalized, is_hybrid, date_finalized, barcode, external_barcode, external_uid, integrity_check, security_level_uid, date_last_modified, date_last_modified_of_contents, client_uid, date_closed, next_enclosure_number, enclosure_number_increment, uncompressed_record_number, security_based_on_container, bypass_referenced_acls, opened_temporarily, date_created, author, batch_id, date_archived, date_made_inactive, date_of_last_enclosure, date_enclosed, record_class, container_record_number, classification_full_number, secondary_classification_full_number, tertiary_classification_full_number, assignee_name, home_name, owner_name, retention_schedule_number, security_level_number, client_name, is_container_removed_on_ret_trig, is_set_home_on_container_ret_trig, retention_schedule_new_home, is_misfiled, master_uid, hybrid_remarks, date_last_modified_of_security_level, is_declassify, is_imported, enforce_single_creation_in_a_workflow, check_in_as_new_version, check_in_as_override_previous_content, is_declassify_alias, is_auto_update_security_level, is_auto_update_security_level_on_particular_date, security_level_trigger_date, is_update_security_level_on_triggered_event, security_level_triggered_event, security_level_triggered_event_type, security_level_triggered_event_duration, security_level_triggered_event_property, auto_update_security_level_id, fdc659695c944890b9c1720de461db2e, j8e43ac4e85940c6a15e4c35f0a5a7e5, h763e35b6288452895b143ec4bad9d02, c7b15198b7a844d2bbe56fa6116f9018, ac587b9bdb0545d9a4bb872848b12755) VALUES ('eb50047853d6486b8c7f78ad91d4f454-e913beff31964fd4ad77b9e6c7ef64a0', NULL, '00000000000000000000000000000000', NULL, NULL, NULL, 'CUST-BANK-14032017-2', NULL, NULL, 0, 'HSBC Account', 'HSBC Account', NULL, '2017-03-14 04:30:31.284', 'ROOT', 'root', NULL, NULL, '00000000000000000000000000000000', 0, 0, NULL, 'NUy764a048', NULL, NULL, NULL, NULL, '2017-03-14 04:36:31.953', NULL, NULL, NULL, 1, 1, 'CUST-BANK-14032017-000000000000002', 0, 0, 0, NULL, '', '', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 'ROOT', NULL, 'ROOT', NULL, 0, NULL, 0, 0, NULL, 0, NULL, NULL, NULL, 0, 0, 0, 0, 0, NULL, 0, 0, NULL, 0, 0, 0, 1, NULL, NULL, 'b7bc8b7449614d159ce0869306f04d36-e90431d4422b4463b30d8dcf70d4d78e', '123456789012', 'Michelle Lim', '890910147890', 'New IC Number');
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000000; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000001; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000002; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000003; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000004; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000005; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000006; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
-
---
--- Data for Name: nodetype_f0000000000000000000000000000007; Type: TABLE DATA; Schema: mdd; Owner: mdd
---
-
-
 
 --
 -- Data for Name: nodetype_f2bfeb5852264c5aa67f53f96ac28d39; Type: TABLE DATA; Schema: mdd; Owner: mdd

@@ -10,14 +10,18 @@ import ebikko.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MandateService {
 
     private final SessionService sessionService;
+    private final NodeTranslator nodeTranslator;
 
     @Autowired
-    public MandateService(SessionService sessionService) {
+    public MandateService(SessionService sessionService, NodeTranslator nodeTranslator) {
         this.sessionService = sessionService;
+        this.nodeTranslator = nodeTranslator;
     }
 
     public void save(final Mandate mandate) throws EbikkoException {
@@ -30,8 +34,8 @@ public class MandateService {
                 mandateNode.setValue("Name", customer.getName());
                 mandateNode.setValue("Email", customer.getEmailAddress());
                 mandateNode.setValue("Phone Number", customer.getPhoneNumber());
-                mandateNode.setValue("ID Type", customer.getId().getType().getDisplayValue());
-                mandateNode.setValue("ID Number", customer.getId().getValue());
+                mandateNode.setValue("ID Type", customer.getIdType().getDisplayValue());
+                mandateNode.setValue("ID Number", customer.getIdValue());
 
                 mandateNode.setValue("Maximum Amount", mandate.getAmount());
                 mandateNode.setValue("Frequency", mandate.getFrequency().getDisplayValue());
@@ -41,6 +45,12 @@ public class MandateService {
                 mandateNode.save();
                 // Effective Date
                 // Customer Details
+
+                Node customerNode = nodeTranslator.translate(customer, session);
+                Node bankAccount = ((List<Node>) customerNode.getValue("Customer Bank Account")).get(0);
+                bankAccount.save();
+
+                customerNode.save();
 
                 return null;
             }

@@ -12,17 +12,15 @@ public class MandateBuilder {
                 "'customer': {" +
                     "'name': 'Joe'," +
                     "'emailAddress': 'test@example.com'," +
-                    "'id': {" +
-                        "'value': '123456'," +
-                        "'type': 'PASSPORT_NUMBER'" +
-                    "}," +
-                    "'bankAccount': {" +
+                    "'idType': 'PASSPORT_NUMBER'," +
+                    "'idValue': '123456'," +
+                    "'bankAccounts': [{" +
                         "'bank': { " +
-                            "'code': 'HSBC', " +
+                            "'code': 'HSBC0222', " +
                             "'name': 'HSBC' " +
                         "}, " +
                         "'accountNumber': '242536' " +
-                    "}" +
+                    "}]" +
                 "}" +
                 "}";
         return s.replaceAll("'", "\"");

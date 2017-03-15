@@ -1,22 +1,26 @@
 package com.ebikko.mandate.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import java.util.List;
+
+@Entity(name = "Customer Information")
 public class Customer {
 
+    @Column(name = "Customer Name")
     private String name;
+    @Column(name = "Email")
     private String emailAddress;
+    @Column(name = "Phone Number")
     private String phoneNumber;
-    private CustomerID id;
-    private CustomerBankAccount bankAccount;
+    @Column(name = "ID Number")
+    private String idValue;
+    @Column(name = "ID Type")
+    private IDType idType;
+    @Column(name = "Customer Bank Account")
+    private List<CustomerBankAccount> bankAccounts;
 
     public Customer() {}
-
-    public Customer(String name, String emailAddress, String phoneNumber, CustomerID id, CustomerBankAccount bankAccount) {
-        this.name = name;
-        this.emailAddress = emailAddress;
-        this.phoneNumber = phoneNumber;
-        this.id = id;
-        this.bankAccount = bankAccount;
-    }
 
     public String getName() {
         return name;
@@ -30,11 +34,15 @@ public class Customer {
         return phoneNumber;
     }
 
-    public CustomerID getId() {
-        return id;
+    public List<CustomerBankAccount> getBankAccounts() {
+        return bankAccounts;
     }
 
-    public CustomerBankAccount getBankAccount() {
-        return bankAccount;
+    public String getIdValue() {
+        return idValue;
+    }
+
+    public IDType getIdType() {
+        return idType;
     }
 }

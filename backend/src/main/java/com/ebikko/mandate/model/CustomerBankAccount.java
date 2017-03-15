@@ -6,9 +6,9 @@ import javax.persistence.Entity;
 @Entity(name = "Customer Bank Account")
 public class CustomerBankAccount {
 
-    @Column(name = "bank")
+    @Column(name = "Bank Name")
     private Bank bank;
-    @Column(name= "account_number")
+    @Column(name= "Account Number")
     private String accountNumber;
 
     public CustomerBankAccount() {}

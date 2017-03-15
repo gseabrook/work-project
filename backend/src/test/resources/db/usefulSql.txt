@@ -1,15 +1,15 @@
 Schema
-pg_dump -h 192.168.1.206 -Umdd --disable-triggers --no-owner --no-acl --no-security-labels --schema-only --table=TABLE_NAME edms > dump.sql
+pg_dump -h 192.168.1.206 -Umdd --no-owner --no-acl --no-security-labels --schema-only --table=TABLE_NAME edms > dump.sql
 
 Data
-pg_dump -h 192.168.1.206 -Umdd--no-owner --no-acl --no-security-labels  --data-only --table=TABLE_NAME edms > dump.sql
+pg_dump -h 192.168.1.206 -Umdd --no-owner --no-acl --no-security-labels  --data-only -column-inserts --table=TABLE_NAME edms > dump.sql
 
 All Node Types
 pg_dump -h 192.168.1.206 -Umdd --schema-only --table=nodetype_* edms > dump.sql
 
 To create fresh dump
 pg_dump -h 192.168.1.206 -Umdd --no-owner --no-acl --no-security-labels --schema-only --table=lookupitem --table=lookupset --table=property --table=nodetype --table=property_group --table=nodetype_property --table=store --table=principal --table=principal_group --table=profile --table=container_containee --table=esign_wflow --table=record_node --table=hold_node --table=hold --table=recent_container --table=ftextindex --table=evt_based_notification --table=node_event --table=object_event --table=NODE_REFS --table=nodetype_* edms > create-db.sql
-pg_dump -h 192.168.1.206 -Umdd --no-owner --no-acl --no-security-labels --data-only --column-inserts --table=lookupitem --table=lookupset --table=property --table=nodetype --table=property_group --table=nodetype_property --table=store --table=principal --table=principal_group --table=profile --table=container_containee --table=esign_wflow --table=record_node --table=hold_node --table=hold --table=recent_container --table=ftextindex --table=evt_based_notification --table=node_event --table=NODE_REFS --table=nodetype_* edms > insert-data.sql
+pg_dump -h 192.168.1.206 -Umdd --no-owner --no-acl --no-security-labels --data-only --column-inserts --table=lookupitem --table=lookupset --table=property --table=nodetype --table=property_group --table=nodetype_property --table=store --table=principal --table=principal_group --table=profile --table=container_containee --table=esign_wflow --table=record_node --table=hold_node --table=hold --table=recent_container --table=ftextindex --table=evt_based_notification --table=NODE_REFS --table=nodetype_* edms > insert-data.sql
 
 Delete all the SET statements at the start of create-db.sql and insert-data.sql
 Perform regex find and replace with '' "ALTER TABLE mdd\..* OWNER TO mdd;\n"
