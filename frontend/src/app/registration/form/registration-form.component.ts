@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MdDialog } from '@angular/material';
 
+import { Bank } from '../model/bank';
 import { Registration } from '../model/registration';
 import { RegistrationService } from '../registration.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
@@ -33,9 +34,10 @@ export class RegistrationFormComponent {
 		{ value: 'BUSINESS_REGISTRATION_NUMBER', viewValue: 'Business Registration' }
 	];
 
-	bankNames = [
-		'Affin Bank', 'Bank Islam', 'Bank of America', 'Bank Rakyat', 'CIMB Bank', 'Citibank', 'Deutsche Bank', 'Hong Leong Bank',
-		'HSBC Bank', 'JPMorgan', 'Maybank', 'OCBC Bank', 'Public Bank', 'RHB Bank', 'Standard Chartered Bank', 'TPAREVENUE'
+	banks = [
+		new Bank('AFFB0123', 'Affin Bank'),
+		new Bank('BIMB0340', 'Bank Islam'), 
+		new Bank('BOFA0207', 'Bank of America')
 	];
 
 	frequencyTypes = [

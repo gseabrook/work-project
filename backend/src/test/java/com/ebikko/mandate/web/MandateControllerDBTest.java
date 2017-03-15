@@ -18,6 +18,7 @@ import static com.ebikko.mandate.IDs.NodeTypes.EMANDATE_FORM;
 import static com.ebikko.mandate.IDs.PropertyIDs;
 import static com.ebikko.mandate.IDs.PropertyIDs.*;
 import static com.ebikko.mandate.MandateBuilder.exampleJson;
+import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,7 +33,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
     public void shouldSaveAllTheFormData() throws Exception {
 
         mockMvc.perform(
-                post("/api/mandate")
+                post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(exampleJson()))
                 .andExpect(status().is2xxSuccessful());

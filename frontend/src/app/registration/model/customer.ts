@@ -1,17 +1,17 @@
-import { CustomerID } from './customerId';
 import { BankAccount } from './bankAccount';
 
 export class Customer {
 	constructor(
 		public name: string,
 		public phoneNumber: string,
-		public id: CustomerID,
-		public bankAccount: BankAccount,
+		public idType: string,
+		public idValue: string,
+		public bankAccounts: BankAccount[],
 
 		public emailAddress?: string
 	) { }
 
 	static newCustomer() {
-		return new Customer('', '', <CustomerID>{}, <BankAccount>{}, '');
+		return new Customer('', '', '', '', [<BankAccount>{}], '');
 	}
 }
