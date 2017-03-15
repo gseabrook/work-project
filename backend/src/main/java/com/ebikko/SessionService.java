@@ -43,8 +43,8 @@ public class SessionService {
         Session session = null;
         try {
             repo = Repositories.getRepository(repoId);
-            String userName = repo.getProperty("eMandate.username");
-            String password = repo.getProperty("eMandate.password");
+            String userName = repo.getProperty("mdd.username");
+            String password = repo.getProperty("mdd.password");
 
             session = repo.open(userName, password);
             return sessionAction.perform(session);

@@ -19,7 +19,7 @@ import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 @RequestMapping(MANDATE_URL)
 public class MandateController {
 
-    public static final String MANDATE_URL = "/api/mandate";
+    public static final String MANDATE_URL = "/mandate";
     private final MandateService service;
 
     @Autowired

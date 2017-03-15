@@ -1,6 +1,6 @@
 {
-  "/api": {
-    "target": "http://localhost:8080/ebikko-fpx",
+  "/mandate": {
+    "target": "http://localhost:8080/mydirectdebit",
     "secure": false,
     "loglevel": "debug"
   }

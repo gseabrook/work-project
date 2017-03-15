@@ -8,7 +8,7 @@ import { Registration } from './model/registration';
 @Injectable()
 export class RegistrationService {
 
-	private registrationUrl = 'api/mandate';
+	private registrationUrl = 'mandate';
 	private headers = new Headers({ 'Content-Type': 'application/json' });
 
 	constructor(private http: Http) { }

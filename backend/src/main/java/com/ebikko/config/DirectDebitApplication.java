@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -14,7 +15,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("com.ebikko")
 @EnableScheduling
 @EnableAsync(proxyTargetClass = true)
-@EnableAutoConfiguration(exclude={HazelcastAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude={
+		HazelcastAutoConfiguration.class,
+		DataSourceAutoConfiguration.class,
+		HibernateJpaAutoConfiguration.class})
 public class DirectDebitApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
