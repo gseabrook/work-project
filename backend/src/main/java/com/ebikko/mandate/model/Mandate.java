@@ -1,5 +1,7 @@
 package com.ebikko.mandate.model;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,6 +11,8 @@ public class Mandate {
 
     private String referenceNumber;
     private Date registrationDate;
+    @NotNull(message = "Amount cannot be blank")
+    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
     private MandateFrequency frequency;
     private Customer customer;

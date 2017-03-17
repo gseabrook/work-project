@@ -1,5 +1,8 @@
 package com.ebikko.mandate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,14 +13,13 @@ public class Bank {
 
     @Id
     @Column(name = "Bank Code")
-    private String code;
+    private final String code;
     @Column(name = "Bank Name")
-    private String name;
+    private final String name;
 
-    public Bank() {
-    }
-
-    public Bank(String code, String name) {
+    @JsonCreator
+    public Bank(@JsonProperty("code") String code,
+                @JsonProperty("name") String name) {
         this.code = code;
         this.name = name;
     }

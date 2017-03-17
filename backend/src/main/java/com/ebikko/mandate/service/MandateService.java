@@ -44,7 +44,6 @@ public class MandateService {
 
                 mandateNode.save();
                 // Effective Date
-                // Customer Details
 
                 Node customerNode = nodeTranslator.translate(customer, session);
                 Node bankAccount = ((List<Node>) customerNode.getValue("Customer Bank Account")).get(0);

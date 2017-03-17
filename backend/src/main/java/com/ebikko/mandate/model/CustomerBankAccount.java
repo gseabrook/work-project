@@ -1,5 +1,7 @@
 package com.ebikko.mandate.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -7,13 +9,12 @@ import javax.persistence.Entity;
 public class CustomerBankAccount {
 
     @Column(name = "Bank Name")
-    private Bank bank;
+    private final Bank bank;
     @Column(name= "Account Number")
-    private String accountNumber;
+    private final String accountNumber;
 
-    public CustomerBankAccount() {}
-
-    public CustomerBankAccount(Bank bank, String accountNumber) {
+    public CustomerBankAccount(@JsonProperty("bank") Bank bank,
+                               @JsonProperty("accountNumber") String accountNumber) {
         this.bank = bank;
         this.accountNumber = accountNumber;
     }

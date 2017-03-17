@@ -12,12 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 
 import static com.ebikko.mandate.IDs.NodeTypes;
-import static com.ebikko.mandate.IDs.NodeTypes.BANK_INFORMATION;
-import static com.ebikko.mandate.IDs.NodeTypes.CUSTOMER_INFO;
-import static com.ebikko.mandate.IDs.NodeTypes.EMANDATE_FORM;
+import static com.ebikko.mandate.IDs.NodeTypes.*;
 import static com.ebikko.mandate.IDs.PropertyIDs;
 import static com.ebikko.mandate.IDs.PropertyIDs.*;
-import static com.ebikko.mandate.MandateBuilder.exampleJson;
+import static com.ebikko.mandate.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -35,7 +33,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         mockMvc.perform(
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(exampleJson()))
+                        .content(exampleMandate().toJson()))
                 .andExpect(status().is2xxSuccessful());
 
         // Check mandate saved

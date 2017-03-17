@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 
-import static com.ebikko.mandate.MandateBuilder.exampleJson;
+import static com.ebikko.mandate.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.exparity.hamcrest.date.DateMatchers.isMarch;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +42,7 @@ public class MandateControllerTest {
         mockMvc.perform(
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(exampleJson()))
+                        .content(exampleMandate().toJson()))
                 .andExpect(status().isCreated());
 
         ArgumentCaptor<Mandate> captor = ArgumentCaptor.forClass(Mandate.class);
