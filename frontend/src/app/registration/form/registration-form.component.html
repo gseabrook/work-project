@@ -3,10 +3,12 @@
         <md-toolbar color="primary">Registration Form</md-toolbar>
         <form #registrationForm="ngForm">
             <md-input-container>
-                <input mdInput placeholder="Reference Number" required [(ngModel)]="model.referenceNumber" name="referenceNumber" />
+                <input mdInput placeholder="Reference Number" required [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
+                <md-hint align="start" class="errorHint" *ngIf="!referenceNumber.valid && referenceNumber.touched">Please enter a reference number</md-hint>
             </md-input-container>
             <md-input-container>
-                <input mdInput placeholder="Name" required [(ngModel)]="model.customer.name" name="accountHolderName" />
+                <input mdInput placeholder="Name" required [(ngModel)]="model.customer.name" name="accountHolderName" #name="ngModel"/>
+                <md-hint align="start" class="errorHint" *ngIf="!name.valid && name.touched">Please enter a name</md-hint>
             </md-input-container>
             <md-input-container>
                 <input mdInput placeholder="Email" type="email" [(ngModel)]="model.customer.emailAddress" name="email" />
@@ -15,13 +17,14 @@
                 <input mdInput placeholder="Phone Number" type="text" [(ngModel)]="model.customer.phoneNumber" name="phoneNumber" />
             </md-input-container>
             <div class="align-horizontally">
-                <md-select placeholder="ID Type" required [(ngModel)]="model.customer.idType" name="idType">
+                <md-select placeholder="ID Type" required [(ngModel)]="model.customer.idType" name="idType" #idType="ngModel">
                     <md-option *ngFor="let idType of idTypes" [value]="idType.value">
                         {{ idType.viewValue }}
                     </md-option>
                 </md-select>
                 <md-input-container>
-                    <input mdInput placeholder="ID Number" type="text" required [(ngModel)]="model.customer.idValue" name="idValue" />
+                    <input mdInput placeholder="ID Number" type="text" required [(ngModel)]="model.customer.idValue" name="idValue" #idValue="ngModel" />
+                    <md-hint align="start" class="errorHint" *ngIf="!idValue.valid && idValue.touched">Please your ID number</md-hint>
                 </md-input-container>
             </div>
             <div class="align-horizontally">
@@ -31,19 +34,26 @@
                     </md-option>
                 </md-select>
                 <md-input-container>
-                    <input mdInput placeholder="Bank Account Number" type="text" required [(ngModel)]="model.customer.bankAccounts[0].accountNumber" name="accountNumber" />
+                    <input mdInput placeholder="Bank Account Number" type="text" required [(ngModel)]="model.customer.bankAccounts[0].accountNumber" name="accountNumber" #accountNumber="ngModel"/>
+                    <md-hint align="start" class="errorHint" *ngIf="!accountNumber.valid && accountNumber.touched">Please enter a bank account number</md-hint>
                 </md-input-container>
             </div>
             <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [required]="true" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
             <div class="align-horizontally">
                 <md-input-container>
-                    <input mdInput placeholder="Amount" type="number" required [(ngModel)]="model.amount" name="amount" />
+                    <input mdInput placeholder="Amount" type="text" required [(ngModel)]="model.amount" name="amount" #amount="ngModel"/>
+                    <md-hint align="start" class="errorHint" *ngIf="!amount.valid && amount.touched">Please enter an amount</md-hint>
                 </md-input-container>
                 <md-select placeholder="Frequency" required [(ngModel)]="model.frequency" name="frequency">
                     <md-option *ngFor="let frequency of frequencyTypes" [value]="frequency.value">
                         {{ frequency.viewValue }}
                     </md-option>
                 </md-select>
+            </div>
+            <div class="errors" *ngIf="fieldErrors.length > 0">
+                <div *ngFor="let fieldError of fieldErrors">
+                    {{ fieldError.message}}
+                </div>
             </div>
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center">
                 <button md-raised-button type="button" routerLink="/registrations">Cancel</button>

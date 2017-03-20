@@ -15,22 +15,14 @@ export class RegistrationService {
 
 	save(registration: Registration) {
 		return this.http
-			.post(this.registrationUrl, JSON.stringify(registration), { headers: this.headers })
-			.toPromise()
-			.catch(this.handleError);
+			.post(this.registrationUrl, JSON.stringify(registration), { headers: this.headers });
 	}
 
 	get() {
 		return this.http
 			.get(this.registrationUrl, { headers: this.headers })
 			.toPromise()
-			.then(response => response.json() as Registration[])
-			.catch(this.handleError);
-	}
-
-	private handleError(error: any): Promise<any> {
-		console.error('An error occurred', error);
-		return Promise.reject(error.message || error);
+			.then(response => response.json() as Registration[]);
 	}
 
 }

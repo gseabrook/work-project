@@ -55,7 +55,7 @@ public class MandateAmountTest {
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(exampleMandate().with("amount", "abc-123").toJson()))
-                .andExpect(response().hasErrorForField("amount", "abc-123 is not a valid amount"))
+                .andExpect(response().hasErrorForField("amount", "'abc-123' is not a valid amount"))
                 .andExpect(status().is4xxClientError());
     }
 

@@ -31,7 +31,7 @@ public class ErrorResponse {
 
     public ErrorResponse(InvalidFormatException exception) {
         String fieldName = exception.getPath().get(0).getFieldName();
-        String message = exception.getValue() + " is not a valid " + fieldName;
+        String message = "'" + exception.getValue() + "' is not a valid " + fieldName;
         ValidationError validationError = new ValidationError(fieldName, exception.getValue(), message);
         fieldErrors = newArrayList(validationError);
     }

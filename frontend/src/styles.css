@@ -46,8 +46,35 @@ div.md2-datepicker-trigger {
 }
 
 @media (max-width: 600px) {
-    div.cdk-overlay-pane, md-dialog-container.mat-dialog-container {
+    div.cdk-overlay-pane,
+    md-dialog-container.mat-dialog-container {
         width: 100%;
         max-width: 100%;
     }
+}
+
+div.errors {
+    background-color: #fd9b9d;
+    border: 1px red solid;
+}
+
+md-hint.errorHint {
+    color: red;
+    opacity: 1;
+    animation-name: fadeIn;
+    animation-duration: 0.5s;   
+    animation-timing-function: ease-in-out; 
+}
+
+md-input-container.selectContainer div.mat-input-underline {
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.0;       
+    }
+    100% {
+        opacity: 1; 
+    }       
 }

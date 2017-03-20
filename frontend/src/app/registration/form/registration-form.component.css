@@ -37,3 +37,7 @@ md-toolbar.mat-toolbar.mat-primary {
 div.buttonContainer button {
     margin: 0px 5px 0px 5px;
 }
+
+md-input-container.selectContainer md-select {
+    width: 100%;
+}
