@@ -27,7 +27,7 @@
 		<java.version>1.7</java.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <api.version>20170309</api.version>
+        <api.version>20170321</api.version>
         <svn.username></svn.username>
         <svn.password></svn.password>
 	</properties>
@@ -69,7 +69,8 @@
 			<artifactId>ebikko.api</artifactId>
             <version>${api.version}</version>
             <scope>system</scope>
-			<systemPath>${basedir}/src/main/resources/lib/api/ebikko.2.8.${api.version}.obf.jar</systemPath>
+			<systemPath>/Users/grahamseabrook/Documents/workspace/ebikkoapi/build/ebikko.2.8.20170322.jar</systemPath>
+			<!--<systemPath>${basedir}/src/main/resources/lib/api/ebikko.2.8.${api.version}.obf.jar</systemPath>-->
 		</dependency>
 
         <dependency>

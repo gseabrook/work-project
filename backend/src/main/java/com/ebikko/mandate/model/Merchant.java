@@ -1,15 +1,50 @@
 package com.ebikko.mandate.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+@Entity(name = Merchant.MERCHANT_NODE_TYPE)
 public class Merchant {
 
-    private final String companyName;
-    private final String companyRegistrationNumber;
-    private final MerchantBankAccount merchantBankAccount;
+    public static final String MERCHANT_NODE_TYPE = "Merchant Information";
 
-    public Merchant(String companyName, String companyRegistrationNumber, MerchantBankAccount merchantBankAccount) {
+    @Id
+    public String id;
+    @Column(name = "Company Registration No")
+    public String companyRegistrationNumber;
+    @Column(name = "Company Name")
+    public String companyName;
+    @Column(name = "Merchant Bank Account")
+    public List<MerchantBankAccount> merchantBankAccounts;
+
+    public Merchant() {}
+
+    @JsonCreator
+    public Merchant(@JsonProperty("companyName") String companyName,
+                    @JsonProperty("companyRegistrationNumber") String companyRegistrationNumber,
+                    @JsonProperty("merchantBankAccount") MerchantBankAccount merchantBankAccount) {
         this.companyName = companyName;
         this.companyRegistrationNumber = companyRegistrationNumber;
-        this.merchantBankAccount = merchantBankAccount;
+        this.merchantBankAccounts = newArrayList(merchantBankAccount);
+    }
+
+    public Merchant(String id) {
+        this.id = id;
+    }
+
+    public Merchant(String id, String companyName, String companyRegistrationNumber, ArrayList<MerchantBankAccount> merchantBankAccounts) {
+        this.id = id;
+        this.companyName = companyName;
+        this.companyRegistrationNumber = companyRegistrationNumber;
+        this.merchantBankAccounts = merchantBankAccounts;
     }
 
     public String getCompanyName() {
@@ -20,7 +55,50 @@ public class Merchant {
         return companyRegistrationNumber;
     }
 
-    public MerchantBankAccount getMerchantBankAccount() {
-        return merchantBankAccount;
+
+    public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public List<MerchantBankAccount> getMerchantBankAccounts() {
+        return merchantBankAccounts;
+    }
+
+    public void setMerchantBankAccounts(List<MerchantBankAccount> merchantBankAccounts) {
+        this.merchantBankAccounts = merchantBankAccounts;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Merchant merchant = (Merchant) o;
+
+        if (companyRegistrationNumber != null ? !companyRegistrationNumber.equals(merchant.companyRegistrationNumber) : merchant.companyRegistrationNumber != null)
+            return false;
+        if (companyName != null ? !companyName.equals(merchant.companyName) : merchant.companyName != null)
+            return false;
+        return merchantBankAccounts != null ? merchantBankAccounts.equals(merchant.merchantBankAccounts) : merchant.merchantBankAccounts == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = companyRegistrationNumber != null ? companyRegistrationNumber.hashCode() : 0;
+        result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
+        result = 31 * result + (merchantBankAccounts != null ? merchantBankAccounts.hashCode() : 0);
+        return result;
     }
 }

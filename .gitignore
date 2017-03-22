@@ -7,13 +7,14 @@ frontend/unit.xml
 .project
 .metadata
 
-src/main/resources/lib/api/*
-
+backend/src/main/resources/lib/api/*
 backend/.idea
 backend/target
 backend/src/main/resources/static/
 backend/logs
 backend/src/test/resources/db/dump.sql
+backend/src/test/resources/db/*.sqle
+backend/src/test/resources/db/*.sql-e
 
 frontend/node_modules
 **/*.iml

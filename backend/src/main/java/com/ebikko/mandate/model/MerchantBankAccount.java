@@ -1,16 +1,36 @@
 package com.ebikko.mandate.model;
 
-import javax.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity(name = "Merchant Bank Account")
 public class MerchantBankAccount {
 
-    @Column(name = "bank")
+    @Id
+    private final String id;
+    @Column(name = "Bank Name")
     private final Bank bank;
-    @Column(name= "account_number")
+    @Column(name= "Merchant Account No")
     private final String accountNumber;
+    @Column(name = "Seller ID")
     private final String sellerId;
 
-    public MerchantBankAccount(Bank bank, String accountNumber, String sellerId) {
+    @JsonCreator
+    public MerchantBankAccount(@JsonProperty("bank") Bank bank,
+                               @JsonProperty("accountNumber") String accountNumber,
+                               @JsonProperty("sellerId") String sellerId) {
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+        this.sellerId = sellerId;
+        this.id = null;
+    }
+
+    public MerchantBankAccount(String id, Bank bank, String accountNumber, String sellerId) {
+        this.id = id;
         this.bank = bank;
         this.accountNumber = accountNumber;
         this.sellerId = sellerId;
@@ -26,5 +46,26 @@ public class MerchantBankAccount {
 
     public String getSellerId() {
         return sellerId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MerchantBankAccount that = (MerchantBankAccount) o;
+
+        if (bank != null ? !bank.equals(that.bank) : that.bank != null) return false;
+        if (accountNumber != null ? !accountNumber.equals(that.accountNumber) : that.accountNumber != null)
+            return false;
+        return sellerId != null ? sellerId.equals(that.sellerId) : that.sellerId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = bank != null ? bank.hashCode() : 0;
+        result = 31 * result + (accountNumber != null ? accountNumber.hashCode() : 0);
+        result = 31 * result + (sellerId != null ? sellerId.hashCode() : 0);
+        return result;
     }
 }

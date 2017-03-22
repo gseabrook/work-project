@@ -1,10 +1,16 @@
-
 SET DATABASE SQL REGULAR NAMES FALSE;
-CREATE TYPE  TEXT AS VARCHAR(1000000);
+CREATE TYPE TEXT AS VARCHAR(1000000)
 CREATE TYPE BYTEA AS VARBINARY(1000000);
+--
+-- PostgreSQL database dump
+--
+
+
+
+
 
 --
--- Name: container_containee; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: container_containee; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE container_containee (
@@ -13,8 +19,9 @@ CREATE TABLE container_containee (
     enclosure_number integer
 );
 
+
 --
--- Name: esign_wflow; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: esign_wflow; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE esign_wflow (
@@ -33,9 +40,8 @@ CREATE TABLE esign_wflow (
 );
 
 
-
 --
--- Name: evt_based_notification; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: evt_based_notification; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE evt_based_notification (
@@ -70,9 +76,8 @@ CREATE TABLE evt_based_notification (
 );
 
 
-
 --
--- Name: ftextindex; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: ftextindex; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE ftextindex (
@@ -89,9 +94,8 @@ CREATE TABLE ftextindex (
 );
 
 
-
 --
--- Name: hold; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: hold; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE hold (
@@ -106,9 +110,8 @@ CREATE TABLE hold (
 );
 
 
-
 --
--- Name: hold_node; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: hold_node; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE hold_node (
@@ -117,9 +120,8 @@ CREATE TABLE hold_node (
 );
 
 
-
 --
--- Name: lookupitem; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: lookupitem; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE lookupitem (
@@ -131,9 +133,8 @@ CREATE TABLE lookupitem (
 );
 
 
-
 --
--- Name: lookupset; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: lookupset; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE lookupset (
@@ -143,9 +144,8 @@ CREATE TABLE lookupset (
 );
 
 
-
 --
--- Name: node_event; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: node_event; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE node_event (
@@ -161,9 +161,19 @@ CREATE TABLE node_event (
 );
 
 
+--
+-- Name: node_refs; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
+--
+
+CREATE TABLE node_refs (
+    property_uid character(32) NOT NULL,
+    from_node_uid character(65) NOT NULL,
+    to_node_uid character(65) NOT NULL
+);
+
 
 --
--- Name: nodetype; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype (
@@ -294,9 +304,8 @@ CREATE TABLE nodetype (
 );
 
 
-
 --
--- Name: nodetype_attribute; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_attribute; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_attribute (
@@ -307,9 +316,8 @@ CREATE TABLE nodetype_attribute (
 );
 
 
-
 --
--- Name: nodetype_b7bc8b7449614d159ce0869306f04d36; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_b7bc8b7449614d159ce0869306f04d36; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_b7bc8b7449614d159ce0869306f04d36 (
@@ -395,9 +403,8 @@ CREATE TABLE nodetype_b7bc8b7449614d159ce0869306f04d36 (
 );
 
 
-
 --
--- Name: nodetype_c22816ad803c47ed83400bc787d06ed4; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_c22816ad803c47ed83400bc787d06ed4; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_c22816ad803c47ed83400bc787d06ed4 (
@@ -489,13 +496,13 @@ CREATE TABLE nodetype_c22816ad803c47ed83400bc787d06ed4 (
     bf65f9219f944e47b00873d7bec3343c character varying(15),
     gf1f763b063149df8529223e8b37a24b character varying(15),
     ec690c2952ef478ebcc6f25afbc367f2 character varying(255),
-    b6d28a5702d740cdb0f733f97aee88c5 character(32)
+    d5858a70d49d4cf2b0d009ffac1c2f01 character(32),
+    j1a034132d74409fa321444e8b7ff4b2 character(32)
 );
 
 
-
 --
--- Name: nodetype_c408fbc0ea084ec19b7ee3f4d94e7711; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_c408fbc0ea084ec19b7ee3f4d94e7711; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_c408fbc0ea084ec19b7ee3f4d94e7711 (
@@ -576,17 +583,14 @@ CREATE TABLE nodetype_c408fbc0ea084ec19b7ee3f4d94e7711 (
     security_level_triggered_event_duration integer DEFAULT 0,
     security_level_triggered_event_property character(32),
     auto_update_security_level_id character(32),
-    ha41c373c2f0413cb1458bb886048bb2 character varying(255),
-    f0970f3862f941338e162f34b75e6831 character varying(20),
     c1fb9f1f82af496cbbfd8f387aefab42 character varying(20),
     fdc659695c944890b9c1720de461db2e character(65),
     cead45cc70f2415ca1054f2853a8a100 character varying(20)
 );
 
 
-
 --
--- Name: nodetype_dc8e3bc6f41f4f15aa445184108a680a; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_dc8e3bc6f41f4f15aa445184108a680a; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_dc8e3bc6f41f4f15aa445184108a680a (
@@ -677,13 +681,16 @@ CREATE TABLE nodetype_dc8e3bc6f41f4f15aa445184108a680a (
     b1b99355d0834804a01b7a69fc2421bd numeric(16,2),
     f9ce8fde98e547699ff79602b2dce34f timestamp without time zone,
     hea71551e76346ad8f8e87f13911c1b3 character varying(100),
-    e797f68ea14741bc85f1b7813cd0d875 character(32)
+    a36e65cb8ea243f894f405bb4a9e3e0d character varying(20),
+    afd1329c2de2421bbbe5a48f65b56818 character varying(255),
+    fdc5a29e8ead4b2f841ee80af03f5aa7 character(65),
+    c1fb9f1f82af496cbbfd8f387aefab42 character varying(20),
+    f792c310e30b4a43b21658046926cc6b character(65)
 );
 
 
-
 --
--- Name: nodetype_eb50047853d6486b8c7f78ad91d4f454; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_eb50047853d6486b8c7f78ad91d4f454; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_eb50047853d6486b8c7f78ad91d4f454 (
@@ -765,16 +772,12 @@ CREATE TABLE nodetype_eb50047853d6486b8c7f78ad91d4f454 (
     security_level_triggered_event_property character(32),
     auto_update_security_level_id character(32),
     fdc659695c944890b9c1720de461db2e character(65),
-    j8e43ac4e85940c6a15e4c35f0a5a7e5 character varying(20),
-    h763e35b6288452895b143ec4bad9d02 character varying(255),
-    c7b15198b7a844d2bbe56fa6116f9018 character varying(15),
-    ac587b9bdb0545d9a4bb872848b12755 character varying(100)
+    j8e43ac4e85940c6a15e4c35f0a5a7e5 character varying(20)
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000000; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000000; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000000 (
@@ -860,9 +863,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000000 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000001; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000001; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000001 (
@@ -947,9 +949,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000001 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000002; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000002; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000002 (
@@ -1041,9 +1042,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000002 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000003; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000003; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000003 (
@@ -1128,9 +1128,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000003 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000004; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000004; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000004 (
@@ -1214,9 +1213,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000004 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000005; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000005; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000005 (
@@ -1308,9 +1306,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000005 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000006; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000006; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000006 (
@@ -1394,9 +1391,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000006 (
 );
 
 
-
 --
--- Name: nodetype_f0000000000000000000000000000007; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f0000000000000000000000000000007; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f0000000000000000000000000000007 (
@@ -1483,9 +1479,8 @@ CREATE TABLE nodetype_f0000000000000000000000000000007 (
 );
 
 
-
 --
--- Name: nodetype_f2bfeb5852264c5aa67f53f96ac28d39; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_f2bfeb5852264c5aa67f53f96ac28d39; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_f2bfeb5852264c5aa67f53f96ac28d39 (
@@ -1573,13 +1568,12 @@ CREATE TABLE nodetype_f2bfeb5852264c5aa67f53f96ac28d39 (
     ibdaf89d09234fef9826c0f2a81ef088 character varying(255),
     e12bc6ec5ab144aab50b592c046de9f5 text,
     f5da945a323c4488b407142013d47646 character varying(15),
-    e797f68ea14741bc85f1b7813cd0d875 character(32)
+    he2bb392ca384d81a11181cdea5a9006 character(32)
 );
 
 
-
 --
--- Name: nodetype_property; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: nodetype_property; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE nodetype_property (
@@ -1594,9 +1588,8 @@ CREATE TABLE nodetype_property (
 );
 
 
-
 --
--- Name: object_event; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: object_event; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE object_event (
@@ -1610,6 +1603,11 @@ CREATE TABLE object_event (
     details text NOT NULL,
     ipaddress character varying(45)
 );
+
+
+--
+-- Name: principal; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
+--
 
 CREATE TABLE principal (
     uid character(32) NOT NULL,
@@ -1643,8 +1641,9 @@ CREATE TABLE principal (
     mobile_phone character varying(20)
 );
 
+
 --
--- Name: principal_group; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: principal_group; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE principal_group (
@@ -1653,9 +1652,8 @@ CREATE TABLE principal_group (
 );
 
 
-
 --
--- Name: profile; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: profile; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE profile (
@@ -1753,9 +1751,8 @@ CREATE TABLE profile (
 );
 
 
-
 --
--- Name: property; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: property; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE property (
@@ -1786,9 +1783,8 @@ CREATE TABLE property (
 );
 
 
-
 --
--- Name: property_group; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: property_group; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE property_group (
@@ -1798,9 +1794,8 @@ CREATE TABLE property_group (
 );
 
 
-
 --
--- Name: recent_container; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: recent_container; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE recent_container (
@@ -1812,9 +1807,8 @@ CREATE TABLE recent_container (
 );
 
 
-
 --
--- Name: record_node; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: record_node; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE record_node (
@@ -1823,9 +1817,8 @@ CREATE TABLE record_node (
 );
 
 
-
 --
--- Name: store; Type: TABLE; Schema: mdd; Owner: mdd; Tablespace: 
+-- Name: store; Type: TABLE; Schema: mdd; Owner: -; Tablespace: 
 --
 
 CREATE TABLE store (
@@ -1838,11 +1831,1464 @@ CREATE TABLE store (
     encryption smallint DEFAULT 0 NOT NULL
 );
 
-CREATE TABLE node_refs (
-    property_uid character(32) NOT NULL,
-    from_node_uid character(65) NOT NULL,
-    to_node_uid character(65) NOT NULL
-);
+
+--
+-- Name: container_containee_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: esign_wflow_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: evt_based_notification_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: ftextindex_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: hold_node_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: hold_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: lookupitem_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: lookupset_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: node_refs_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_attribute_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_b7bc8b7449614d159ce0869306f04d36_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_c22816ad803c47ed83400bc787d06ed4_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_c408fbc0ea084ec19b7ee3f4d94e7711_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_dc8e3bc6f41f4f15aa445184108a680a_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_eb50047853d6486b8c7f78ad91d4f454_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000000_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000001_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000002_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000003_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000004_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000005_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000006_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f0000000000000000000000000000007_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_f2bfeb5852264c5aa67f53f96ac28d39_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: nodetype_property_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: principal_group_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: principal_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: profile_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: property_group_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: property_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: recent_container_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: record_node_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: store_pkey; Type: CONSTRAINT; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+
+--
+-- Name: actor_uid_node_uid_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: containee_uid_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: index_event_timestamp; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: index_nodeevent_event_timestamp; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: lkset_code_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: lkset_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: lkset_val_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: node_uid_uniq; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: nodetype_attribute_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: nodetype_level_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: nodetype_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: principal_barcode; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: principal_ext_barcode; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: principal_extid_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: principal_uname_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: profile_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: property_group_nodetype_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: property_group_order_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: property_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: store_name_idx; Type: INDEX; Schema: mdd; Owner: -; Tablespace: 
+--
+
+
+
+--
+-- Name: actor_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: ct_node_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: ebn_et_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: ebn_group_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: ebn_nodetype_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: ebn_prop_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_acl_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_assignee_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_classif_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_client_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_hold_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_home_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_owner_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_principal_esign_wflow; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_record_node_esign_wflow; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_retsched_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_b7bc8b7449614d159ce0869306f04d36; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_c22816ad803c47ed83400bc787d06ed4; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_c408fbc0ea084ec19b7ee3f4d94e7711; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_dc8e3bc6f41f4f15aa445184108a680a; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_eb50047853d6486b8c7f78ad91d4f454; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000000; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000001; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000002; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000003; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000004; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000005; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000006; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f0000000000000000000000000000007; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: fk_sec_level_f2bfeb5852264c5aa67f53f96ac28d39; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: group_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: hold_acl_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: hold_contact_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: hold_node_hold_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: lkpitm_fk1; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: node_refs_property_uid_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_acl_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_attribute_nodetype_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_c22816ad803c47ed8340_j1a034132d74409fa321444e8b7f_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_c408fbc0ea084ec19b7e_fdc659695c944890b9c1720de461_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_dc8e3bc6f41f4f15aa44_f792c310e30b4a43b21658046926_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_dc8e3bc6f41f4f15aa44_fdc5a29e8ead4b2f841ee80af03f_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_eb50047853d6486b8c7f_fdc659695c944890b9c1720de461_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nodetype_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: nt_rs_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: principal_profile_uid_fkey; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: principal_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: prop_lkpset_fk1; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: property_group_nodetype_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: property_member_of_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: property_refnodetype_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: property_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
+--
+-- Name: store_uid_fk; Type: FK CONSTRAINT; Schema: mdd; Owner: -
+--
+
+
+
+
 --
 -- PostgreSQL database dump complete
 --

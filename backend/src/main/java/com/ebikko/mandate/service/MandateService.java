@@ -4,6 +4,7 @@ import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.service.translator.NodeTranslator;
 import ebikko.EbikkoException;
 import ebikko.Node;
 import ebikko.Session;
@@ -17,11 +18,13 @@ public class MandateService {
 
     private final SessionService sessionService;
     private final NodeTranslator nodeTranslator;
+    private final NodeService nodeService;
 
     @Autowired
-    public MandateService(SessionService sessionService, NodeTranslator nodeTranslator) {
+    public MandateService(SessionService sessionService, NodeTranslator nodeTranslator, NodeService nodeService) {
         this.sessionService = sessionService;
         this.nodeTranslator = nodeTranslator;
+        this.nodeService = nodeService;
     }
 
     public void save(final Mandate mandate) throws EbikkoException {
@@ -42,14 +45,19 @@ public class MandateService {
                 mandateNode.setValue("Registration Date", mandate.getRegistrationDate());
                 mandateNode.setValue("Reference Number", mandate.getReferenceNumber());
 
+                Node merchantInformation = nodeService.getNode(session, mandate.getMerchant());
+                mandateNode.setValue("Merchant", merchantInformation);
+
+                Node customerNode = nodeTranslator.translate(customer, session);
+                customerNode.save();
+
+                mandateNode.setValue("Customer", customerNode);
+
                 mandateNode.save();
                 // Effective Date
 
-                Node customerNode = nodeTranslator.translate(customer, session);
                 Node bankAccount = ((List<Node>) customerNode.getValue("Customer Bank Account")).get(0);
                 bankAccount.save();
-
-                customerNode.save();
 
                 return null;
             }

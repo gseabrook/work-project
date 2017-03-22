@@ -11,19 +11,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.mail.MailSender;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Connection;
 import java.util.Properties;
 
 import static org.mockito.Mockito.*;
 
 @Configuration
+@EnableTransactionManagement
 @Import(DirectDebitApplication.class)
 @Profile("embeddeddb")
 public class EmbeddedDBTestConfiguration {
@@ -42,14 +47,21 @@ public class EmbeddedDBTestConfiguration {
     }
 
     @Bean
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Bean
     public SessionService sessionService() throws Exception {
         Field escapeChar = Filter.class.getField("ESCAPE_CHAR");
         setFinalStatic(escapeChar, "\\");
 
         SessionService mockSessionService = mock(SessionService.class);
         TestRepository repository = mock(TestRepository.class);
-
-        when(repository.getConnection()).thenReturn(dataSource().getConnection());
+        Connection connection = DataSourceUtils.getConnection(dataSource());
+//        Connection connection = dataSource().getConnection();
+        connection.setAutoCommit(false);
+        when(repository.getConnection()).thenReturn(connection);
         when(repository.getDriver()).thenReturn("mysql");
 
         when(repository.getProperty("web.defaultTimeZone")).thenReturn("Asia/Kuala_Lumpur");
@@ -75,6 +87,8 @@ public class EmbeddedDBTestConfiguration {
         doReturn(principal).when(spy).getLoginDetails();
         doReturn(principal).when(spy).getPrincipalByUserName(anyString());
         doReturn("root").when(spy).getUserName();
+        doReturn(false).when(spy).isLocked(any(Node.class));
+        doReturn(true).when(spy).isInTransaction();
 
         when(mockSessionService.loadRepositoryProperty(anyString())).thenCallRealMethod();
         when(mockSessionService.performSessionAction(any(SessionAction.class))).thenAnswer(new Answer<Object>() {

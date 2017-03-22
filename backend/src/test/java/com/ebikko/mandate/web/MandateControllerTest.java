@@ -2,19 +2,14 @@ package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.service.MandateService;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 
-import static com.ebikko.mandate.MandateBuilder.exampleMandate;
+import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.exparity.hamcrest.date.DateMatchers.isMarch;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,17 +18,14 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MandateControllerTest {
+public class MandateControllerTest extends AbstractControllerTest {
 
-    private MockMvc mockMvc;
     @Mock
     private MandateService mandateService;
 
-    @Before
-    public void setUp() throws Exception {
-        MandateController mandateController = new MandateController(mandateService);
-        mockMvc = MockMvcBuilders.standaloneSetup(mandateController).build();
+    @Override
+    public Object getController() {
+        return new MandateController(mandateService);
     }
 
     @Test
@@ -42,7 +34,7 @@ public class MandateControllerTest {
         mockMvc.perform(
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(exampleMandate().toJson()))
+                        .content(exampleMandateBuilder().toJson()))
                 .andExpect(status().isCreated());
 
         ArgumentCaptor<Mandate> captor = ArgumentCaptor.forClass(Mandate.class);

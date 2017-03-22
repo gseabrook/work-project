@@ -30,14 +30,6 @@ public class SessionService {
         }
     }
 
-    public <T> T performUnsafeSessionAction(SessionAction<T> sessionAction)  {
-        try {
-            return performSessionAction(sessionAction);
-        } catch (EbikkoException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public <T> T performSessionAction(SessionAction<T> sessionAction) throws EbikkoException {
         Repository repo;
         Session session = null;

@@ -1,6 +1,7 @@
 package com.ebikko.mandate.web;
 
 import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,9 +14,10 @@ import java.util.Map;
 
 import static com.ebikko.mandate.IDs.NodeTypes;
 import static com.ebikko.mandate.IDs.NodeTypes.*;
+import static com.ebikko.mandate.IDs.Nodes.AGI_MERCHANT;
 import static com.ebikko.mandate.IDs.PropertyIDs;
 import static com.ebikko.mandate.IDs.PropertyIDs.*;
-import static com.ebikko.mandate.MandateBuilder.exampleMandate;
+import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -33,8 +35,8 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         mockMvc.perform(
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(exampleMandate().toJson()))
-                .andExpect(status().is2xxSuccessful());
+                        .content(exampleMandateBuilder().toJson()))
+                .andExpect(status().isCreated());
 
         // Check mandate saved
         Map<String, Object> values = jdbcTemplate.queryForMap("select * from nodetype_" + EMANDATE_FORM);
@@ -45,6 +47,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         assertThat(values.get(ID_NUMBER), Matchers.<Object>is("123456"));
         Timestamp date = (Timestamp) values.get(REGISTRATION_DATE);
         assertThat(date.getTime(), is(new GregorianCalendar(2017, 2, 25).getTime().getTime()));
+        assertThat(values.get(MERCHANT_RECORD), Is.<Object>is(AGI_MERCHANT));
 
         // Check customer saved
         values = jdbcTemplate.queryForMap("select * from nodetype_" + CUSTOMER_INFO + " where " + EMAIL + " = 'test@example.com'" );
