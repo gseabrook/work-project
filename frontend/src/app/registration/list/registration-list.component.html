@@ -1,29 +1,23 @@
-<div class="container">
-    <md-toolbar color="primary">Registration List</md-toolbar>
-    
-    <table class="material-table">
-        <thead>
-            <tr>
-                <th>Account Holder Name</th>
-                <th>ID Number</th>
-                <th>Account Number</th>
-                <th>Bank Abbreviation</th>
-                <th>Registration Date</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let registration of registrations">
-                <td>{{registration.accountHolderName}}</td>
-                <td>{{registration.idNumber}}</td>
-                <td>{{registration.accountNumber}}</td>
-                <td>{{registration.bankAbbreviation}}</td>
-                <td>{{registration.registrationDate | date:'mediumDate'}}</td>
-                <td>{{registration.email}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a routerLink="/registration-form">Create</a>
-
-</div>
+<h1 class="subheader" color="primary">Registration List</h1>    
+<table class="material-table">
+    <thead>
+        <tr>
+            <th>Reference Number</th>
+            <th>Registration Date</th>
+            <th>Amount</th>
+            <th>Frequency</th>
+            <th>Customer Name</th>
+            <th>Customer ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let registration of registrations">
+            <td>{{registration.referenceNumber}}</td>
+            <td>{{registration.registrationDate | date:'mediumDate'}}</td>
+            <td>{{registration.amount}}</td>
+            <td>{{registration.frequency}}</td>
+            <td>{{registration.customer.name}}</td>
+            <td>{{registration.customer.idValue}} ({{registration.customer.idType}})</td>
+        </tr>
+    </tbody>
+</table>

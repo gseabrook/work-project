@@ -6,6 +6,7 @@ import { RegistrationFormComponent } from './registration/form/registration-form
 import { RegistrationListComponent } from './registration/list/registration-list.component';
 import { CompleteComponent } from './registration/complete/complete.component';
 import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'registration-complete',
     component: CompleteComponent
+  },
+  {
+    path: 'home',
+    loadChildren: 'app/home/home.module#HomeModule',
   },
   { path: 'login', component: LoginComponent },
   {

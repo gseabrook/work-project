@@ -3,5 +3,10 @@
     "target": "http://localhost:8080/mydirectdebit",
     "secure": false,
     "loglevel": "debug"
+  },  
+  "/merchant": {
+    "target": "http://localhost:8080/mydirectdebit",
+    "secure": false,
+    "loglevel": "debug"
   }
 }

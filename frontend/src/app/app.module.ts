@@ -8,11 +8,11 @@ import { RouterModule } from '@angular/router';
 
 import { Md2Module } from 'md2';
 
+import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { RegistrationModule } from './registration/registration.module';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from './auth.service';
@@ -30,6 +30,7 @@ import { AppRoutingModule } from './app-routing.module';
     HttpModule,
     MaterialModule.forRoot(),
     Md2Module.forRoot(),
+    HomeModule,
     LoginModule,
     RegistrationModule,
     AppRoutingModule
