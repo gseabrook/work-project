@@ -1,14 +1,20 @@
 package com.ebikko.mandate.web;
 
+import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
+import com.ebikko.mandate.service.UserService;
 import ebikko.EbikkoException;
+import ebikko.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,26 +24,31 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
-@RequestMapping(MERCHANT_URL + "/{merchantId}")
+@RequestMapping(MERCHANT_URL)
 public class MerchantController {
 
     public static final String MERCHANT_URL = "/merchant";
     public static final String MERCHANT_MANDATE_URL = "/mandate";
+
     private final MerchantService merchantService;
+    private final UserService userService;
+    private final MandateService mandateService;
 
     @Autowired
-    public MerchantController(MerchantService merchantService) {
+    public MerchantController(MerchantService merchantService, UserService userService, MandateService mandateService) {
         this.merchantService = merchantService;
+        this.userService = userService;
+        this.mandateService = mandateService;
     }
 
-    @RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/{merchantId}", method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity getMerchant(@PathVariable("merchantId") String merchantId) throws EbikkoException {
         Merchant merchant = merchantService.getMerchant(merchantId);
 
         return new ResponseEntity(merchant, OK);
     }
 
-    @RequestMapping(path = MERCHANT_MANDATE_URL, method = GET, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/{merchantId}" + MERCHANT_MANDATE_URL, method = GET, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity getMandatesForMerchant(@PathVariable("merchantId") String merchantId) throws EbikkoException {
         Merchant merchant = merchantService.getMerchant(merchantId);
 
@@ -46,4 +57,27 @@ public class MerchantController {
         return new ResponseEntity(mandates, OK);
     }
 
+    @RequestMapping(path = MERCHANT_MANDATE_URL, method = GET, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity getMandatesForLoggedInMerchant(Authentication auth) throws EbikkoException {
+        Merchant merchant = userService.getMerchant((Principal) auth.getPrincipal());
+
+        List<Mandate> mandates = merchantService.getMandates(merchant);
+
+        return new ResponseEntity(mandates, OK);
+    }
+
+    @RequestMapping(path = MERCHANT_MANDATE_URL, method = RequestMethod.POST)
+    public ResponseEntity create(@RequestBody @Validated Mandate mandate, BindingResult bindingResult,
+                                 Authentication auth) throws EbikkoException {
+
+        if (bindingResult.hasErrors()) {
+            ErrorResponse errorResponse = new ErrorResponse(bindingResult);
+            return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+        } else {
+            Merchant merchant = userService.getMerchant((Principal) auth.getPrincipal());
+            mandate.setMerchant(merchant);
+            mandateService.save(mandate);
+            return new ResponseEntity(HttpStatus.CREATED);
+        }
+    }
 }

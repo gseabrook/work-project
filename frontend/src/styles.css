@@ -1,5 +1,16 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     margin: 0px;
+}
+
+app-root, app-home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
@@ -90,4 +101,8 @@ h1.subheader {
     line-height: 40px;
     margin-bottom: 30px;
     color: #3f51b5;
+}
+
+md-nav-list a:focus {
+    outline: none;
 }

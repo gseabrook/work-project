@@ -39,9 +39,9 @@ export class RegistrationFormComponent {
 	];
 
 	banks = [
-		new Bank('AFFB0123', 'Affin Bank'),
-		new Bank('BIMB0340', 'Bank Islam'),
-		new Bank('BOFA0207', 'Bank of America')
+		new Bank('b7bc8b7449614d159ce0869306f04d36-c5c7e7e7d62c46a4a6fae91dc22004d9', 'AFFB0123', 'Affin Bank'),
+		new Bank('b7bc8b7449614d159ce0869306f04d36-cccab6d0af204c8795d11e13698796b8', 'BIMB0340', 'Bank Islam'),
+		new Bank('b7bc8b7449614d159ce0869306f04d36-h37714a8ad974a8d8977d27bcbf6c52c', 'BOFA0207', 'Bank of America')
 	];
 
 	frequencyTypes = [
@@ -64,8 +64,8 @@ export class RegistrationFormComponent {
 				if (success) {
 					this.registrationService.save(this.model)
 						.subscribe(
-						result => this.router.navigate(['/registration-complete']),
-						error => Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(error.json()).fieldErrors)
+							result => this.router.navigate(['/home/registration-list']),
+							error => Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(error.json()).fieldErrors)
 					);
 				}
 			});

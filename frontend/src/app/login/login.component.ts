@@ -14,10 +14,9 @@ export class LoginComponent {
 
 	constructor(private authService: AuthService, private router: Router) { }
 
-	// TODO - Add the navigation to the test
 	login() {
 		this.authService.login(this.model.username, this.model.password).then(() => {
-			let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/registrations';
+			let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
 
 			this.router.navigate([redirect]);
 		});

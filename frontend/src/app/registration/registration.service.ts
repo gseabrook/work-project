@@ -15,12 +15,12 @@ export class RegistrationService {
 
 	save(registration: Registration) {
 		return this.http
-			.post(this.registrationUrl, JSON.stringify(registration), { headers: this.headers });
+			.post("merchant/mandate", JSON.stringify(registration), { headers: this.headers });
 	}
 
 	get() {
 		return this.http
-			.get("merchant/c22816ad803c47ed83400bc787d06ed4-cac5e82e2312435a9bc943028f22133a/mandate", { headers: this.headers })
+			.get("merchant/mandate", { headers: this.headers })
 			.toPromise()
 			.then(response => response.json() as Registration[]);
 	}

@@ -49,15 +49,16 @@ public class MandateService {
                 mandateNode.setValue("Merchant", merchantInformation);
 
                 Node customerNode = nodeTranslator.translate(customer, session);
+
+                Node bankAccount = ((List<Node>) customerNode.getValue("Customer Bank Account")).get(0);
+                bankAccount.save();
+
                 customerNode.save();
 
                 mandateNode.setValue("Customer", customerNode);
 
                 mandateNode.save();
                 // Effective Date
-
-                Node bankAccount = ((List<Node>) customerNode.getValue("Customer Bank Account")).get(0);
-                bankAccount.save();
 
                 return null;
             }

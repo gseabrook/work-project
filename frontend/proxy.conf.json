@@ -1,12 +1,22 @@
 {
-  "/mandate": {
-    "target": "http://localhost:8080/mydirectdebit",
-    "secure": false,
-    "loglevel": "debug"
-  },  
-  "/merchant": {
-    "target": "http://localhost:8080/mydirectdebit",
-    "secure": false,
-    "loglevel": "debug"
-  }
+    "/mandate": {
+        "target": "http://localhost:8080/mydirectdebit",
+        "secure": false,
+        "loglevel": "debug",
+        "changeOrigin": true
+    },
+    "/merchant": {
+        "target": "http://localhost:8080/mydirectdebit",
+        "secure": false,
+        "loglevel": "debug",
+        "changeOrigin": true
+
+    },
+    "/login": {
+        "target": "http://localhost:8080/mydirectdebit",
+        "secure": false,
+        "loglevel": "debug",
+        "changeOrigin": true
+
+    }
 }

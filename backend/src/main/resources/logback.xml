@@ -17,11 +17,19 @@
         </encoder>
     </appender>
 
+    <logger name="net.sf.ehcache" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.ebikko.mandate" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+
     <logger name="ebikko.MultiQuery" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

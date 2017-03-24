@@ -10,7 +10,7 @@ import 'rxjs/add/operator/delay';
 @Injectable()
 export class AuthService {
 
-	loginUrl = "api/login";
+	loginUrl = "login";
 	isLoggedIn: boolean = false;
 	redirectUrl: string;
 

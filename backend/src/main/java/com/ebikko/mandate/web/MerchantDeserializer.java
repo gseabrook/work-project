@@ -13,6 +13,7 @@ public class MerchantDeserializer extends JsonDeserializer<Merchant> {
 
     @Override
     public Merchant deserialize(final JsonParser p, DeserializationContext ctxt) throws IOException {
-        return new Merchant(p.getText());
+        String merchantId = p.getText();
+        return merchantId == null ? null : new Merchant(merchantId);
     }
 }

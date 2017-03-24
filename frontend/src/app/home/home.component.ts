@@ -13,8 +13,7 @@ export class HomeComponent implements OnInit {
 		private route: ActivatedRoute,
 	) { }
 
-	ngOnInit() {
-	}
+	ngOnInit() {}
 
 	link() {
 		this.router.navigate(['registration-list'], { relativeTo: this.route });

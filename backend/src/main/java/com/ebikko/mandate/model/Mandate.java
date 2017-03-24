@@ -68,6 +68,10 @@ public class Mandate {
         return merchant;
     }
 
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

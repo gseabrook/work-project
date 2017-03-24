@@ -3,6 +3,7 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
 import com.ebikko.mandate.service.MerchantService;
+import com.ebikko.mandate.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -26,10 +27,12 @@ public class MerchantControllerTest extends AbstractControllerTest {
 
     @Mock
     private MerchantService merchantService;
+    @Mock
+    private UserService userService;
 
     @Override
     public Object getController() {
-        return new MerchantController(merchantService);
+        return new MerchantController(merchantService, userService);
     }
 
     @Test
