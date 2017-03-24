@@ -12,21 +12,28 @@ import { RegistrationService } from '../registration.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
+import { MandateFormService } from './mandate-form.service';
 
 @Component({
-	selector: 'registration-form',
-	templateUrl: './registration-form.component.html',
-	styleUrls: ['./registration-form.component.css']
+	selector: 'mandate-form',
+	templateUrl: './mandate-form.component.html',
+	styleUrls: ['./mandate-form.component.css']
 })
-export class RegistrationFormComponent {
-	vm: RegistrationFormComponent = this;
+export class MandateFormComponent implements OnInit {
+
+  	banks: Bank[];
 
 	constructor(
 		private registrationService: RegistrationService,
+		private mandateFormService: MandateFormService,
 		private dialog: MdDialog,
 		private location: Location,
 		private router: Router
 	) { }
+
+	ngOnInit() {
+		this.mandateFormService.getBanks().subscribe(banks => this.banks = banks);
+	}
 
 	model: Registration = Registration.newRegistration();
 	fieldErrors : ValidationError[] = [];
@@ -38,11 +45,6 @@ export class RegistrationFormComponent {
 		{ value: 'BUSINESS_REGISTRATION_NUMBER', viewValue: 'Business Registration' }
 	];
 
-	banks = [
-		new Bank('b7bc8b7449614d159ce0869306f04d36-c5c7e7e7d62c46a4a6fae91dc22004d9', 'AFFB0123', 'Affin Bank'),
-		new Bank('b7bc8b7449614d159ce0869306f04d36-cccab6d0af204c8795d11e13698796b8', 'BIMB0340', 'Bank Islam'),
-		new Bank('b7bc8b7449614d159ce0869306f04d36-h37714a8ad974a8d8977d27bcbf6c52c', 'BOFA0207', 'Bank of America')
-	];
 
 	frequencyTypes = [
 		{ value: 'DAILY', viewValue: 'Daily' },

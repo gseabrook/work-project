@@ -4,7 +4,7 @@ import { AuthGuard } from '../auth-guard.service';
 
 import { HomeComponent } from './home.component';
 import { RegistrationListComponent } from '../registration/list/registration-list.component';
-import { RegistrationFormComponent } from '../registration/form/registration-form.component';
+import { MandateFormComponent } from '../registration/form/mandate-form.component';
 
 const homeRoutes: Routes = [
   {
@@ -17,8 +17,8 @@ const homeRoutes: Routes = [
         component: RegistrationListComponent
       },
       {
-        path: 'registration-form',
-        component: RegistrationFormComponent
+        path: 'mandate-form',
+        component: MandateFormComponent
       }
     ]
   }

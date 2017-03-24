@@ -7,9 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "Bank Information")
+@Entity(name = Bank.BANK_NODE_TYPE)
 @ReferenceData
 public class Bank {
+
+    public static final String BANK_NODE_TYPE = "Bank Information";
 
     @Id
     private final String id;
