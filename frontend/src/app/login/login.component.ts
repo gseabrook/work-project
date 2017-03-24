@@ -17,7 +17,6 @@ export class LoginComponent {
 	login() {
 		this.authService.login(this.model.username, this.model.password).then(() => {
 			let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
-
 			this.router.navigate([redirect]);
 		});
 	}

@@ -1,5 +1,7 @@
 html {
     height: 100%;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+
 }
 
 body {
@@ -47,10 +49,6 @@ div.md2-calendar-day.today {
 md2-datepicker:focus:not(.md2-datepicker-disabled) .md2-datepicker-input {
     color: #673ab7 !important;
     border-color: #673ab7 !important;
-}
-
-div.md2-datepicker-panel {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .md2-datepicker-icon {

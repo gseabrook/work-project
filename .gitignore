@@ -6,6 +6,7 @@ out
 frontend/unit.xml
 .project
 .metadata
+npm-debug.log
 
 backend/src/main/resources/lib/api/*
 backend/.idea

@@ -23,10 +23,17 @@ export class AuthService {
 		body.set('password', password);
 
 		return this.http
-			.post(this.loginUrl, body)
+			.post(this.loginUrl, body, {
+				withCredentials: true
+			})
 			.toPromise()
 			.then(() => this.isLoggedIn = true)
 			.catch(this.handleError);
+	}
+
+	logout() {
+		this.isLoggedIn = false;
+		return this.http.get('/logout');
 	}
 
 	private handleError(error: any): Promise<any> {
@@ -34,7 +41,4 @@ export class AuthService {
 		return Promise.reject(error.message || error);
 	}
 
-	logout(): void {
-		this.isLoggedIn = false;
-	}
 }

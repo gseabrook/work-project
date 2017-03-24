@@ -1,8 +1,14 @@
-<md-toolbar color="primary" class="mat-elevation-z8">
+<md-toolbar color="primary" class="mat-elevation-z8" fxLayout="row">
     <button md-icon-button (click)="sidenav.toggle()">
         <md-icon>menu</md-icon>
     </button>
-    Mandate Dashboard
+    <div>Mandate Dashboard</div>
+    <button md-icon-button [mdMenuTriggerFor]="settingsMenu">
+        <md-icon>settings</md-icon>
+    </button>
+    <md-menu #settingsMenu="mdMenu">
+        <button md-menu-item (click)="logout()">Logout</button>
+    </md-menu>
 </md-toolbar>
 <md-sidenav-container>
     <md-sidenav #sidenav mode="over">
