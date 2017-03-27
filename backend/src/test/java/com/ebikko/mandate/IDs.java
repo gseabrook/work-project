@@ -11,6 +11,7 @@ public class IDs {
         public static String EMAIL = "ibdaf89d09234fef9826c0f2a81ef088";
         public static String PHONE_NUMBER = "f5da945a323c4488b407142013d47646";
         public static String ID_TYPE = "ac587b9bdb0545d9a4bb872848b12755";
+        public static String ID_VALUE = "c7b15198b7a844d2bbe56fa6116f9018";
         public static String ID_NUMBER = "c7b15198b7a844d2bbe56fa6116f9018";
         public static String CUSTOMER_BANK_ACCOUNT = "he2bb392ca384d81a11181cdea5a9006";
 

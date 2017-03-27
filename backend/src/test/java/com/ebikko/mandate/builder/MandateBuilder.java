@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ebikko.mandate.builder.BankBuilder.exampleBank;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
@@ -41,7 +42,7 @@ public class MandateBuilder {
 
     public static MandateBuilder exampleMandateBuilder() {
         MandateBuilder mandateBuilder = new MandateBuilder()
-                .with("referenceNumber", "123abc")
+                .with("referenceNumber", String.valueOf(Math.random()))
                 .with("registrationDate", "2017-03-25")
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
@@ -51,8 +52,7 @@ public class MandateBuilder {
         customer.put("name", "Joe");
         customer.put("emailAddress", "test@example.com");
         customer.put("idType", "PASSPORT_NUMBER");
-        customer.put("idValue", "123456");
-
+        customer.put("idValue", String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999)));
         Map<String, Object> bank = new HashMap<>();
         bank.put("code", "HSBC0222");
         bank.put("name", "HSBC");
@@ -69,6 +69,10 @@ public class MandateBuilder {
         mandateBuilder.with("customer", customer);
 
         return mandateBuilder;
+    }
+
+    public Object get(String field) {
+        return mandate.get(field);
     }
 
     public static Mandate exampleMandate() {

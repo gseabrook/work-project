@@ -14,6 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(MANDATE_URL)
@@ -36,6 +38,17 @@ public class MandateController {
         } else {
             service.save(mandate);
             return new ResponseEntity(HttpStatus.CREATED);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{mandateId}")
+    public ResponseEntity get(@PathVariable String mandateId) throws EbikkoException {
+        Mandate mandate = service.get(mandateId);
+
+        if (mandate == null) {
+            return new ResponseEntity(NOT_FOUND);
+        } else {
+            return new ResponseEntity(mandate, OK);
         }
     }
 

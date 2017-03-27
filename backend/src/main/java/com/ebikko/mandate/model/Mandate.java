@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -17,6 +18,8 @@ public class Mandate {
 
     public static final String MANDATE_NODE_TYPE = "eMandate Form";
 
+    @Id
+    public String id;
     @Column(name = "Reference Number")
     public String referenceNumber;
     @Column(name = "Registration Date")
@@ -70,6 +73,14 @@ public class Mandate {
 
     public void setMerchant(Merchant merchant) {
         this.merchant = merchant;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.ebikko.mandate.web;
 
+import com.ebikko.mandate.builder.MandateBuilder;
+import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.service.MandateService;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -17,10 +20,12 @@ import static com.ebikko.mandate.IDs.NodeTypes.*;
 import static com.ebikko.mandate.IDs.Nodes.AGI_MERCHANT;
 import static com.ebikko.mandate.IDs.PropertyIDs;
 import static com.ebikko.mandate.IDs.PropertyIDs.*;
+import static com.ebikko.mandate.builder.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,33 +33,39 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private MandateService mandateService;
 
     @Test
     public void shouldSaveAllTheFormData() throws Exception {
 
+        MandateBuilder mandateBuilder = exampleMandateBuilder();
+        Object referenceNumber = mandateBuilder.get("referenceNumber");
+        Object customerIdValue = ((Map)mandateBuilder.get("customer")).get("idValue");
+
         mockMvc.perform(
                 post(MANDATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(exampleMandateBuilder().toJson()))
+                        .content(mandateBuilder.toJson()))
                 .andExpect(status().isCreated());
 
         // Check mandate saved
-        Map<String, Object> values = jdbcTemplate.queryForMap("select * from nodetype_" + EMANDATE_FORM);
-        assertThat(values.get(REFERENCE_NUMBER), Matchers.<Object>is("123abc"));
+        Map<String, Object> values = jdbcTemplate.queryForMap("select * from nodetype_" + EMANDATE_FORM + " where " + REFERENCE_NUMBER + " = '" + referenceNumber + "'");
+        assertThat(values.get(REFERENCE_NUMBER), Matchers.is(referenceNumber));
         assertThat(values.get(FREQUENCY), Matchers.<Object>is("Monthly"));
         assertThat(values.get(MAXIMUM_AMOUNT), Matchers.<Object>is(new BigDecimal("123.45")));
         assertThat(values.get(ID_TYPE), Matchers.<Object>is("Passport Number"));
-        assertThat(values.get(ID_NUMBER), Matchers.<Object>is("123456"));
+        assertThat(values.get(ID_NUMBER), Matchers.<Object>is(customerIdValue));
         Timestamp date = (Timestamp) values.get(REGISTRATION_DATE);
         assertThat(date.getTime(), is(new GregorianCalendar(2017, 2, 25).getTime().getTime()));
         assertThat(values.get(MERCHANT_RECORD), Is.<Object>is(AGI_MERCHANT));
 
         // Check customer saved
-        values = jdbcTemplate.queryForMap("select * from nodetype_" + CUSTOMER_INFO + " where " + EMAIL + " = 'test@example.com'" );
+        values = jdbcTemplate.queryForMap("select * from nodetype_" + CUSTOMER_INFO + " where " + ID_VALUE + " = '" + customerIdValue + "'" );
         assertThat(values.get(CUSTOMER_NAME), Matchers.<Object>is("Joe"));
         assertThat(values.get(EMAIL), Matchers.<Object>is("test@example.com"));
         assertThat(values.get(ID_TYPE), Matchers.<Object>is("Passport Number"));
-        assertThat(values.get(ID_NUMBER), Matchers.<Object>is("123456"));
+        assertThat(values.get(ID_NUMBER), Matchers.is(customerIdValue));
 
         String customerUid = (String) values.get("uid");
 
@@ -68,5 +79,25 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         // Check bank account has reference to bank
         String bankInformationUid = jdbcTemplate.queryForObject("select uid from nodetype_" + BANK_INFORMATION + " where " + BANK_CODE + " = 'HSBC0222'", String.class);
         assertThat(values.get(BANK_NAME), Matchers.<Object>is(bankInformationUid));
+    }
+
+    @Test
+    public void shouldLoadMandateByUid() throws Exception {
+        final Mandate mandate = exampleMandate();
+        mandateService.save(mandate);
+
+        mockMvc
+                .perform(get(MANDATE_URL + "/" + mandate.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldLoadMandateByReferenceNumber() throws Exception {
+        final Mandate mandate = exampleMandate();
+        mandateService.save(mandate);
+
+        mockMvc
+                .perform(get(MANDATE_URL + "/" + mandate.getReferenceNumber()))
+                .andExpect(status().isOk());
     }
 }

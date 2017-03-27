@@ -5,6 +5,7 @@ import { AuthGuard } from '../auth-guard.service';
 import { HomeComponent } from './home.component';
 import { RegistrationListComponent } from '../registration/list/registration-list.component';
 import { MandateFormComponent } from '../registration/form/mandate-form.component';
+import { MandateFormResolver } from '../registration/form/mandate-form-resolver.service';
 
 const homeRoutes: Routes = [
   {
@@ -18,7 +19,10 @@ const homeRoutes: Routes = [
       },
       {
         path: 'mandate-form',
-        component: MandateFormComponent
+        component: MandateFormComponent,
+        resolve: {
+              mandate: MandateFormResolver
+        }
       }
     ]
   }
@@ -30,6 +34,9 @@ const homeRoutes: Routes = [
   ],
   exports: [
     RouterModule
+  ],
+  providers: [
+    MandateFormResolver
   ]
 })
 export class HomeRoutingModule { }

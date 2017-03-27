@@ -11,6 +11,7 @@ import { RegistrationListComponent } from './list/registration-list.component';
 import { FpxAuthenticationComponent } from './fpx-authentication/fpx-authentication.component';
 import { RegistrationService } from './registration.service';
 import { MandateFormService } from './form/mandate-form.service';
+import { MandateFormResolver } from './form/mandate-form-resolver.service';
 import { CompleteComponent } from './complete/complete.component';
 
 @NgModule({
@@ -27,7 +28,7 @@ import { CompleteComponent } from './complete/complete.component';
 		MandateFormComponent, RegistrationListComponent, CompleteComponent
 	],
 	providers: [
-		RegistrationService, MandateFormService
+		RegistrationService, MandateFormService, MandateFormResolver
 	]
 })
 export class RegistrationModule { }

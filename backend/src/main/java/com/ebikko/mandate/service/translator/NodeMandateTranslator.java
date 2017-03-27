@@ -36,10 +36,24 @@ public class NodeMandateTranslator implements Function<NodeStub, Mandate> {
     @Override
     public Mandate apply(final NodeStub input) {
         try {
+            Node node = sessionService.performSessionAction(new SessionAction<Node>() {
+                @Override
+                public Node perform(Session session) throws EbikkoException {
+                    return session.getNode(input.getNodeUid());
+                }
+            });
+            return apply(node);
+        } catch (EbikkoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Mandate apply(final Node node) {
+        try {
             return sessionService.performSessionAction(new SessionAction<Mandate>() {
                 @Override
                 public Mandate perform(Session session) throws EbikkoException {
-                    Node node = session.getNode(input.getNodeUid());
+                    node.setSession(session);
                     String referenceNumber = (String) node.getValue("Reference Number");
                     Date registrationDate = (Date) node.getValue("Registration Date");
                     BigDecimal amount = (BigDecimal) node.getValue("Maximum Amount");

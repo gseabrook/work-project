@@ -3,11 +3,11 @@ import { Location } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgForm } from '@angular/forms';
 import { Response } from '@angular/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MdDialog } from '@angular/material';
 
 import { Bank } from '../model/bank';
-import { Registration } from '../model/registration';
+import { Mandate } from '../model/mandate';
 import { RegistrationService } from '../registration.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
@@ -22,20 +22,25 @@ import { MandateFormService } from './mandate-form.service';
 export class MandateFormComponent implements OnInit {
 
   	banks: Bank[];
+  	model: Mandate;
 
 	constructor(
 		private registrationService: RegistrationService,
 		private mandateFormService: MandateFormService,
 		private dialog: MdDialog,
 		private location: Location,
-		private router: Router
+		private router: Router,
+    	private route: ActivatedRoute
 	) { }
 
 	ngOnInit() {
+		this.route.data.subscribe((data: { mandate: Mandate}) => {
+			this.model = data.mandate;
+		});
+
 		this.mandateFormService.getBanks().subscribe(banks => this.banks = banks);
 	}
 
-	model: Registration = Registration.newRegistration();
 	fieldErrors : ValidationError[] = [];
 
 	idTypes = [
@@ -45,7 +50,6 @@ export class MandateFormComponent implements OnInit {
 		{ value: 'BUSINESS_REGISTRATION_NUMBER', viewValue: 'Business Registration' }
 	];
 
-
 	frequencyTypes = [
 		{ value: 'DAILY', viewValue: 'Daily' },
 		{ value: 'WEEKLY', viewValue: 'Weekly' },
@@ -54,8 +58,14 @@ export class MandateFormComponent implements OnInit {
 		{ value: 'YEARLY', viewValue: 'Yearly' }
 	];
 
-	save(registrationForm: NgForm) {
-		if (registrationForm.valid) {
+	email(mandateForm: NgForm) {
+		if (mandateForm.valid) {
+			this.mandateFormService.email(this.model).subscribe(this.handleSuccess, this.handleError);
+		}
+	}
+
+	save(mandateForm: NgForm) {
+		if (mandateForm.valid) {
 			 let dialogRef = this.dialog.open(FpxAuthenticationComponent, {
 				data: {
 					registration: this.model
@@ -72,5 +82,13 @@ export class MandateFormComponent implements OnInit {
 				}
 			});
 		}
+	}
+
+	private handleSuccess(result) {
+		this.router.navigate(['/home/registration-list']);
+	}
+
+	private handleError(result) {
+		Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(result.json()).fieldErrors);
 	}
 }
