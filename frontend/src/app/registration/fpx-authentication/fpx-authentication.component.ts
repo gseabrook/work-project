@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { Registration } from '../model/registration';
+import { Mandate } from '../model/mandate';
 
 @Component({
 	selector: 'fpx-authentication',
@@ -10,7 +10,7 @@ import { Registration } from '../model/registration';
 export class FpxAuthenticationComponent implements OnInit {
 
 	loggedIn = false;
-	registration: Registration;
+	mandate: Mandate;
 	model = {
 		username: '',
 		password: ''
@@ -27,7 +27,7 @@ export class FpxAuthenticationComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.registration = this.dialogRef.config.data.registration;
+		this.mandate = this.dialogRef.config.data.mandate;
 	}
 
 }

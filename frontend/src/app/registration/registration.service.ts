@@ -3,7 +3,7 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Registration } from './model/registration';
+import { Mandate } from './model/mandate';
 
 @Injectable()
 export class RegistrationService {
@@ -13,16 +13,16 @@ export class RegistrationService {
 
 	constructor(private http: Http) { }
 
-	save(registration: Registration) {
+	save(mandate: Mandate) {
 		return this.http
-			.post("merchant/mandate", JSON.stringify(registration), { headers: this.headers });
+			.post("merchant/mandate", JSON.stringify(mandate), { headers: this.headers });
 	}
 
 	get() {
 		return this.http
 			.get("merchant/mandate", { headers: this.headers })
 			.toPromise()
-			.then(response => response.json() as Registration[]);
+			.then(response => response.json() as Mandate[]);
 	}
 
 }

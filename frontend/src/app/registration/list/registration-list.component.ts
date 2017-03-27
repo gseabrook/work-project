@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Registration } from '../model/registration';
+import { Mandate } from '../model/mandate';
 import { RegistrationService } from '../registration.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { RegistrationService } from '../registration.service';
 })
 export class RegistrationListComponent implements OnInit {
 
-	registrations: Registration[] = [];
+	registrations: Mandate[] = [];
 
 	constructor(private registrationService: RegistrationService, private router: Router) { }
 

@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MandateFormComponent } from './registration/form/mandate-form.component';
+import { MandateFormResolver } from './registration/form/mandate-form-resolver.service';
 import { RegistrationListComponent } from './registration/list/registration-list.component';
 import { CompleteComponent } from './registration/complete/complete.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [{
   path: 'mandate-form',
-  component: MandateFormComponent
+  component: MandateFormComponent,
+  resolve: {
+    mandate: MandateFormResolver
+  }
 },
 {
   path: 'registration-complete',
@@ -29,6 +32,7 @@ const routes: Routes = [{
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [MandateFormResolver]
 })
 export class AppRoutingModule { }
