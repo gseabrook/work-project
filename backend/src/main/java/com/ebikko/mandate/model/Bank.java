@@ -3,24 +3,23 @@ package com.ebikko.mandate.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity(name = Bank.BANK_NODE_TYPE)
-@ReferenceData
+@Entity
 public class Bank {
 
-    public static final String BANK_NODE_TYPE = "Bank Information";
-
     @Id
-    private final String id;
-    @Column(name = "Bank Code")
-    private final String code;
-    @Column(name = "Bank Name")
-    private final String name;
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+    @Column
+    private String code;
+    @Column
+    private String name;
 
-    public Bank(String id, String code, String name) {
+    public Bank() {
+    }
+
+    public Bank(Long id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -42,7 +41,7 @@ public class Bank {
         return code;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

@@ -18,7 +18,7 @@ public class MerchantDeserializer extends JsonDeserializer<Merchant> {
             return p.getCodec().readValue(p, Merchant.class);
         } else {
             String merchantId = p.getText();
-            return merchantId == null ? null : new Merchant(merchantId);
+            return merchantId == null ? null : new Merchant(Long.valueOf(merchantId));
         }
     }
 }

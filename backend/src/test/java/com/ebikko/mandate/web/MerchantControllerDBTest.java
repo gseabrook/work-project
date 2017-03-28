@@ -1,62 +1,100 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.SessionService;
+import com.ebikko.mandate.model.Customer;
+import com.ebikko.mandate.model.IDType;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
-import com.ebikko.mandate.service.MandateService;
-import com.ebikko.mandate.service.translator.NodeTranslator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ebikko.Principal;
+import ebikko.Property;
+import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.List;
 
-import static com.ebikko.mandate.builder.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private NodeTranslator nodeTranslator;
-    @Autowired
-    private MandateService mandateService;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     @Test
     public void shouldRetrieveMerchantInformation() throws Exception {
+        Merchant merchant = testDataService.createMerchant();
+
         String contentAsString = mockMvc
-                .perform(get(MERCHANT_URL + "/c22816ad803c47ed83400bc787d06ed4-cf4ad5cb478c4c36a3dec97e16d81091"))
+                .perform(get(MERCHANT_URL + "/" + merchant.getId()).with(user("Bob")))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         Merchant response = new ObjectMapper().readValue(contentAsString, Merchant.class);
 
-        assertThat(response.getCompanyRegistrationNumber(), is("WP010101334"));
-        assertThat(response.getCompanyName(), is("Ag I Solutions"));
+        assertThat(response.getCompanyRegistrationNumber(), is(merchant.getCompanyRegistrationNumber()));
+        assertThat(response.getCompanyName(), is(merchant.getCompanyName()));
     }
 
     @Test
     public void shouldRetrieveMandatesForMerchant() throws Exception {
-        final Mandate mandate = exampleMandate();
-        mandateService.save(mandate);
+        Mandate mandate = testDataService.createMandate();
 
         String contentAsString = mockMvc
-                .perform(get(MERCHANT_URL + "/c22816ad803c47ed83400bc787d06ed4-cf4ad5cb478c4c36a3dec97e16d81091" + MERCHANT_MANDATE_URL))
+                .perform(get(MERCHANT_URL + "/" + mandate.getMerchant().getId() + MERCHANT_MANDATE_URL).with(user("Bob")))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         List list = new ObjectMapper().readValue(contentAsString, List.class);
 
-        assertThat(list.size(),greaterThan(0));
+        assertThat(list.size(), is(1));
+    }
+
+    @Test
+    public void shouldCreateMandateForMerchant() throws Exception {
+        Merchant merchant = testDataService.createMerchant();
+        Principal principal = mock(Principal.class);
+        given(principal.getValue(any(Property.class))).willReturn(merchant.getId());
+        super.setAuthenticationPrincipal(principal);
+
+        String json = "{" +
+                "'referenceNumber': '123-abc-def'," +
+                "'registrationDate': '2017-03-25'," +
+                "    'amount': '123.45'," +
+                "    'frequency': 'MONTHLY'," +
+                "    'customer': {" +
+                    "    'name': 'Joe'," +
+                    "    'emailAddress': 'joe@example.com'," +
+                    "    'idType': 'PASSPORT_NUMBER'," +
+                    "    'idValue': '456789123'," +
+                    "    'bankAccount': {" +
+                        "    'bankId': '5'," +
+                        "    'accountNumber': '12323537'" +
+                    "    }" +
+                "    }" +
+                "}";
+
+        String json2 = json.replaceAll("'", "\"");
+        System.out.println(json2);
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(json2)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(principal, "")))
+        ).andExpect(status().isCreated());
+
+        List<Mandate> mandates = mandateService.getMandates(merchant);
+        assertThat(mandates, Matchers.hasSize(1));
+
+        Customer customer = customerService.get("456789123", IDType.PASSPORT_NUMBER);
+        assertThat(customer.getName(), is("Joe"));
     }
 }

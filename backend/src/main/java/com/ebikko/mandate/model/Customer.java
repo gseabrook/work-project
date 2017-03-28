@@ -1,32 +1,31 @@
 package com.ebikko.mandate.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
-@Entity(name = "Customer Information")
+@Entity
 public class Customer {
 
     @Id
-    public String id;
-    @Column(name = "Customer Name")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    public Long id;
+    @Column
     public String name;
-    @Column(name = "Email")
+    @Column
     public String emailAddress;
-    @Column(name = "Phone Number")
+    @Column
     public String phoneNumber;
-    @Column(name = "ID Number")
+    @Column
     public String idValue;
-    @Column(name = "ID Type")
+    @Column
     public IDType idType;
-    @Column(name = "Customer Bank Account")
+    @OneToMany(cascade = CascadeType.ALL)
     public List<CustomerBankAccount> bankAccounts;
 
     public Customer() {
     }
 
-    public Customer(String id, String name, String emailAddress, String phoneNumber, String idValue, IDType idType, List<CustomerBankAccount> bankAccounts) {
+    public Customer(Long id, String name, String emailAddress, String phoneNumber, String idValue, IDType idType, List<CustomerBankAccount> bankAccounts) {
         this.id = id;
         this.name = name;
         this.emailAddress = emailAddress;
@@ -36,36 +35,56 @@ public class Customer {
         this.bankAccounts = bankAccounts;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmailAddress() {
         return emailAddress;
     }
 
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public List<CustomerBankAccount> getBankAccounts() {
-        return bankAccounts;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getIdValue() {
         return idValue;
     }
 
+    public void setIdValue(String idValue) {
+        this.idValue = idValue;
+    }
+
     public IDType getIdType() {
         return idType;
     }
 
-    public String getId() {
-        return id;
+    public void setIdType(IDType idType) {
+        this.idType = idType;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public List<CustomerBankAccount> getBankAccounts() {
+        return bankAccounts;
+    }
+
+    public void setBankAccounts(List<CustomerBankAccount> bankAccounts) {
+        this.bankAccounts = bankAccounts;
     }
 
     @Override

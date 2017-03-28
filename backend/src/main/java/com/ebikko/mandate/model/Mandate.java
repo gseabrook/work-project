@@ -3,42 +3,40 @@ package com.ebikko.mandate.model;
 import com.ebikko.mandate.web.MerchantDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static com.ebikko.mandate.model.Mandate.MANDATE_NODE_TYPE;
-
-@Entity(name = MANDATE_NODE_TYPE)
+@Entity
 public class Mandate {
 
     public static final String MANDATE_NODE_TYPE = "eMandate Form";
 
     @Id
-    public String id;
-    @Column(name = "Reference Number")
-    public String referenceNumber;
-    @Column(name = "Registration Date")
-    public Date registrationDate;
-    @Column(name = "Maximum Amount")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+    @Column
+    private String referenceNumber;
+    @Column
+    private Date registrationDate;
+    @Column
     @NotNull(message = "Amount cannot be blank")
     @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
-    public BigDecimal amount;
-    @Column(name = "Frequency")
-    public MandateFrequency frequency;
-    public Customer customer;
+    private BigDecimal amount;
+    @Column
+    private MandateFrequency frequency;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Customer customer;
     @JsonDeserialize(using = MerchantDeserializer.class)
-    @Column(name = "Merchant")
-    public Merchant merchant;
+    @ManyToOne
+    private Merchant merchant;
 
     public Mandate() {
     }
 
-    public Mandate(String referenceNumber, Date registrationDate, BigDecimal amount, MandateFrequency frequency, Customer customer, Merchant merchant) {
+    public Mandate(Long id, String referenceNumber, Date registrationDate, BigDecimal amount, MandateFrequency frequency, Customer customer, Merchant merchant) {
         this.referenceNumber = referenceNumber;
         this.registrationDate = registrationDate;
         this.amount = amount;
@@ -47,24 +45,48 @@ public class Mandate {
         this.merchant = merchant;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getReferenceNumber() {
         return referenceNumber;
+    }
+
+    public void setReferenceNumber(String referenceNumber) {
+        this.referenceNumber = referenceNumber;
     }
 
     public Date getRegistrationDate() {
         return registrationDate;
     }
 
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public MandateFrequency getFrequency() {
         return frequency;
     }
 
+    public void setFrequency(MandateFrequency frequency) {
+        this.frequency = frequency;
+    }
+
     public Customer getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Merchant getMerchant() {
@@ -73,14 +95,6 @@ public class Mandate {
 
     public void setMerchant(Merchant merchant) {
         this.merchant = merchant;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

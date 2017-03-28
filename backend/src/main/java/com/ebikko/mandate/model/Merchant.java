@@ -3,26 +3,25 @@ package com.ebikko.mandate.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-@Entity(name = Merchant.MERCHANT_NODE_TYPE)
+@Entity
 public class Merchant {
 
     public static final String MERCHANT_NODE_TYPE = "Merchant Information";
 
     @Id
-    public String id;
-    @Column(name = "Company Registration No")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    public Long id;
+    @Column
     public String companyRegistrationNumber;
-    @Column(name = "Company Name")
+    @Column
     public String companyName;
-    @Column(name = "Merchant Bank Account")
+    @OneToMany
     public List<MerchantBankAccount> merchantBankAccounts;
 
     public Merchant() {}
@@ -36,11 +35,11 @@ public class Merchant {
         this.merchantBankAccounts = newArrayList(merchantBankAccount);
     }
 
-    public Merchant(String id) {
+    public Merchant(Long id) {
         this.id = id;
     }
 
-    public Merchant(String id, String companyName, String companyRegistrationNumber, ArrayList<MerchantBankAccount> merchantBankAccounts) {
+    public Merchant(Long id, String companyName, String companyRegistrationNumber, ArrayList<MerchantBankAccount> merchantBankAccounts) {
         this.id = id;
         this.companyName = companyName;
         this.companyRegistrationNumber = companyRegistrationNumber;
@@ -72,12 +71,8 @@ public class Merchant {
         this.merchantBankAccounts = merchantBankAccounts;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

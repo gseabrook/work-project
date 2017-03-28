@@ -3,9 +3,12 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
 import com.ebikko.mandate.service.UserService;
+import com.ebikko.mandate.service.translator.MandateDTOTranslator;
+import com.ebikko.mandate.web.dto.MandateDTO;
 import ebikko.EbikkoException;
 import ebikko.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +36,17 @@ public class MerchantController {
     private final MerchantService merchantService;
     private final UserService userService;
     private final MandateService mandateService;
+    private final MandateDTOTranslator mandateDTOTranslator;
+    private final CustomerService customerService;
 
     @Autowired
-    public MerchantController(MerchantService merchantService, UserService userService, MandateService mandateService) {
+    public MerchantController(MerchantService merchantService, UserService userService, MandateService mandateService,
+                              MandateDTOTranslator mandateDTOTranslator, CustomerService customerService) {
         this.merchantService = merchantService;
         this.userService = userService;
         this.mandateService = mandateService;
+        this.mandateDTOTranslator = mandateDTOTranslator;
+        this.customerService = customerService;
     }
 
     @RequestMapping(path = "/{merchantId}", method = GET, produces = APPLICATION_JSON_VALUE)
@@ -52,7 +60,7 @@ public class MerchantController {
     public ResponseEntity getMandatesForMerchant(@PathVariable("merchantId") String merchantId) throws EbikkoException {
         Merchant merchant = merchantService.getMerchant(merchantId);
 
-        List<Mandate> mandates = merchantService.getMandates(merchant);
+        List<Mandate> mandates = mandateService.getMandates(merchant);
 
         return new ResponseEntity(mandates, OK);
     }
@@ -61,19 +69,21 @@ public class MerchantController {
     public ResponseEntity getMandatesForLoggedInMerchant(Authentication auth) throws EbikkoException {
         Merchant merchant = userService.getMerchant((Principal) auth.getPrincipal());
 
-        List<Mandate> mandates = merchantService.getMandates(merchant);
+        List<Mandate> mandates = mandateService.getMandates(merchant);
 
         return new ResponseEntity(mandates, OK);
     }
 
     @RequestMapping(path = MERCHANT_MANDATE_URL, method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody @Validated Mandate mandate, BindingResult bindingResult,
+    public ResponseEntity create(@RequestBody @Validated MandateDTO mandateDTO, BindingResult bindingResult,
                                  Authentication auth) throws EbikkoException {
 
         if (bindingResult.hasErrors()) {
             ErrorResponse errorResponse = new ErrorResponse(bindingResult);
             return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
+            Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
+            customerService.save(mandate.getCustomer());
             Merchant merchant = userService.getMerchant((Principal) auth.getPrincipal());
             mandate.setMerchant(merchant);
             mandateService.save(mandate);

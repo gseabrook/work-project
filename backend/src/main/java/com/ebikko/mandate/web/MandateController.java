@@ -42,8 +42,8 @@ public class MandateController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{mandateId}")
-    public ResponseEntity get(@PathVariable String mandateId) throws EbikkoException {
-        Mandate mandate = service.get(mandateId);
+    public ResponseEntity get(@PathVariable Long mandateId) throws EbikkoException {
+        Mandate mandate = service.getMandate(mandateId);
 
         if (mandate == null) {
             return new ResponseEntity(NOT_FOUND);

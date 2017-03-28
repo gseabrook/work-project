@@ -1,6 +1,9 @@
 package com.ebikko.mandate.builder;
 
-import com.ebikko.mandate.model.*;
+import com.ebikko.mandate.model.Customer;
+import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateFrequency;
+import com.ebikko.mandate.model.Merchant;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,9 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.ebikko.mandate.builder.BankBuilder.exampleBank;
+import static com.ebikko.mandate.builder.CustomerBuilder.exampleCustomer;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
-import static com.google.common.collect.Lists.newArrayList;
 
 public class MandateBuilder {
 
@@ -46,17 +48,18 @@ public class MandateBuilder {
                 .with("registrationDate", "2017-03-25")
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
-                .with("merchant", "c22816ad803c47ed83400bc787d06ed4-cf4ad5cb478c4c36a3dec97e16d81091");
+                .with("merchant", 7l);
 
         Map<String, Object> customer = new HashMap<>();
         customer.put("name", "Joe");
         customer.put("emailAddress", "test@example.com");
         customer.put("idType", "PASSPORT_NUMBER");
         customer.put("idValue", String.valueOf(ThreadLocalRandom.current().nextInt(1, 999999999)));
+
         Map<String, Object> bank = new HashMap<>();
         bank.put("code", "HSBC0222");
         bank.put("name", "HSBC");
-        bank.put("id", "b7bc8b7449614d159ce0869306f04d36-e90431d4422b4463b30d8dcf70d4d78e");
+        bank.put("id", 9l);
 
         ArrayList<Map<String, Object>> bankAccounts = new ArrayList<Map<String, Object>>();
         Map<String, Object> bankAccount = new HashMap<>();
@@ -75,11 +78,16 @@ public class MandateBuilder {
         return mandate.get(field);
     }
 
+    public static Mandate exampleMandate(Customer customer, Merchant merchant) {
+        return new Mandate(1l, "ABC-123", new Date(), BigDecimal.TEN, MandateFrequency.MONTHLY, customer, merchant);
+
+    }
+
+    public static Mandate exampleMandate(Customer customer) {
+        return exampleMandate(customer, exampleMerchant());
+    }
+
     public static Mandate exampleMandate() {
-        CustomerBankAccount customerBankAccount = new CustomerBankAccount("ABC-123", exampleBank(), "11223344");
-
-        Customer customer = new Customer("abc-123","Joe", "test@example.com", "0111234456", "54321234", IDType.PASSPORT_NUMBER, newArrayList(customerBankAccount));
-
-        return new Mandate("ABC-123", new Date(), BigDecimal.TEN, MandateFrequency.MONTHLY, customer, exampleMerchant());
+        return exampleMandate(exampleCustomer());
     }
 }

@@ -3,18 +3,17 @@ package com.ebikko.mandate;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.config.DirectDebitApplication;
+import com.ebikko.config.EbikkoAuthenticationManager;
 import ebikko.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.mail.MailSender;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,6 +24,7 @@ import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.util.Properties;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @Configuration
@@ -36,19 +36,14 @@ public class EmbeddedDBTestConfiguration {
     @MockBean
     private MailSender mailSender;
 
-    @Bean
-    public DataSource dataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        return builder
-                .setType(EmbeddedDatabaseType.HSQL)
-                .addScript("db/create-db.sql")
-                .addScript("db/insert-data.sql")
-                .build();
-    }
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private TestAuthenticationManager testAuthenticationManager;
 
     @Bean
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public EbikkoAuthenticationManager ebikkoAuthenticationManager() {
+        return testAuthenticationManager;
     }
 
     @Bean
@@ -58,8 +53,7 @@ public class EmbeddedDBTestConfiguration {
 
         SessionService mockSessionService = mock(SessionService.class);
         TestRepository repository = mock(TestRepository.class);
-        Connection connection = DataSourceUtils.getConnection(dataSource());
-//        Connection connection = dataSource().getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
         connection.setAutoCommit(false);
         when(repository.getConnection()).thenReturn(connection);
         when(repository.getDriver()).thenReturn("mysql");

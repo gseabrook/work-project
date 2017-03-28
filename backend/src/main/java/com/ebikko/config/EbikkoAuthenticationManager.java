@@ -7,20 +7,24 @@ import ebikko.Principal;
 import ebikko.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
 public class EbikkoAuthenticationManager implements AuthenticationProvider {
 
     private static final Log logger = LogFactory.getLog(EbikkoAuthenticationManager.class);
     private final SessionService sessionService;
 
+    @Autowired
     public EbikkoAuthenticationManager(SessionService sessionService) {
         this.sessionService = sessionService;
     }

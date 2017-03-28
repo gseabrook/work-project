@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static com.ebikko.mandate.web.BankController.BANK_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,7 +18,7 @@ public class BankControllerDBTest extends AbstractEmbeddedDBControllerTest {
     @Test
     public void shouldReturnAllBanks() throws Exception {
 
-        String contentAsString = mockMvc.perform(get(BANK_URL))
+        String contentAsString = mockMvc.perform(get(BANK_URL).with(user("bob")))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 

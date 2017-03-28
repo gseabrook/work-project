@@ -1,6 +1,5 @@
-package com.ebikko.config;
+    package com.ebikko.config;
 
-import com.ebikko.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,14 +22,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     @Autowired
-    private SessionService sessionService;
+    private EbikkoAuthenticationManager ebikkoAuthenticationManager;
 
     @Autowired
     private MySavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
-        return new ProviderManager(Arrays.<AuthenticationProvider>asList(new EbikkoAuthenticationManager(sessionService)));
+        return new ProviderManager(Arrays.<AuthenticationProvider>asList(ebikkoAuthenticationManager));
     }
 
     @Override

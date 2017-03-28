@@ -3,28 +3,23 @@ package com.ebikko.mandate.service;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Merchant;
-import com.ebikko.mandate.service.translator.NodeMerchantTranslator;
-import ebikko.*;
-import ebikko.filter.Equals;
+import ebikko.EbikkoException;
+import ebikko.Principal;
+import ebikko.Property;
+import ebikko.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static com.ebikko.mandate.model.Merchant.MERCHANT_NODE_TYPE;
-import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Collections.emptyList;
 
 @Service
 public class UserService {
 
     private final SessionService sessionService;
-    private final NodeMerchantTranslator translator;
+    private final MerchantService merchantService;
 
     @Autowired
-    public UserService(SessionService sessionService, NodeMerchantTranslator translator) {
+    public UserService(SessionService sessionService, MerchantService merchantService ) {
         this.sessionService = sessionService;
-        this.translator = translator;
+        this.merchantService = merchantService;
     }
 
     public Merchant getMerchant(final Principal principal) {
@@ -32,9 +27,9 @@ public class UserService {
             return sessionService.performSessionAction(new SessionAction<Merchant>() {
                 @Override
                 public Merchant perform(Session session) throws EbikkoException {
-                    principal.setSession(session);
-                    Group merchantGroup = getMerchantGroup(principal);
-                    return getMerchantRecord(merchantGroup, session);
+                    Property merchantIdProperty = session.getPropertyByName("Merchant ID");
+                    Object value = principal.getValue(merchantIdProperty);
+                    return merchantService.getMerchant(value.toString());
                 }
             });
 
@@ -43,27 +38,4 @@ public class UserService {
         }
     }
 
-    private Merchant getMerchantRecord(Group merchantGroup, Session session) throws EbikkoException {
-        Property property = session.getPropertyByName("Merchant Group");
-        Filter filter = new Equals(property, merchantGroup);
-
-        NodeType mandateNodeType = session.getNodeTypeByName(MERCHANT_NODE_TYPE);
-
-        MultiQuery query = new MultiQuery(session, "Search", newArrayList(mandateNodeType), filter, emptyList(), 0);
-        query.execute();
-        return translator.apply(query.get(0));
-    }
-
-    private Group getMerchantGroup(Principal principal) throws EbikkoException {
-        List<Group> groups = principal.getGroups();
-        for (Group userGroup : groups) {
-            for (Group parentGroup : userGroup.getGroups()) {
-                if (parentGroup.getName().equals("Merchants")) {
-                    return userGroup;
-                }
-            }
-        }
-
-        return null;
-    }
 }

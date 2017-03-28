@@ -71,7 +71,7 @@ public class MandateControllerTest extends AbstractControllerTest {
     @Test
     public void shouldLoadMandate() throws Exception {
         Mandate exampleMandate = exampleMandate();
-        given(mandateService.get("123")).willReturn(exampleMandate);
+        given(mandateService.getMandate(123l)).willReturn(exampleMandate);
 
         String contentAsString = mockMvc.perform(
                 get(MANDATE_URL + "/123"))

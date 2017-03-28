@@ -3,20 +3,19 @@ package com.ebikko.mandate.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity(name = "Merchant Bank Account")
+@Entity
 public class MerchantBankAccount {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private final String id;
-    @Column(name = "Bank Name")
+    @ManyToOne
     private final Bank bank;
-    @Column(name= "Merchant Account No")
+    @Column
     private final String accountNumber;
-    @Column(name = "Seller ID")
+    @Column
     private final String sellerId;
 
     @JsonCreator

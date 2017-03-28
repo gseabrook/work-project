@@ -2,9 +2,11 @@ package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
 import com.ebikko.mandate.service.UserService;
+import com.ebikko.mandate.service.translator.MandateDTOTranslator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,10 +34,14 @@ public class MerchantControllerTest extends AbstractControllerTest {
     private UserService userService;
     @Mock
     private MandateService mandateService;
+    @Mock
+    private MandateDTOTranslator mandateDTOTranslator;
+    @Mock
+    private CustomerService customerService;
 
     @Override
     public Object getController() {
-        return new MerchantController(merchantService, userService, mandateService);
+        return new MerchantController(merchantService, userService, mandateService, mandateDTOTranslator, customerService);
     }
 
     @Test
@@ -64,7 +70,7 @@ public class MerchantControllerTest extends AbstractControllerTest {
         given(merchantService.getMerchant(merchantId)).willReturn(exampleMerchant);
 
         Mandate exampleMandate = exampleMandate();
-        given(merchantService.getMandates(exampleMerchant)).willReturn(newArrayList(exampleMandate));
+        given(mandateService.getMandates(exampleMerchant)).willReturn(newArrayList(exampleMandate));
 
         String response = mockMvc
                 .perform(get(MERCHANT_URL + "/" + merchantId + MERCHANT_MANDATE_URL))
