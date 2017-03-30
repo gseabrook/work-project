@@ -1,0 +1,23 @@
+<h1 class="subheader" color="primary">View Mandates</h1>    
+<table class="material-table">
+    <thead>
+        <tr>
+            <th>Reference Number</th>
+            <th>Registration Date</th>
+            <th>Amount</th>
+            <th>Frequency</th>
+            <th>Customer Name</th>
+            <th>Customer ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let mandate of mandates">
+            <td>{{mandate.referenceNumber}}</td>
+            <td>{{mandate.mandateDate | date:'mediumDate'}}</td>
+            <td>{{mandate.amount}}</td>
+            <td>{{mandate.frequency}}</td>
+            <td>{{mandate.customer.name}}</td>
+            <td>{{mandate.customer.idValue}} ({{mandate.customer.idType}})</td>
+        </tr>
+    </tbody>
+</table>

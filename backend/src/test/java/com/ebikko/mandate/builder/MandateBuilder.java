@@ -79,7 +79,7 @@ public class MandateBuilder {
     }
 
     public static Mandate exampleMandate(Customer customer, Merchant merchant) {
-        return new Mandate(1l, "ABC-123", new Date(), BigDecimal.TEN, MandateFrequency.MONTHLY, customer, merchant);
+        return new Mandate("ABC-123", new Date(), BigDecimal.TEN, MandateFrequency.MONTHLY, customer, merchant);
 
     }
 

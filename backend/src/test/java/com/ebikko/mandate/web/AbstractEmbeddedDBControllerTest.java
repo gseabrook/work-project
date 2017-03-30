@@ -3,10 +3,10 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.EmbeddedDBTestConfiguration;
 import com.ebikko.mandate.TestAuthenticationManager;
 import com.ebikko.mandate.TestDataService;
+import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
-import ebikko.Principal;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public abstract class AbstractEmbeddedDBControllerTest {
                 .build();
     }
 
-    protected void setAuthenticationPrincipal(Principal principal) {
-        testAuthenticationManager.setPrincipal(principal);
+    protected void setAuthenticationPrincipal(User user) {
+        testAuthenticationManager.setUser(user);
     }
 }

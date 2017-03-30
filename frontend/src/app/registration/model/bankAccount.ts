@@ -12,4 +12,16 @@ export class BankAccount implements Serializable<BankAccount> {
 		this.accountNumber = input.accountNumber;
 		return this;
 	}
+
+	toJSON(): BankAccountJSON {
+		return {
+			bankId: this.bank.id,
+			accountNumber: this.accountNumber
+		};
+	}
+}
+
+interface BankAccountJSON {
+	bankId: string,
+	accountNumber: string
 }

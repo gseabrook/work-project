@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth-guard.service';
 
 import { HomeComponent } from './home.component';
-import { RegistrationListComponent } from '../registration/list/registration-list.component';
+import { MandateListComponent } from '../registration/list/mandate-list.component';
 import { MandateFormComponent } from '../registration/form/mandate-form.component';
 import { MandateFormResolver } from '../registration/form/mandate-form-resolver.service';
 
@@ -14,16 +14,18 @@ const homeRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'registration-list',
-        component: RegistrationListComponent
-      },
-      {
+        path: 'mandate-list',
+        component: MandateListComponent
+      }, {
         path: 'mandate-form',
         component: MandateFormComponent,
         resolve: {
-              mandate: MandateFormResolver
+          mandate: MandateFormResolver
         }
-      }
+      }, { 
+        path: '', 
+        redirectTo: 'mandate-list', 
+        pathMatch: 'full' }
     ]
   }
 ];

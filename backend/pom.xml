@@ -5,7 +5,7 @@
 
 	<groupId>my.directdebit</groupId>
 	<artifactId>my-direct-debit-backend</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>MyDirectDebit</name>
@@ -27,7 +27,7 @@
 		<java.version>1.7</java.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <api.version>20170328</api.version>
+        <api.version>20170330</api.version>
         <svn.username></svn.username>
         <svn.password></svn.password>
 	</properties>

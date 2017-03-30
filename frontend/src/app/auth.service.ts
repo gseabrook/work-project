@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, URLSearchParams } from '@angular/http';
 
-// TODO - Clean up imports
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
@@ -16,8 +15,7 @@ export class AuthService {
 
 	constructor(private http: Http) {}
 
-	// TODO - Create module for auth service and auth guard
-	login(username: string, password: string) {
+	login(username: string, password: string): Promise<any> {
 		let body = new URLSearchParams();
 		body.set('username', username);
 		body.set('password', password);
@@ -33,7 +31,11 @@ export class AuthService {
 
 	logout() {
 		this.isLoggedIn = false;
-		return this.http.get('/logout');
+		return this.http.get('logout');
+	}
+
+	getUserDetails() {
+		return this.http.get('user').toPromise();
 	}
 
 	private handleError(error: any): Promise<any> {

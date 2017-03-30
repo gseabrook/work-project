@@ -1,5 +1,6 @@
 form {
     padding: 8px;
+    max-width: 500px;
 }
 
 form md-input-container {

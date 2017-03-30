@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class CustomerBankAccount {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne
     private Bank bank;

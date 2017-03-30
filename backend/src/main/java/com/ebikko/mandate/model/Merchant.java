@@ -12,10 +12,8 @@ import static com.google.common.collect.Lists.newArrayList;
 @Entity
 public class Merchant {
 
-    public static final String MERCHANT_NODE_TYPE = "Merchant Information";
-
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     public Long id;
     @Column
     public String companyRegistrationNumber;

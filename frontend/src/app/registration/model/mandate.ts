@@ -9,11 +9,9 @@ export class Mandate implements Serializable<Mandate> {
 	public amount: string;
 	public frequency: string;
 	public customer: Customer;
-	public customerBankAccount: BankAccount;
 
 	constructor() {
 		this.customer = new Customer();
-		this.customerBankAccount = new BankAccount();
 	}
 
     deserialize(input){
@@ -22,9 +20,6 @@ export class Mandate implements Serializable<Mandate> {
     	this.amount = input.amount;
     	this.frequency = input.frequency;
     	this.customer = new Customer().deserialize(input.customer);
-    	if (input.customerBankAccount) {
-    		this.customerBankAccount = new BankAccount().deserialize(input.customerBankAccount);
-    	}
     	return this;
 	}
 }

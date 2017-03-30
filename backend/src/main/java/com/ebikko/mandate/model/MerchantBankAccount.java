@@ -9,8 +9,8 @@ import javax.persistence.*;
 public class MerchantBankAccount {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private final String id;
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    private final Long id;
     @ManyToOne
     private final Bank bank;
     @Column
@@ -28,7 +28,7 @@ public class MerchantBankAccount {
         this.id = null;
     }
 
-    public MerchantBankAccount(String id, Bank bank, String accountNumber, String sellerId) {
+    public MerchantBankAccount(Long id, Bank bank, String accountNumber, String sellerId) {
         this.id = id;
         this.bank = bank;
         this.accountNumber = accountNumber;

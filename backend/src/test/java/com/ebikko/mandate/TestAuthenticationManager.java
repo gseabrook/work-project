@@ -2,7 +2,8 @@ package com.ebikko.mandate;
 
 import com.ebikko.SessionService;
 import com.ebikko.config.EbikkoAuthenticationManager;
-import ebikko.Principal;
+import com.ebikko.mandate.model.User;
+import com.ebikko.mandate.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -14,19 +15,19 @@ import java.util.ArrayList;
 @Service
 public class TestAuthenticationManager extends EbikkoAuthenticationManager {
 
-    private Principal principal;
+    private User user;
 
-    public TestAuthenticationManager(SessionService sessionService) {
-        super(sessionService);
+    public TestAuthenticationManager(SessionService sessionService, UserService userService) {
+        super(sessionService, userService);
     }
 
-    public void setPrincipal(Principal principal) {
-        this.principal = principal;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        return new UsernamePasswordAuthenticationToken(principal, "abc123", new ArrayList<GrantedAuthority>());
+        return new UsernamePasswordAuthenticationToken(user, "abc123", new ArrayList<GrantedAuthority>());
     }
 
     @Override
@@ -35,6 +36,6 @@ public class TestAuthenticationManager extends EbikkoAuthenticationManager {
     }
 
     public void clear() {
-        principal = null;
+        user = null;
     }
 }

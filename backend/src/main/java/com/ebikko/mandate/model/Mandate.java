@@ -15,7 +15,7 @@ public class Mandate {
     public static final String MANDATE_NODE_TYPE = "eMandate Form";
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Column
     private String referenceNumber;
@@ -36,7 +36,7 @@ public class Mandate {
     public Mandate() {
     }
 
-    public Mandate(Long id, String referenceNumber, Date registrationDate, BigDecimal amount, MandateFrequency frequency, Customer customer, Merchant merchant) {
+    public Mandate(String referenceNumber, Date registrationDate, BigDecimal amount, MandateFrequency frequency, Customer customer, Merchant merchant) {
         this.referenceNumber = referenceNumber;
         this.registrationDate = registrationDate;
         this.amount = amount;

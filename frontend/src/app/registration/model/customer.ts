@@ -14,6 +14,13 @@ export class Customer implements Serializable<Customer> {
 		this.bankAccounts = [new BankAccount()];
 	}
 
+	toJSON(): CustomerJSON {
+		return Object.assign({}, this, {
+			bankAccounts: null,
+			bankAccount: this.bankAccounts[0].toJSON()
+		});
+	}
+
 	deserialize(input) {
 		this.name = input.name;
 		this.phoneNumber = input.phoneNumber;
@@ -24,4 +31,12 @@ export class Customer implements Serializable<Customer> {
 		return this;
 	}
 
+}
+
+interface CustomerJSON {
+	name: string,
+	phoneNumber: string,
+	idType: string,
+	idValue: string,
+	bankAccount: Object
 }

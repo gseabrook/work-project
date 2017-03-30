@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MandateFormComponent } from './registration/form/mandate-form.component';
 import { MandateFormResolver } from './registration/form/mandate-form-resolver.service';
-import { RegistrationListComponent } from './registration/list/registration-list.component';
 import { CompleteComponent } from './registration/complete/complete.component';
 import { LoginComponent } from './login/login.component';
 

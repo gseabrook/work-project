@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Bank {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
     @Column
     private String code;

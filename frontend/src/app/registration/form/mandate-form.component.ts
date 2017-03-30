@@ -65,10 +65,11 @@ export class MandateFormComponent implements OnInit {
 	}
 
 	save(mandateForm: NgForm) {
+
 		if (mandateForm.valid) {
 			 let dialogRef = this.dialog.open(FpxAuthenticationComponent, {
 				data: {
-					registration: this.model
+					mandate: this.model
 				}
 			});
 
@@ -76,7 +77,7 @@ export class MandateFormComponent implements OnInit {
 				if (success) {
 					this.registrationService.save(this.model)
 						.subscribe(
-							result => this.router.navigate(['/home/registration-list']),
+							result => this.router.navigate(["../mandate-list"], { relativeTo: this.route }),
 							error => Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(error.json()).fieldErrors)
 					);
 				}
@@ -85,7 +86,7 @@ export class MandateFormComponent implements OnInit {
 	}
 
 	private handleSuccess(result) {
-		this.router.navigate(['/home/registration-list']);
+		this.router.navigate(["../mandate-list"], { relativeTo: this.route });
 	}
 
 	private handleError(result) {

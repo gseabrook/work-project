@@ -7,7 +7,7 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     public Long id;
     @Column
     public String name;

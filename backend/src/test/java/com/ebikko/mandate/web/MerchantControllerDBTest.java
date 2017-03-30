@@ -1,12 +1,7 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.IDType;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ebikko.Principal;
-import ebikko.Property;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -18,9 +13,6 @@ import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -61,9 +53,8 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
     @Test
     public void shouldCreateMandateForMerchant() throws Exception {
         Merchant merchant = testDataService.createMerchant();
-        Principal principal = mock(Principal.class);
-        given(principal.getValue(any(Property.class))).willReturn(merchant.getId());
-        super.setAuthenticationPrincipal(principal);
+        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT);
+        super.setAuthenticationPrincipal(user);
 
         String json = "{" +
                 "'referenceNumber': '123-abc-def'," +
@@ -88,7 +79,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
                         .content(json2)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .with(authentication(new UsernamePasswordAuthenticationToken(principal, "")))
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         List<Mandate> mandates = mandateService.getMandates(merchant);

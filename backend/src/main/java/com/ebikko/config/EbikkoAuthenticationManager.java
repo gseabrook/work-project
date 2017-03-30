@@ -2,6 +2,8 @@ package com.ebikko.config;
 
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
+import com.ebikko.mandate.model.User;
+import com.ebikko.mandate.service.UserService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
 import ebikko.Session;
@@ -23,10 +25,12 @@ public class EbikkoAuthenticationManager implements AuthenticationProvider {
 
     private static final Log logger = LogFactory.getLog(EbikkoAuthenticationManager.class);
     private final SessionService sessionService;
+    private final UserService userService;
 
     @Autowired
-    public EbikkoAuthenticationManager(SessionService sessionService) {
+    public EbikkoAuthenticationManager(SessionService sessionService, UserService userService) {
         this.sessionService = sessionService;
+        this.userService = userService;
     }
 
     @Override
@@ -49,7 +53,8 @@ public class EbikkoAuthenticationManager implements AuthenticationProvider {
                     }
                 }
             });
-            return new UsernamePasswordAuthenticationToken(p, password, new ArrayList<GrantedAuthority>());
+            User user = userService.convertPrincipal(p);
+            return new UsernamePasswordAuthenticationToken(user, password, new ArrayList<GrantedAuthority>());
         } catch (EbikkoException e) {
             logger.warn("Error authenticating " + username + " / " + password, e);
             throw new RuntimeException(e);
