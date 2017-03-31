@@ -12,6 +12,9 @@
     <logger name="org.springframework.beans.factory" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
+    <logger name="org.springframework.context.annotation" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
 
     <logger name="net.sf.ehcache" level="INFO" additivity="false">
         <appender-ref ref="STDOUT" />
