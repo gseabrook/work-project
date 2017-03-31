@@ -10,13 +10,16 @@ public class MerchantBankAccount {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    private final Long id;
+    private Long id;
     @ManyToOne
-    private final Bank bank;
+    private Bank bank;
     @Column
-    private final String accountNumber;
+    private String accountNumber;
     @Column
-    private final String sellerId;
+    private String sellerId;
+
+    public MerchantBankAccount() {
+    }
 
     @JsonCreator
     public MerchantBankAccount(@JsonProperty("bank") Bank bank,

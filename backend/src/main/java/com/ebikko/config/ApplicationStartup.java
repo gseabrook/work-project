@@ -14,10 +14,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 
     @Value("${spring.datasource.url:}")
     private String jdbcUrl;
+    @Value("${spring.datasource.username:}")
+    private String userName;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("-----Logging Property Values-----");
         logger.info("spring.datasource.url: " + jdbcUrl);
+        logger.info("spring.datasource.username: " + userName);
     }
 }
