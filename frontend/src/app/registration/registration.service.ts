@@ -20,7 +20,7 @@ export class RegistrationService {
 
 	get() {
 		return this.http
-			.get("merchant/mandate", { headers: this.headers })
+			.get("user/mandate", { headers: this.headers })
 			.toPromise()
 			.then(response => response.json() as Mandate[]);
 	}

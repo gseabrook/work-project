@@ -8,19 +8,19 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    public Long id;
+    private Long id;
     @Column
-    public String name;
+    private String name;
     @Column
-    public String emailAddress;
+    private String emailAddress;
     @Column
-    public String phoneNumber;
+    private String phoneNumber;
     @Column
-    public String idValue;
+    private String idValue;
     @Column
-    public IDType idType;
+    private IDType idType;
     @OneToMany(cascade = CascadeType.ALL)
-    public List<CustomerBankAccount> bankAccounts;
+    private List<CustomerBankAccount> bankAccounts;
 
     public Customer() {
     }

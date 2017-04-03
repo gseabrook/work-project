@@ -6,6 +6,7 @@ import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.service.UserService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
+import ebikko.Repository;
 import ebikko.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EbikkoAuthenticationManager implements AuthenticationProvider {
@@ -43,11 +45,23 @@ public class EbikkoAuthenticationManager implements AuthenticationProvider {
             Principal p = sessionService.performSessionAction(new SessionAction<Principal>() {
                 @Override
                 public Principal perform(Session session) throws EbikkoException {
-                    boolean b = session.getRepository().verifyCredentials(username, password);
-                    if (b) {
-                        Principal principalByUserName = session.getPrincipalByUserName(username);
-                        principalByUserName.getProfile(); // To avoid lazy loading issues later
-                        return principalByUserName;
+                    boolean validCredentials;
+                    Repository repository = session.getRepository();
+
+                    if (username.contains("@")) {
+                        List<Principal> principalByEmail = session.getPrincipalByEmail(username);
+                        if (principalByEmail.isEmpty()) {
+                            throw new BadCredentialsException("Invalid username or password");
+                        }
+                        validCredentials = repository.verifyCredentials(principalByEmail.get(0).getUserName(), password);
+                    } else {
+                        validCredentials = repository.verifyCredentials(username, password);
+                    }
+
+                    if (validCredentials) {
+                        Principal principal = session.getPrincipalByUserName(username);
+                        principal.getProfile(); // To avoid lazy loading issues later
+                        return principal;
                     } else {
                         throw new BadCredentialsException("Invalid username or password");
                     }
