@@ -20,6 +20,9 @@ public class IDs {
         public static String BANK_CODE = "b5fb184441d941d6936f00708785f3f3";
         public static String BANK_NAME = "fdc659695c944890b9c1720de461db2e";
         public static String MERCHANT_RECORD = "fdc5a29e8ead4b2f841ee80af03f5aa7";
+
+        public static String MERCHANT_ID = "af7c0ba6be8a452194d3e040048463d6";
+        public static String CUSTOMER_ID = "jc2300d55f3547e3a495f6332e259604";
     }
 
     public static class NodeTypes {

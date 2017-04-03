@@ -4,6 +4,12 @@ import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.config.DirectDebitApplication;
 import com.ebikko.config.EbikkoAuthenticationManager;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.NetworkConfig;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import ebikko.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -18,6 +24,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -48,6 +55,31 @@ public class EmbeddedDBTestConfiguration {
 
     @Bean
     public SessionService sessionService() throws Exception {
+        File f = new File(this.getClass().getClassLoader().getResource("ebikko.license.properties").toURI());
+        System.setProperty("EBIKKO_CONFIG_DIR", f.getPath());
+
+        Config config = new Config();
+        config.setProperty("hazelcast.shutdownhook.enabled", "false");
+        config.setInstanceName("Test HAZY123");
+        config.addMapConfig(new MapConfig("ebikko.configs"));
+
+        NetworkConfig network = config.getNetworkConfig();
+        network.getJoin().getTcpIpConfig().setEnabled(false);
+        network.getJoin().getMulticastConfig().setEnabled(false);
+        HazelcastInstance instance = Hazelcast.init(config);
+        IMap<Object, Object> map = instance.getMap("ebikko.configs");
+
+        Properties ebikkoProperties = new Properties();
+        ebikkoProperties.put("organization", "Ag-I Solutions Sdn Bhd");
+        ebikkoProperties.put("user-licenses", "103");
+        ebikkoProperties.put("license-type", "saas");
+        ebikkoProperties.put("valid-until", "2017-07-01");
+        ebikkoProperties.put("modules", "core;workflow;esign");
+        ebikkoProperties.put("license-key", "9ed78eb848c75772f0d53ddd97181758f1485a0e035052adbaab27bbcf464580");
+
+        map.put("ebikko.license.properties", ebikkoProperties);
+
+
         Field escapeChar = Filter.class.getField("ESCAPE_CHAR");
         setFinalStatic(escapeChar, "\\");
 
@@ -59,6 +91,7 @@ public class EmbeddedDBTestConfiguration {
         when(repository.getDriver()).thenReturn("mysql");
 
         when(repository.getProperty("web.defaultTimeZone")).thenReturn("Asia/Kuala_Lumpur");
+        when(repository.getProperty("repo.maxUserLogins")).thenReturn("1000");
 
         Constructor<Session> constructor = Session.class.getDeclaredConstructor(Repository.class, String.class);
         constructor.setAccessible(true);

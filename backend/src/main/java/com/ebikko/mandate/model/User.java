@@ -41,4 +41,12 @@ public class User implements Principal {
     public String getId() {
         return id;
     }
+
+    public boolean isCustomer() {
+        return userType == UserType.CUSTOMER;
+    }
+
+    public boolean isMerchant() {
+        return userType == UserType.MERCHANT;
+    }
 }

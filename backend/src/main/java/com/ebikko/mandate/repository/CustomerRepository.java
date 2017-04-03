@@ -6,5 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
-    public Customer findByIdValueAndIdType(String idValue, IDType idType);
+    Customer findByIdValueAndIdType(String idValue, IDType idType);
+
+    Customer findByEmailAddress(String emailAddress);
+
 }

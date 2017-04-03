@@ -25,20 +25,32 @@ public class TestDataService {
     @Autowired
     private MerchantService merchantService;
 
-    public Mandate createMandate() {
-        CustomerBankAccount customerBankAccount = customerBankAccountService.save(exampleCustomerBankAccount());
+    public Mandate createMandate(Customer customer) {
+        return createMandate(customer, createMerchant());
+    }
 
-        Customer customer = customerService.save(exampleCustomer(customerBankAccount));
+    public Mandate createMandate(Merchant merchant) {
+        return createMandate(createCustomer(), merchant);
+    }
 
-        Merchant merchant = createMerchant();
-
-        final Mandate mandate = exampleMandate(customer, merchant);
+    public Mandate createMandate(Customer customer, Merchant merchant) {
+        Mandate mandate = exampleMandate(customer, merchant);
         return mandateService.save(mandate);
+    }
+
+    public Mandate createMandate() {
+        return createMandate(createCustomer(), createMerchant());
     }
 
     public Merchant createMerchant() {
         MerchantBankAccount merchantBankAccount = merchantBankAccountService.save(exampleMerchantBankAccount());
 
         return merchantService.save(exampleMerchant(merchantBankAccount));
+    }
+
+    public Customer createCustomer() {
+        CustomerBankAccount customerBankAccount = customerBankAccountService.save(exampleCustomerBankAccount());
+
+        return customerService.save(exampleCustomer(customerBankAccount));
     }
 }

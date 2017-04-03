@@ -36,10 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
 
-
                 // Allow these requests
                 .authorizeRequests()
-                .antMatchers("/**/*.js", "/**/*.css", "/login", "/mandate-form", "/mandate/*", "/").permitAll()
+                .antMatchers("/**/*.js", "/**/*.css", "/signup", "/login", "/user", "/mandate-form", "/mandate/*", "/").permitAll()
                 .and()
 
                 // Require authentication for anything else

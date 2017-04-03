@@ -11,6 +11,7 @@ import { Md2Module } from 'md2';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { RegistrationModule } from './registration/registration.module';
+import { SignUpModule } from './signup/signup.module';
 
 import { AppComponent } from './app.component';
 
@@ -33,6 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
     HomeModule,
     LoginModule,
     RegistrationModule,
+    SignUpModule,
     AppRoutingModule
   ],
   providers: [

@@ -14,13 +14,13 @@ public class Merchant {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    public Long id;
+    private Long id;
     @Column
-    public String companyRegistrationNumber;
+    private String companyRegistrationNumber;
     @Column
-    public String companyName;
+    private String companyName;
     @OneToMany
-    public List<MerchantBankAccount> merchantBankAccounts;
+    private List<MerchantBankAccount> merchantBankAccounts;
 
     public Merchant() {}
 

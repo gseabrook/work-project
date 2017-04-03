@@ -5,6 +5,7 @@ import { MandateFormComponent } from './registration/form/mandate-form.component
 import { MandateFormResolver } from './registration/form/mandate-form-resolver.service';
 import { CompleteComponent } from './registration/complete/complete.component';
 import { LoginComponent } from './login/login.component';
+import { SignUpComponent } from './signup/signup.component';
 
 const routes: Routes = [{
   path: 'mandate-form',
@@ -22,6 +23,7 @@ const routes: Routes = [{
   loadChildren: 'app/home/home.module#HomeModule'
 },
 { path: 'login', component: LoginComponent },
+{ path: 'signup', component: SignUpComponent },
 {
   path: '',
   redirectTo: '/login',
