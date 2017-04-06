@@ -10,7 +10,7 @@ export class SignUpService {
 	constructor(private http: Http) { }
 
 	signUp(signUp: SignUp) {
-		return this.http.post("user", JSON.stringify(signUp), { headers: this.headers });
+		return this.http.post("signup", JSON.stringify(signUp), { headers: this.headers });
 	}
 
 }

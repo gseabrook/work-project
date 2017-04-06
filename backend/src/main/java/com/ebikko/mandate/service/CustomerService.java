@@ -31,4 +31,11 @@ public class CustomerService {
     public Customer getCustomer(String id) {
         return customerRepository.findOne(Long.valueOf(id));
     }
+
+    public Customer save(String emailAddress) {
+        Customer customer = new Customer();
+        customer.setEmailAddress(emailAddress);
+        customer.setName(emailAddress);
+        return save(customer);
+    }
 }

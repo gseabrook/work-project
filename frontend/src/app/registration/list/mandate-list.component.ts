@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Mandate } from '../model/mandate';
-import { RegistrationService } from '../registration.service';
+import { User } from '../../model/user';
+import { MandateService } from '../mandate.service';
 
 @Component({
 	selector: 'app-mandate-list',
@@ -12,11 +13,20 @@ import { RegistrationService } from '../registration.service';
 export class MandateListComponent implements OnInit {
 
 	mandates: Mandate[] = [];
+	user: User;
 
-	constructor(private registrationService: RegistrationService, private router: Router) { }
+	constructor(
+		private mandateService: MandateService,
+		private router: Router,
+		private route: ActivatedRoute
+	) { }
 
 	ngOnInit() {
-		this.registrationService.get().then(mandates => this.mandates = mandates);
+		this.route.data.subscribe((data: { user: User }) => {
+			this.user = data.user;
+		});
+
+		this.mandateService.get().then(mandates => this.mandates = mandates);
 	}
 
 }

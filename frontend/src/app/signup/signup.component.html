@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container loginForm">
     <md-toolbar color="primary">
     	<span>Welcome to MyDirectDebit</span>
     </md-toolbar>
@@ -9,6 +9,16 @@
         <md-input-container>
             <input mdInput type="password" placeholder="Password" [(ngModel)]="model.password" name="password">
         </md-input-container>
+        <md-input-container>
+            <input mdInput type="password" placeholder="Repeat Password" [(ngModel)]="model.repeatPassword" name="repeatPassword">
+        </md-input-container>
+
+        <div class="alert alert-danger fade" [ngClass]="{'hide': errors.length === 0}">
+            <div *ngFor="let error of errors">
+            {{ error.message}}
+            </div>
+        </div>
+        
         <button md-raised-button type="submit" color="primary">Sign Up</button>
     </form>
     <div fxLayout="row" fxLayoutAlign="end" class="secondaryLink">

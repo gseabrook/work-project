@@ -1,4 +1,4 @@
-import { Bank } from './bank'
+import { Bank } from './bank';
 import { Serializable } from '../../model/serializable';
 
 export class BankAccount implements Serializable<BankAccount> {
@@ -15,13 +15,13 @@ export class BankAccount implements Serializable<BankAccount> {
 
 	toJSON(): BankAccountJSON {
 		return {
-			bankId: this.bank.id,
+			bankId: this.bank ? this.bank.id : undefined,
 			accountNumber: this.accountNumber
 		};
 	}
 }
 
 interface BankAccountJSON {
-	bankId: string,
-	accountNumber: string
+	bankId: string;
+	accountNumber: string;
 }

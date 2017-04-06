@@ -1,8 +1,5 @@
 package com.ebikko.mandate.model;
 
-import com.ebikko.mandate.web.MerchantDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -29,7 +26,6 @@ public class Mandate {
     private MandateFrequency frequency;
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
-    @JsonDeserialize(using = MerchantDeserializer.class)
     @ManyToOne
     private Merchant merchant;
 

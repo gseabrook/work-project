@@ -8,7 +8,7 @@ import { MdDialog } from '@angular/material';
 
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
-import { RegistrationService } from '../registration.service';
+import { MandateService } from '../mandate.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
@@ -23,9 +23,10 @@ export class MandateFormComponent implements OnInit {
 
   	banks: Bank[];
   	model: Mandate;
+	errors : ValidationError[] = [];
 
 	constructor(
-		private registrationService: RegistrationService,
+		private mandateService: MandateService,
 		private mandateFormService: MandateFormService,
 		private dialog: MdDialog,
 		private location: Location,
@@ -41,7 +42,6 @@ export class MandateFormComponent implements OnInit {
 		this.mandateFormService.getBanks().subscribe(banks => this.banks = banks);
 	}
 
-	fieldErrors : ValidationError[] = [];
 
 	idTypes = [
 		{ value: 'PASSPORT_NUMBER', viewValue: 'Passport Number' },
@@ -75,10 +75,10 @@ export class MandateFormComponent implements OnInit {
 
 			dialogRef.afterClosed().subscribe(success => { 
 				if (success) {
-					this.registrationService.save(this.model)
+					this.mandateService.save(this.model)
 						.subscribe(
 							result => this.router.navigate(["../mandate-list"], { relativeTo: this.route }),
-							error => Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(error.json()).fieldErrors)
+							error => Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(error.json()).fieldErrors)
 					);
 				}
 			});
@@ -90,6 +90,6 @@ export class MandateFormComponent implements OnInit {
 	}
 
 	private handleError(result) {
-		Array.prototype.push.apply(this.fieldErrors, new ErrorResponse().deserialize(result.json()).fieldErrors);
+		Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(result.json()).fieldErrors);
 	}
 }

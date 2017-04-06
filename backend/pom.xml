@@ -27,7 +27,7 @@
 		<java.version>1.7</java.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <api.version>20170331</api.version>
+        <api.version>20170403</api.version>
         <svn.username></svn.username>
         <svn.password></svn.password>
 	</properties>
@@ -51,11 +51,11 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.codehaus.castor</groupId>
@@ -192,6 +192,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -258,7 +264,7 @@
                 <executions>
                     <execution>
                         <id>download-api-jar</id>
-                        <phase>generate-resources</phase>
+                        <phase>none</phase>
                         <goals>
                             <goal>export</goal>
                         </goals>

@@ -9,7 +9,7 @@ import { Md2Module } from 'md2';
 import { MandateFormComponent } from './form/mandate-form.component';
 import { MandateListComponent } from './list/mandate-list.component';
 import { FpxAuthenticationComponent } from './fpx-authentication/fpx-authentication.component';
-import { RegistrationService } from './registration.service';
+import { MandateService } from './mandate.service';
 import { MandateFormService } from './form/mandate-form.service';
 import { MandateFormResolver } from './form/mandate-form-resolver.service';
 import { CompleteComponent } from './complete/complete.component';
@@ -28,7 +28,7 @@ import { CompleteComponent } from './complete/complete.component';
 		MandateFormComponent, MandateListComponent, CompleteComponent
 	],
 	providers: [
-		RegistrationService, MandateFormService, MandateFormResolver
+		MandateService, MandateFormService, MandateFormResolver
 	]
 })
-export class RegistrationModule { }
+export class MandateModule { }

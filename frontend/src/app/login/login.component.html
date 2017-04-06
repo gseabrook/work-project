@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container loginForm">
     <md-toolbar color="primary">
     	<span>My Direct Debit</span>
     </md-toolbar>
@@ -9,6 +9,11 @@
         <md-input-container>
             <input mdInput type="password" placeholder="Password" [(ngModel)]="model.password" name="password">
         </md-input-container>
+
+        <div class="alert alert-danger fade" [ngClass]="{'hide': !showError}">
+            Invalid username or password
+        </div>
+
         <button md-raised-button type="submit" color="primary">Login</button>
     </form>
     <div fxLayout="row" fxLayoutAlign="end" class="secondaryLink">

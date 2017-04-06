@@ -17,3 +17,8 @@ div.container {
 	width: 750px;
 	min-height: 200px;
 }
+
+td.numeric {
+	text-align: right;
+	padding-right: 10px;
+}

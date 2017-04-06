@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
-import static com.ebikko.mandate.MandateControllerResponseMatchers.response;
+import static com.ebikko.mandate.ValidationErrorResponseMatchers.response;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

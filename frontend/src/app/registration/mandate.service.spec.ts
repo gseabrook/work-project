@@ -2,18 +2,17 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
-import { RegistrationService } from './registration.service';
-import { Registration } from './model/registration';
-import { HttpModule, Http, BaseRequestOptions } from '@angular/http';
+import { MandateService } from './mandate.service';
+import { Mandate } from './model/mandate';
 import { MockBackend } from '@angular/http/testing';
 
 import 'rxjs/add/operator/toPromise';
 
-describe('RegistrationService', () => {
+describe('MandateService', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
 			imports: [HttpModule],
-			providers: [RegistrationService,
+			providers: [MandateService,
 				{
 					provide: Http,
 					useFactory: (mockBackend, options) => {
@@ -27,16 +26,16 @@ describe('RegistrationService', () => {
 		});
 	});
 
-	it('should create a registration form',
-		async(inject([RegistrationService, MockBackend], (service, mockBackend) => {
+	it('should create a mandate form',
+		async(inject([MandateService, MockBackend], (service, mockBackend) => {
 			mockBackend.connections.subscribe((connection) => {
 				expect(connection.request.method).toBe(RequestMethod.Post);
 				connection.mockRespond(new Response(new ResponseOptions({ status: 201 })));
 			});
 
-			let registration = new Registration('a', 'b', 'c', 'd', new Date());
+			let mandate = new Mandate();
 
-			service.save(registration).then((response) => {
+			service.save(mandate).subscribe((response) => {
 				expect(response).toBeDefined();
 				expect(response.status).toEqual(201);
 			});

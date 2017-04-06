@@ -5,15 +5,17 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { RegistrationModule } from '../registration/registration.module';
+import { MandateModule } from '../registration/mandate.module';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		MaterialModule,
 		HomeRoutingModule,
-		RegistrationModule,
-		FlexLayoutModule
+		MandateModule,
+		FlexLayoutModule,
+		AuthModule
 	],
 	declarations: [
 		HomeComponent

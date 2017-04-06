@@ -5,18 +5,17 @@ import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './login.component';
 import { RouterModule } from '@angular/router';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
 	imports: [
-		CommonModule, FormsModule, MaterialModule, FlexLayoutModule, RouterModule
+		CommonModule, FormsModule, MaterialModule, FlexLayoutModule, RouterModule, AuthModule
 	],
 	declarations: [
 		LoginComponent
 	],
 	exports: [
 		LoginComponent
-	],
-	providers: [
 	]
 })
 export class LoginModule { }

@@ -8,7 +8,7 @@ export class Customer implements Serializable<Customer> {
 	public idValue: string;
 	public bankAccounts: BankAccount[];
 
-	public emailAddress?: string
+	public emailAddress?: string;
 
 	constructor() {
 		this.bankAccounts = [new BankAccount()];
@@ -17,14 +17,14 @@ export class Customer implements Serializable<Customer> {
 	toJSON(): CustomerJSON {
 		return Object.assign({}, this, {
 			bankAccounts: null,
-			bankAccount: this.bankAccounts[0].toJSON()
+			bankAccount: this.bankAccounts.length > 0 ? this.bankAccounts[0].toJSON() : undefined
 		});
 	}
 
 	deserialize(input) {
 		this.name = input.name;
 		this.phoneNumber = input.phoneNumber;
-		this.idType = input.idType;
+		this.idType = input.idType.displayValue;
 		this.idValue = input.idValue;
 		this.bankAccounts = input.bankAccounts.map(x => new BankAccount().deserialize(x));
 		this.emailAddress = input.emailAddress;
@@ -34,9 +34,9 @@ export class Customer implements Serializable<Customer> {
 }
 
 interface CustomerJSON {
-	name: string,
-	phoneNumber: string,
-	idType: string,
-	idValue: string,
-	bankAccount: Object
+	name: string;
+	phoneNumber: string;
+	idType: string;
+	idValue: string;
+	bankAccount: Object;
 }

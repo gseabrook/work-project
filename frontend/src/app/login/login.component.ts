@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Login } from './login';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
 	selector: 'app-login',
@@ -11,13 +11,17 @@ import { AuthService } from '../auth.service';
 export class LoginComponent {
 
 	model = new Login('', '');
+	showError = false;
 
-	constructor(private authService: AuthService, private router: Router) { }
+	constructor(private authService: AuthService, private router: Router) {
+		authService.getUserDetails().then(() => router.navigate(['home'])).catch(() => {});
+	}
 
 	login() {
+		this.showError = false;
 		this.authService.login(this.model.username, this.model.password).then(() => {
 			let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
 			this.router.navigate([redirect]);
-		});
+		}, () => this.showError = true);
 	}
 }

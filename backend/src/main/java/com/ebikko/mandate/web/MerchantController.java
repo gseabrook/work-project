@@ -1,9 +1,7 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.mandate.model.ErrorResponse;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.Merchant;
-import com.ebikko.mandate.model.User;
+import com.ebikko.mandate.model.*;
+import com.ebikko.mandate.model.event.CustomerCreatedEvent;
 import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
@@ -12,6 +10,7 @@ import com.ebikko.mandate.service.translator.MandateDTOTranslator;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import ebikko.EbikkoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -38,15 +37,18 @@ public class MerchantController {
     private final MandateService mandateService;
     private final MandateDTOTranslator mandateDTOTranslator;
     private final CustomerService customerService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     public MerchantController(MerchantService merchantService, UserService userService, MandateService mandateService,
-                              MandateDTOTranslator mandateDTOTranslator, CustomerService customerService) {
+                              MandateDTOTranslator mandateDTOTranslator, CustomerService customerService,
+                              ApplicationEventPublisher applicationEventPublisher) {
         this.merchantService = merchantService;
         this.userService = userService;
         this.mandateService = mandateService;
         this.mandateDTOTranslator = mandateDTOTranslator;
         this.customerService = customerService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @RequestMapping(path = "/{merchantId}", method = GET, produces = APPLICATION_JSON_VALUE)
@@ -83,7 +85,11 @@ public class MerchantController {
             return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
-            customerService.save(mandate.getCustomer());
+
+            Customer customer = mandate.getCustomer();
+            customerService.save(customer);
+            applicationEventPublisher.publishEvent(new CustomerCreatedEvent(customer));
+
             Merchant merchant = userService.getMerchant((User) auth.getPrincipal());
             mandate.setMerchant(merchant);
             mandateService.save(mandate);

@@ -39,7 +39,7 @@ public class UserService {
                     String merchantId = getMerchantId(session, principal);
                     String customerId = getCustomerId(session, principal);
                     UserType userType = isBlank(merchantId) ? UserType.CUSTOMER : UserType.MERCHANT;
-                    return new User(principal.getUid(), userType == UserType.CUSTOMER ? customerId : merchantId, principal.getUserName(), principal.getName(), userType);
+                    return new User(principal.getUid(), userType == UserType.CUSTOMER ? customerId : merchantId, principal.getUserName(), principal.getName(), userType, principal.getEmail());
                 }
             });
         } catch (Exception e) {

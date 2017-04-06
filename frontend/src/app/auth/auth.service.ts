@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, URLSearchParams } from '@angular/http';
 
+import { User } from '../model/user';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
@@ -34,8 +35,8 @@ export class AuthService {
 		return this.http.get('logout');
 	}
 
-	getUserDetails() {
-		return this.http.get('user').toPromise();
+	getUserDetails(): Promise<User> {
+		return this.http.get('user').toPromise().then(response => new User().deserialize(response.json()));
 	}
 
 	private handleError(error: any): Promise<any> {

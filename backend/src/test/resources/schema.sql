@@ -8,6 +8,7 @@ drop table if exists mandate CASCADE;
 drop table if exists merchant CASCADE;
 drop table if exists merchant_merchant_bank_accounts CASCADE;
 drop table if exists merchant_bank_account CASCADE;
+drop table if exists user_verification_token CASCADE;
 
 create sequence hibernate_sequence;
 
@@ -19,6 +20,7 @@ create table mandate (id SERIAL UNIQUE, amount decimal(19,2) not null, frequency
 create table merchant (id SERIAL UNIQUE, company_name varchar(255), company_registration_number varchar(255), primary key (id));
 create table merchant_merchant_bank_accounts (merchant_id integer not null, merchant_bank_accounts_id integer not null);
 create table merchant_bank_account (id SERIAL UNIQUE, account_number varchar(255), seller_id varchar(255), bank_id integer, primary key (id));
+create table user_verification_token (id SERIAL UNIQUE, token varchar(255) not null, principal_uid varchar(255) not null, expiry_date timestamp, primary key(id));
 
 alter table customer_bank_accounts add constraint UK_hdpy2oggcb1tuwmdussu8o8qx unique (bank_accounts_id);
 alter table merchant_merchant_bank_accounts add constraint UK_rm1vhggt5oe0lu14fab81ct2p unique (merchant_bank_accounts_id);
@@ -194,4 +196,17 @@ CREATE TABLE pasw_events (
     changed_by character(32),
     password character varying(255),
     date_modified timestamp
+);
+
+
+CREATE TABLE object_event (
+    event_timestamp timestamp NOT NULL,
+    event_type character varying(100) NOT NULL,
+    object_uid character(32) NOT NULL,
+    object_type integer NOT NULL,
+    object_name character varying(255) NOT NULL,
+    principal_uid character(32) NOT NULL,
+    principal_name character varying(255) NOT NULL,
+    details text NOT NULL,
+    ipaddress character varying(45)
 );

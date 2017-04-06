@@ -14,7 +14,7 @@ export class FpxAuthenticationComponent implements OnInit {
 	model = {
 		username: '',
 		password: ''
-	}
+	};
 
 	constructor(private dialogRef: MdDialogRef<FpxAuthenticationComponent>) { }
 

@@ -10,14 +10,11 @@ import { Md2Module } from 'md2';
 
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
-import { RegistrationModule } from './registration/registration.module';
+import { MandateModule } from './registration/mandate.module';
 import { SignUpModule } from './signup/signup.module';
+import { AuthModule } from './auth/auth.module';
 
 import { AppComponent } from './app.component';
-
-import { AuthGuard } from './auth-guard.service';
-import { AuthService } from './auth.service';
-
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
@@ -33,13 +30,9 @@ import { AppRoutingModule } from './app-routing.module';
     Md2Module.forRoot(),
     HomeModule,
     LoginModule,
-    RegistrationModule,
+    MandateModule,
     SignUpModule,
     AppRoutingModule
-  ],
-  providers: [
-    AuthGuard,
-    AuthService
   ],
   bootstrap: [AppComponent]
 })

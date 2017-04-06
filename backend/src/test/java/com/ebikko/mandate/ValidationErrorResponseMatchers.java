@@ -15,10 +15,10 @@ import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
-public class MandateControllerResponseMatchers {
+public class ValidationErrorResponseMatchers {
 
-    public static MandateControllerResponseMatchers response() {
-        return new MandateControllerResponseMatchers();
+    public static ValidationErrorResponseMatchers response() {
+        return new ValidationErrorResponseMatchers();
     }
 
     public ResultMatcher hasErrorForField(final String field, final String error) {
@@ -33,7 +33,7 @@ public class MandateControllerResponseMatchers {
 
                 ErrorResponse errorResponse = new ObjectMapper().readValue(contentAsString, ErrorResponse.class);
 
-                List<ValidationError> fieldErrors = errorResponse.getFieldErrors();
+                List<ValidationError> fieldErrors = errorResponse.getErrors();
 
                 boolean matched = false;
                 for (ValidationError validationError : fieldErrors) {

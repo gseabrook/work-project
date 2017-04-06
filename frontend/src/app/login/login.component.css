@@ -11,3 +11,13 @@ md-input-container {
 div.secondaryLink {
 	padding: 10px;
 }
+
+.alert {
+	padding: 5px;
+	margin-bottom: 1em;
+	opacity: 1;
+}
+
+md-input-container {
+	margin-bottom: 0px;
+}

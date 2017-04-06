@@ -13,8 +13,10 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
     public void shouldLoadMandateByUid() throws Exception {
         Mandate mandate = testDataService.createMandate();
 
-        mockMvc
+        String contentAsString = mockMvc
                 .perform(get(MANDATE_URL + "/" + mandate.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        System.out.println(contentAsString);
     }
 }

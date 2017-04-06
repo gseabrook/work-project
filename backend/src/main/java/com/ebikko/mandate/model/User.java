@@ -1,8 +1,14 @@
 package com.ebikko.mandate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.security.Principal;
 
 public class User implements Principal {
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
     public enum UserType {
         MERCHANT, CUSTOMER
@@ -12,14 +18,16 @@ public class User implements Principal {
     private final String id;
     private final String username;
     private final String name;
-    private final UserType userType;
+    private final UserType type;
+    private final String emailAddress;
 
-    public User(String principalId, String id, String username, String name, UserType userType) {
+    public User(String principalId, String id, String username, String name, UserType type, String emailAddress) {
         this.principalId = principalId;
         this.id = id;
         this.username = username;
         this.name = name;
-        this.userType = userType;
+        this.type = type;
+        this.emailAddress = emailAddress;
     }
 
     public String getPrincipalId() {
@@ -34,19 +42,21 @@ public class User implements Principal {
         return name;
     }
 
-    public UserType getUserType() {
-        return userType;
+    public UserType getType() {
+        return type;
     }
 
     public String getId() {
         return id;
     }
 
+    @JsonIgnore
     public boolean isCustomer() {
-        return userType == UserType.CUSTOMER;
+        return type == UserType.CUSTOMER;
     }
 
+    @JsonIgnore
     public boolean isMerchant() {
-        return userType == UserType.MERCHANT;
+        return type == UserType.MERCHANT;
     }
 }

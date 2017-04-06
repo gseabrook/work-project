@@ -9,7 +9,7 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { LoginComponent } from './login.component';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 
 class RouterStub {
   navigate(args: any[]) { }
@@ -68,6 +68,20 @@ describe('LoginComponent', () => {
         });
 
         fixture.debugElement.query(By.css('button')).nativeElement.click();
+      });
+    })));
+
+  it('should show error message for incorrect username and password',
+    async(inject([MockBackend], (mockBackend) => {
+      fixture.whenStable().then(() => {
+        
+        mockBackend.connections.subscribe((connection) => {
+          connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
+        });
+
+        fixture.debugElement.query(By.css('button')).nativeElement.click();
+
+        
       });
     })));
 });

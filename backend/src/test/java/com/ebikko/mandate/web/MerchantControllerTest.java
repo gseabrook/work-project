@@ -10,6 +10,7 @@ import com.ebikko.mandate.service.translator.MandateDTOTranslator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -38,10 +39,12 @@ public class MerchantControllerTest extends AbstractControllerTest {
     private MandateDTOTranslator mandateDTOTranslator;
     @Mock
     private CustomerService customerService;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Object getController() {
-        return new MerchantController(merchantService, userService, mandateService, mandateDTOTranslator, customerService);
+        return new MerchantController(merchantService, userService, mandateService, mandateDTOTranslator, customerService, applicationEventPublisher);
     }
 
     @Test

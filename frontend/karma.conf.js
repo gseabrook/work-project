@@ -4,13 +4,16 @@
 module.exports = function(config) {
     config.set({
         basePath: '',
-        frameworks: ['jasmine', '@angular/cli'],
+        frameworks: ['jasmine', '@angular/cli', 'fixture'],
         plugins: [
             require('karma-jasmine-html-reporter'),
             require('karma-coverage-istanbul-reporter'),
             require('karma-jasmine'),
             require('karma-chrome-launcher'),
-            require('@angular/cli/plugins/karma')
+            require('@angular/cli/plugins/karma'),
+            require('karma-json-fixtures-preprocessor'),
+            require('karma-fixture'),
+            require('karma-html2js-preprocessor')
         ],
         files: [{
             client: {
@@ -18,9 +21,12 @@ module.exports = function(config) {
             },
             pattern: './src/test.ts',
             watched: false
-        }],
+        },
+            './fixtures/**/*.json'
+        ],
         preprocessors: {
-            './src/test.ts': ['@angular/cli']
+            './src/test.ts': ['@angular/cli'],
+            '**/*.json'   : ['json_fixtures']
         },
         mime: {
             'text/x-typescript': ['ts', 'tsx']
@@ -30,6 +36,9 @@ module.exports = function(config) {
                 html: 'coverage',
                 lcovonly: './coverage/coverage.lcov'
             }
+        },
+        jsonFixturesPreprocessor: {
+            variableName: '__json__'
         },
         angularCli: {
             environment: 'dev'

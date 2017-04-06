@@ -17,13 +17,4 @@ public enum IDType implements DisplayEnum {
         return displayValue;
     }
 
-    public static IDType fromDisplayValue(String value) {
-        for (IDType idType : IDType.values()) {
-            if (idType.getDisplayValue().equals(value)) {
-                return idType;
-            }
-        }
-
-        throw new RuntimeException("Cant find idType " + value);
-    }
 }

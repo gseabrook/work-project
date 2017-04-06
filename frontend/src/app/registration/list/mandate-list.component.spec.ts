@@ -3,27 +3,24 @@ import { By } from '@angular/platform-browser';
 import { TestBed, async, inject } from '@angular/core/testing';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RegistrationService } from '../registration.service';
-import { Registration } from '../registration';
+import { MandateService } from '../mandate.service';
+import { Mandate } from '../model/mandate';
 import { MaterialModule } from '@angular/material';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-class RouterStub {
-  navigate(args: any[]) { }
-}
+import data from '/fixtures/mandates.json';
 
-import { RegistrationListComponent } from './registration-list.component';
+import { MandateListComponent } from './mandate-list.component';
 
-describe('RegistrationListComponent', () => {
-  let component: RegistrationListComponent;
-  let fixture: ComponentFixture<RegistrationListComponent>;
+describe('MandateListComponent', () => {
+  let component: MandateListComponent;
+  let fixture: ComponentFixture<MandateListComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RegistrationListComponent],
-      imports: [HttpModule, MaterialModule],
-      providers: [RegistrationService,
-        { provide: Router, useClass: RouterStub },
+      declarations: [MandateListComponent],
+      imports: [HttpModule, MaterialModule, RouterTestingModule],
+      providers: [MandateService,
         {
           provide: Http,
           useFactory: (mockBackend, options) => {
@@ -39,7 +36,7 @@ describe('RegistrationListComponent', () => {
   });
 
   function createComponent() {
-    fixture = TestBed.createComponent(RegistrationListComponent);
+    fixture = TestBed.createComponent(MandateListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }
@@ -50,7 +47,7 @@ describe('RegistrationListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load all the registrations and display them in the table',
+  it('should load all the mandates and display them in the table',
     async(inject([MockBackend], (mockBackend) => {
       mockBackend.connections.subscribe((connection) => {
         expect(connection.request.method).toBe(RequestMethod.Get);
