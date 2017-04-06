@@ -10,14 +10,14 @@ import 'rxjs/add/operator/delay';
 @Injectable()
 export class AuthService {
 
-	loginUrl = "login";
-	isLoggedIn: boolean = false;
+	loginUrl = 'login';
+	isLoggedIn = false;
 	redirectUrl: string;
 
 	constructor(private http: Http) {}
 
 	login(username: string, password: string): Promise<any> {
-		let body = new URLSearchParams();
+		const body constew URLSearchPara ms();
 		body.set('username', username);
 		body.set('password', password);
 

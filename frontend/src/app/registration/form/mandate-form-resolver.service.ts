@@ -15,7 +15,7 @@ export class MandateFormResolver implements Resolve<Mandate> {
 	) { }
 
 	resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Mandate> {
-		let id = route.queryParams['id'];
+		const id = route.queryParams['id'];
 
 		if (id) {
 			return this.mandateFormService.getMandate(id);

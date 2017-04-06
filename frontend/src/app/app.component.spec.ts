@@ -9,7 +9,7 @@ describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent       
+        AppComponent
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     });

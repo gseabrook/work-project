@@ -67,7 +67,8 @@ describe('SignUpComponent', () => {
 
         mockBackend.connections.subscribe((connection) => {
           expect(connection.request.method).toBe(RequestMethod.Post);
-          expect(JSON.parse(connection.request.getBody())).toEqual({ "email": "joe@dog.com", "token": "123", "password": "supersecretpassword", "repeatPassword": "supersecretpassword" });
+          expect(JSON.parse(connection.request.getBody()))
+          .toEqual({ 'email': 'joe@dog.com', 'token': '123', 'password': 'supersecretpassword', 'repeatPassword': 'supersecretpassword' });
 
           connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
         });
@@ -83,10 +84,11 @@ describe('SignUpComponent', () => {
 
       fixture.debugElement.query(By.css('button[type=submit]')).nativeElement.click();
 
-      connection.mockRespond(new Response(new ResponseOptions({ body: '{"errors":[{"field":"email","value":"","message":"Please enter an email address"}]}', status: 422 })));
+      connection.mockRespond(new Response(
+        new ResponseOptions({ body: '{"errors":[{"field":"email","value":"","message":"Please enter an email address"}]}', status: 422 })));
       tick();
 
-      expect(fixture.debugElement.query(By.css('div.alert')).nativeElement.textContent).toContain("Please enter an email address");
+      expect(fixture.debugElement.query(By.css('div.alert')).nativeElement.textContent).toContain('Please enter an email address');
     });
   })));
 });

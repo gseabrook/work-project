@@ -20,7 +20,7 @@ export class LoginComponent {
 	login() {
 		this.showError = false;
 		this.authService.login(this.model.username, this.model.password).then(() => {
-			let redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
+			const redirect = this.authService.redirectUrl ? this.authService.redirectUrl : '/home';
 			this.router.navigate([redirect]);
 		}, () => this.showError = true);
 	}

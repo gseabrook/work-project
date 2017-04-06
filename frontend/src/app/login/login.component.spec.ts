@@ -49,7 +49,7 @@ describe('LoginComponent', () => {
   });
 
   function inputValue(inputElement, value) {
-    let el = inputElement.nativeElement;
+    const el = inputElement.nativeElement;
     el.value = value;
     el.dispatchEvent(new Event('input'));
   }
@@ -62,7 +62,7 @@ describe('LoginComponent', () => {
 
         mockBackend.connections.subscribe((connection) => {
           expect(connection.request.method).toBe(RequestMethod.Post);
-          expect(connection.request.getBody()).toEqual("username=JoeDog&password=supersecretpassword");
+          expect(connection.request.getBody()).toEqual('username=JoeDog&password=supersecretpassword');
 
           connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
         });
@@ -74,14 +74,14 @@ describe('LoginComponent', () => {
   it('should show error message for incorrect username and password',
     async(inject([MockBackend], (mockBackend) => {
       fixture.whenStable().then(() => {
-        
+
         mockBackend.connections.subscribe((connection) => {
           connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
         });
 
         fixture.debugElement.query(By.css('button')).nativeElement.click();
 
-        
+
       });
     })));
 });

@@ -32,7 +32,7 @@ describe('MandateListComponent', () => {
         BaseRequestOptions
       ]
     })
-      .compileComponents();;
+      .compileComponents(); ;
   });
 
   function createComponent() {

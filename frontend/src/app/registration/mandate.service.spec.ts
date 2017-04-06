@@ -33,7 +33,7 @@ describe('MandateService', () => {
 				connection.mockRespond(new Response(new ResponseOptions({ status: 201 })));
 			});
 
-			let mandate = new Mandate();
+			const mandate = new Mandate();
 
 			service.save(mandate).subscribe((response) => {
 				expect(response).toBeDefined();
