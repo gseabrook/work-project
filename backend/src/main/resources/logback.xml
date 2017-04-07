@@ -6,7 +6,7 @@
     </appender>
 
     <appender name="MDD_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/mydirectdebit.log</file>
+        <file>./mydirectdebit.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>mydirectdebit.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
@@ -34,11 +34,23 @@
         <appender-ref ref="MDD_LOG"/>
     </logger>
 
+    <logger name="org.springframework.mail" level="DEBUG" additivity="false">
+        <appender-ref ref="MDD_LOG"/>
+    </logger>
+
     <logger name="org.postgresql" level="DEBUG">
         <appender-ref ref="MDD_LOG"/>
     </logger>
 
-    <root level="INFO">
-        <appender-ref ref="MDD_LOG" />
-    </root>
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="MDD_LOG" />
+        </root>
+    </springProfile>
+
+    <springProfile name="!default">
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
 </configuration>

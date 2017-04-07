@@ -96,6 +96,13 @@ CREATE TABLE principal (
     jc2300d55f3547e3a495f6332e259604 character varying(100)
 );
 
+ALTER TABLE principal ADD CONSTRAINT principal_pkey PRIMARY KEY (uid);
+CREATE UNIQUE INDEX principal_barcode ON principal (barcode);
+CREATE UNIQUE INDEX principal_ext_barcode ON principal (external_barcode);
+CREATE UNIQUE INDEX principal_extid_idx ON principal (extid);
+CREATE UNIQUE INDEX principal_uname_idx ON principal (username);
+
+
 CREATE TABLE profile (
     uid character(32) NOT NULL,
     name character varying(50) NOT NULL,

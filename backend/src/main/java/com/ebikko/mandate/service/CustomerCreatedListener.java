@@ -3,6 +3,7 @@ package com.ebikko.mandate.service;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.UserVerificationToken;
 import com.ebikko.mandate.model.event.CustomerCreatedEvent;
+import com.ebikko.signup.SignUpEmailService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
 import org.springframework.beans.factory.annotation.Autowired;

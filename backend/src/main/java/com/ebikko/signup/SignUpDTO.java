@@ -1,10 +1,11 @@
-package com.ebikko.mandate.model;
+package com.ebikko.signup;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 @PasswordsMatch
+@UniqueEmail
 public class SignUpDTO {
 
     @NotBlank(message = "Please enter an email address")

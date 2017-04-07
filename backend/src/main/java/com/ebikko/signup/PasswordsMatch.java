@@ -1,4 +1,4 @@
-package com.ebikko.mandate.model;
+package com.ebikko.signup;
 
 
 import javax.validation.Constraint;

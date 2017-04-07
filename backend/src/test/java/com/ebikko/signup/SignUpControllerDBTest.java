@@ -1,34 +1,40 @@
-package com.ebikko.mandate.web;
+package com.ebikko.signup;
 
 import com.ebikko.SessionAction;
 import com.ebikko.mandate.IDs;
 import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.SignUpDTO;
 import com.ebikko.mandate.model.UserVerificationToken;
+import com.ebikko.mandate.web.AbstractEmbeddedDBControllerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ebikko.EbikkoException;
 import ebikko.Principal;
 import ebikko.Session;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import java.util.Map;
 
 import static com.ebikko.mandate.responsematcher.ValidationErrorResponseMatchers.response;
-import static com.ebikko.mandate.web.SignUpController.SIGNUP_URL;
+import static com.ebikko.signup.SignUpController.SIGNUP_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest{
+public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest {
+
+    @After
+    public void tearDown() throws Exception {
+        testDataService.resetPrincipals();
+    }
 
     @Test
-    public void shouldCreateAPrincipalAssociatedWithExistingCustomer() throws Exception {
+    public void shouldAllowInactiveInvitedUsersToRegister() throws Exception {
+        Customer customer = testDataService.createInactiveCustomer();
 
-        Customer customer = testDataService.createCustomer();
         SignUpDTO signUpDTO = new SignUpDTO(customer.getEmailAddress(), "abc123", "abc123", "");
 
         mockMvc.perform(
@@ -53,6 +59,7 @@ public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest{
 
     @Test
     public void shouldCreatePrincipalAndCustomer() throws Exception {
+        testDataService.resetPrincipals();
         String emailAddress = "test2@example.com";
         SignUpDTO signUpDTO = new SignUpDTO(emailAddress, "abc123", "abc123", "");
 
@@ -122,4 +129,18 @@ public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest{
                 .andExpect(response().hasErrorForField("email", "Please enter an email address"));
     }
 
+    @Test
+    public void shouldRejectUsersWithDuplicateEmail() throws Exception {
+        Customer customer = testDataService.createActiveCustomer();
+        SignUpDTO signUpDTO = new SignUpDTO(customer.getEmailAddress(), "abc1", "abc1", "");
+
+        mockMvc.perform(
+                post(SIGNUP_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(signUpDTO)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(response().hasErrorForField("signUpDTO", "Email address is already in use"));
+
+        testDataService.resetPrincipals();
+    }
 }

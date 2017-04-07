@@ -3,9 +3,9 @@ package com.ebikko.mandate.service;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.SignUpDTO;
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.model.UserVerificationToken;
+import com.ebikko.signup.SignUpDTO;
 import ebikko.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PrincipalService {
@@ -105,5 +106,15 @@ public class PrincipalService {
 
     public Principal activatePrincipal(String token) throws EbikkoException {
         return activatePrincipal(token, null);
+    }
+
+    public Principal findByEmail(final String email) throws EbikkoException {
+        List<Principal> principals = sessionService.performSessionAction(new SessionAction<List<Principal>>() {
+            @Override
+            public List<Principal> perform(Session session) throws EbikkoException {
+                return session.getPrincipalByEmail(email);
+            }
+        });
+        return principals.isEmpty() ? null : principals.get(0);
     }
 }

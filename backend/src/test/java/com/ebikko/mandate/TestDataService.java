@@ -62,15 +62,27 @@ public class TestDataService {
     public Customer createCustomer() {
         CustomerBankAccount customerBankAccount = customerBankAccountService.save(exampleCustomerBankAccount());
 
-        return customerService.save(exampleCustomer(customerBankAccount));
+        Customer customer = exampleCustomer(customerBankAccount);
+        System.out.println("Created: " + customer.getName());
+        return customerService.save(customer);
+    }
+
+    public Customer createInactiveCustomer() throws EbikkoException {
+        Customer customer = createCustomer();
+        createPrincipal(customer, false);
+        return customer;
     }
 
     public Customer createInactiveCustomer(String token) throws EbikkoException {
-        Customer customer = createCustomer();
         userVerificationTokenRepository.save(new UserVerificationToken(token, "aaa111"));
 
-        final String sql = "insert into principal (uid, name, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
-                "values ('aaa111', 'Test user', 0, 0, 0, 3, 0, 5, '" + customer.getId() + "')";
+        return createInactiveCustomer();
+    }
+
+    private void createPrincipal(Customer customer, Boolean active) throws EbikkoException {
+        final String sql = String.format("insert into principal (uid, username, name, email, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
+                "values ('aaa111', '%s', '%s', '%s', 0, 0, 0, 3, %s, 5, '%s')",
+                customer.getEmailAddress(), customer.getName(), customer.getEmailAddress(), active ? "1" : "0", customer.getId() );
 
         sessionService.performSessionAction(new SessionAction<Void>() {
             @Override
@@ -83,7 +95,28 @@ public class TestDataService {
                 return null;
             }
         });
+    }
 
-        return customer;
+    public Customer createActiveCustomer() throws EbikkoException {
+        Customer customer = createCustomer();
+        createPrincipal(customer, true);
+        return  customer;
+    }
+
+    public void resetPrincipals() throws EbikkoException {
+        final String sql = "delete from principal where uid != '00000000000000000000000000000000'";
+
+        sessionService.performSessionAction(new SessionAction<Void>() {
+            @Override
+            public Void perform(Session session) throws EbikkoException {
+                try {
+                    session.getConnection().prepareCall(sql).execute();
+                    session.clearPrincipalCache();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                return null;
+            }
+        });
     }
 }

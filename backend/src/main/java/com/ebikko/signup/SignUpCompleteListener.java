@@ -1,4 +1,4 @@
-package com.ebikko.mandate.service;
+package com.ebikko.signup;
 
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.model.UserVerificationToken;

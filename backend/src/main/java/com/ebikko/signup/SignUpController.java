@@ -1,13 +1,13 @@
-package com.ebikko.mandate.web;
+package com.ebikko.signup;
 
 import com.ebikko.mandate.model.ErrorResponse;
-import com.ebikko.mandate.model.SignUpDTO;
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.model.event.SignUpCompleteEvent;
 import com.ebikko.mandate.service.PrincipalService;
 import com.ebikko.mandate.service.UserService;
-import com.ebikko.mandate.service.UserVerificationTokenService;
 import ebikko.EbikkoException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +26,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class SignUpController {
 
     public static final String SIGNUP_URL = "/signup";
+    private static Log logger = LogFactory.getLog(SignUpController.class);
 
-    private final UserVerificationTokenService userVerificationTokenService;
     private final PrincipalService principalService;
     private final UserService userService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public SignUpController(UserVerificationTokenService userVerificationTokenService, PrincipalService principalService,
+    public SignUpController(PrincipalService principalService,
                             UserService userService, ApplicationEventPublisher applicationEventPublisher) {
-        this.userVerificationTokenService = userVerificationTokenService;
         this.principalService = principalService;
         this.userService = userService;
         this.applicationEventPublisher = applicationEventPublisher;
@@ -52,12 +51,16 @@ public class SignUpController {
     public ResponseEntity create(@RequestBody @Validated SignUpDTO signUpDTO, BindingResult bindingResult) throws EbikkoException {
 
         if (bindingResult.hasErrors()) {
+            logger.error(bindingResult);
             return new ResponseEntity(new ErrorResponse(bindingResult), UNPROCESSABLE_ENTITY);
         }
 
         String token = signUpDTO.getToken();
         if (isBlank(token)) {
-            ebikko.Principal principal = principalService.createPrincipal(signUpDTO);
+            ebikko.Principal principal = principalService.findByEmail(signUpDTO.getEmail());
+            if (principal == null) {
+                principal = principalService.createPrincipal(signUpDTO);
+            }
             User user = userService.convertPrincipal(principal);
             applicationEventPublisher.publishEvent(new SignUpCompleteEvent(user));
             return new ResponseEntity(CREATED);

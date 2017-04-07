@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import ebikko.EbikkoException;
 import ebikko.Repository;
 import ebikko.Session;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorViewResolver;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,8 @@ import static java.lang.Integer.parseInt;
 
 @Configuration
 public class WebConfiguration {
+
+    private static final Log logger = LogFactory.getLog(WebConfiguration.class);
 
     @Bean
     ErrorViewResolver supportPathBasedLocationStrategyWithoutHashes() {
@@ -60,10 +64,22 @@ public class WebConfiguration {
             }
         });
 
-        mailSender.setHost(repository.getProperty("email.host"));
-        mailSender.setPort(parseInt(repository.getProperty("email.port")));
-        mailSender.setUsername(repository.getProperty("email.username"));
-        mailSender.setPassword(repository.getProperty("email.password"));
+        String host = repository.getProperty("email.host");
+        String port = repository.getProperty("email.port");
+        String username = repository.getProperty("email.username");
+        String password = repository.getProperty("email.password");
+
+        logger.info("-----Mail Sender Properties-----");
+        logger.info("Host: " + host);
+        logger.info("Port: " + port);
+        logger.info("Username: " + username);
+        logger.info("Password: " + password);
+        logger.info("---------------------------------");
+
+        mailSender.setHost(host);
+        mailSender.setPort(parseInt(port));
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
 
         Properties properties = new Properties();
         properties.put("mail.smtp.starttls.enable", true);

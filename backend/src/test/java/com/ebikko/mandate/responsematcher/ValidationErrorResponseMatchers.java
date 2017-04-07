@@ -3,16 +3,17 @@ package com.ebikko.mandate.responsematcher;
 import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.ValidationError;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Function;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
 
+import static com.google.common.collect.Collections2.transform;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.join;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 
 public class ValidationErrorResponseMatchers {
@@ -26,17 +27,17 @@ public class ValidationErrorResponseMatchers {
             @Override
             public void match(MvcResult result) throws Exception {
                 String contentAsString = result.getResponse().getContentAsString();
-                if (StringUtils.isBlank(contentAsString)) {
+                if (isBlank(contentAsString)) {
                     assertThat("Expected error for " + field + " but response is empty", contentAsString, not(isEmptyOrNullString()));
                     return;
                 }
 
                 ErrorResponse errorResponse = new ObjectMapper().readValue(contentAsString, ErrorResponse.class);
 
-                List<ValidationError> fieldErrors = errorResponse.getErrors();
+                List<ValidationError> validationErrors = errorResponse.getErrors();
 
                 boolean matched = false;
-                for (ValidationError validationError : fieldErrors) {
+                for (ValidationError validationError : validationErrors) {
                     if (validationError.getField().equals(field)) {
                         matched = true;
                         assertThat(validationError.getMessage(), containsString(error));
@@ -44,7 +45,12 @@ public class ValidationErrorResponseMatchers {
                 }
 
                 if (!matched) {
-                    assertThat("Could not find validation error for field " + field, matched, is(true));
+                    String message = join(transform(validationErrors, new Function<ValidationError, String>() {
+                        public String apply(ValidationError input) {
+                            return input.getField()+ " - " + input.getMessage();
+                        }
+                    }), ",");
+                    assertThat("Could not find validation error for field " + field + ", but did find: " + message, matched, is(true));
                 }
             }
         };
