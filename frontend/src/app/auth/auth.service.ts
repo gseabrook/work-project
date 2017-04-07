@@ -17,7 +17,7 @@ export class AuthService {
 	constructor(private http: Http) {}
 
 	login(username: string, password: string): Promise<any> {
-		const body constew URLSearchPara ms();
+		const body = new URLSearchParams();
 		body.set('username', username);
 		body.set('password', password);
 

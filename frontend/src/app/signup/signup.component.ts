@@ -14,6 +14,7 @@ export class SignUpComponent implements OnInit {
 
 	model = new SignUp();
 	errors : ValidationError[] = [];
+	complete: Boolean = false;
 
 	constructor(
 		private signUpService: SignUpService, 
@@ -31,7 +32,13 @@ export class SignUpComponent implements OnInit {
 
 	signUp() {
 		this.signUpService.signUp(this.model).subscribe(
-			success => this.router.navigate(['/home']),
+			success => {
+				if (this.model.token) {
+					this.router.navigate(['/home']);
+				} else {
+					this.complete = true;
+				}
+			},
 			error => Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(error.json()).fieldErrors)
 		);
 	}

@@ -1,4 +1,4 @@
-package com.ebikko.mandate;
+package com.ebikko.mandate.responsematcher;
 
 import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.ValidationError;

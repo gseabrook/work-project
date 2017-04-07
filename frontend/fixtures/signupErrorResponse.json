@@ -1,0 +1,9 @@
+{
+  "errors": [
+    {
+      "field": "email",
+      "value": "",
+      "message": "Please enter an email address"
+    }
+  ]
+}

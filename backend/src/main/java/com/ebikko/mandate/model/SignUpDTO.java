@@ -9,9 +9,9 @@ public class SignUpDTO {
 
     @NotBlank(message = "Please enter an email address")
     private final String email;
-    @NotBlank
+    @NotBlank(message = "Please enter a password")
     private final String password;
-    @NotBlank
+    @NotBlank(message = "Please repeat the password")
     private final String repeatPassword;
     private final String token;
 

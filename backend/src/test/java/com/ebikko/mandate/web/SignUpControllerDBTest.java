@@ -13,10 +13,9 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import java.sql.SQLException;
 import java.util.Map;
 
-import static com.ebikko.mandate.ValidationErrorResponseMatchers.response;
+import static com.ebikko.mandate.responsematcher.ValidationErrorResponseMatchers.response;
 import static com.ebikko.mandate.web.SignUpController.SIGNUP_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -79,23 +78,7 @@ public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest{
 
     @Test
     public void shouldActivateAUserWithTheirPasswordAndToken() throws Exception {
-        Customer customer = testDataService.createCustomer();
-        userVerificationTokenRepository.save(new UserVerificationToken("ABCDEFG1234", "aaa111"));
-
-        final String sql = "insert into principal (uid, name, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
-                "values ('aaa111', 'Test user', 0, 0, 0, 3, 0, 5, '" + customer.getId() + "')";
-
-        sessionService.performSessionAction(new SessionAction<Void>() {
-            @Override
-            public Void perform(Session session) throws EbikkoException {
-                try {
-                    session.getConnection().prepareCall(sql).execute();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                return null;
-            }
-        });
+        Customer customer = testDataService.createInactiveCustomer("ABCDEFG1234");
 
         SignUpDTO signUpDTO = new SignUpDTO(customer.getEmailAddress(), "password", "password", "ABCDEFG1234");
 
