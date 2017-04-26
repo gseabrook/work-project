@@ -2,7 +2,9 @@ package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,6 +27,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
+
+    @Before
+    public void setUp() throws Exception {
+        testDataService.resetPrincipals();
+    }
 
     @Test
     public void shouldRetrieveMerchantInformation() throws Exception {
@@ -61,28 +68,11 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
         super.setAuthenticationPrincipal(user);
 
-        String json = "{" +
-                "'referenceNumber': '123-abc-def'," +
-                "'registrationDate': '2017-03-25'," +
-                "    'amount': '123.45'," +
-                "    'frequency': 'MONTHLY'," +
-                "    'customer': {" +
-                    "    'name': 'Joe'," +
-                    "    'emailAddress': 'joe@example.com'," +
-                    "    'idType': 'PASSPORT_NUMBER'," +
-                    "    'idValue': '456789123'," +
-                    "    'bankAccount': {" +
-                        "    'bankId': '5'," +
-                        "    'accountNumber': '12323537'" +
-                    "    }" +
-                "    }" +
-                "}";
+        String json = exampleMandateDTO();
 
-        String json2 = json.replaceAll("'", "\"");
-        System.out.println(json2);
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(json2)
+                        .content(json.replaceAll("'", "\""))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
@@ -104,5 +94,50 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         assertNotNull(token);
 
         verify(mailSender).send(any(SimpleMailMessage.class));
+    }
+
+    @Test
+    public void shouldLinkMandatesWithExistingCustomer() throws Exception {
+        Merchant merchant = testDataService.createMerchant();
+        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
+        super.setAuthenticationPrincipal(user);
+
+        String json = exampleMandateDTO();
+
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(json.replaceAll("'", "\""))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isCreated());
+
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(json.replaceAll("'", "\""))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isCreated());
+
+        Iterable<Customer> customers = customerRepository.findAll();
+        assertThat(Iterables.size(customers), is(1));
+    }
+
+    private String exampleMandateDTO() {
+        return "{" +
+                    "'referenceNumber': '123-abc-def'," +
+                    "'registrationDate': '2017-03-25'," +
+                    "    'amount': '123.45'," +
+                    "    'frequency': 'MONTHLY'," +
+                    "    'customer': {" +
+                        "    'name': 'Joe'," +
+                        "    'emailAddress': 'joe@example.com'," +
+                        "    'idType': 'PASSPORT_NUMBER'," +
+                        "    'idValue': '456789123'," +
+                        "    'bankAccount': {" +
+                            "    'bankId': '5'," +
+                            "    'accountNumber': '12323537'" +
+                        "    }" +
+                    "    }" +
+                    "}";
     }
 }

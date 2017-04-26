@@ -16,7 +16,5 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         String contentAsString = mockMvc
                 .perform(get(MANDATE_URL + "/" + mandate.getId()))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-
-        System.out.println(contentAsString);
     }
 }

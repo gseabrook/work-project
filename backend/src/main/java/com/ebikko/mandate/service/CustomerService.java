@@ -28,7 +28,7 @@ public class CustomerService {
         return customerRepository.findByEmailAddress(emailAddress);
     }
 
-    public Customer getCustomer(String id) {
+    public Customer getCustomerById(String id) {
         return customerRepository.findOne(Long.valueOf(id));
     }
 
@@ -37,5 +37,9 @@ public class CustomerService {
         customer.setEmailAddress(emailAddress);
         customer.setName(emailAddress);
         return save(customer);
+    }
+
+    public Customer getCustomer(String idValue, String idType) {
+        return customerRepository.findByIdValueAndIdType(idValue, IDType.valueOf(idType));
     }
 }

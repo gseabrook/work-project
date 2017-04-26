@@ -109,6 +109,10 @@ public class PrincipalService {
     }
 
     public Principal findByEmail(final String email) throws EbikkoException {
+        if (StringUtils.isBlank(email)) {
+            return null;
+        }
+
         List<Principal> principals = sessionService.performSessionAction(new SessionAction<List<Principal>>() {
             @Override
             public List<Principal> perform(Session session) throws EbikkoException {

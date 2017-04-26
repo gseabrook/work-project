@@ -24,7 +24,7 @@ export class Customer implements Serializable<Customer> {
 	deserialize(input) {
 		this.name = input.name;
 		this.phoneNumber = input.phoneNumber;
-		this.idType = input.idType.displayValue;
+		this.idType = input.idType ? input.idType.displayValue : undefined;
 		this.idValue = input.idValue;
 		this.bankAccounts = input.bankAccounts.map(x => new BankAccount().deserialize(x));
 		this.emailAddress = input.emailAddress;

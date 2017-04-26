@@ -1,7 +1,9 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.mandate.model.*;
-import com.ebikko.mandate.model.event.CustomerCreatedEvent;
+import com.ebikko.mandate.model.ErrorResponse;
+import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
@@ -85,11 +87,6 @@ public class MerchantController {
             return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
-
-            Customer customer = mandate.getCustomer();
-            customerService.save(customer);
-            applicationEventPublisher.publishEvent(new CustomerCreatedEvent(customer));
-
             Merchant merchant = userService.getMerchant((User) auth.getPrincipal());
             mandate.setMerchant(merchant);
             mandateService.save(mandate);

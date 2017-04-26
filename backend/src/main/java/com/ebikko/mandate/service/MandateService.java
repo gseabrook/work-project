@@ -42,7 +42,7 @@ public class MandateService {
             Merchant merchant = merchantService.getMerchant(user.getId());
             mandates = getMandates(merchant);
         } else {
-            Customer customer = customerService.getCustomer(user.getId());
+            Customer customer = customerService.getCustomerById(user.getId());
             mandates = getMandates(customer);
         }
         return mandates;
