@@ -5,7 +5,7 @@ import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.PrincipalService;
 import com.ebikko.mandate.service.UserService;
-import com.ebikko.mandate.service.UserVerificationTokenService;
+import com.ebikko.signup.UserVerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;

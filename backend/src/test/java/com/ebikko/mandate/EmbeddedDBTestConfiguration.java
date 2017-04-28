@@ -4,6 +4,8 @@ import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.config.DirectDebitApplication;
 import com.ebikko.config.EbikkoAuthenticationManager;
+import com.ebikko.mandate.service.EmailService;
+import com.ebikko.mandate.service.NodeService;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.NetworkConfig;
@@ -41,7 +43,11 @@ import static org.mockito.Mockito.*;
 public class EmbeddedDBTestConfiguration {
 
     @MockBean
+    private EmailService emailService;
+    @MockBean
     private MailSender mailSender;
+    @MockBean
+    private NodeService nodeService;
 
     @Autowired
     private DataSource dataSource;

@@ -36,7 +36,7 @@ public class WebConfiguration {
         return new ErrorViewResolver() {
             @Override
             public ModelAndView resolveErrorView(HttpServletRequest request, HttpStatus status, Map<String, Object> model) {
-                return (status == HttpStatus.NOT_FOUND || status == HttpStatus.METHOD_NOT_ALLOWED)
+                return (status == HttpStatus.NOT_FOUND || status == HttpStatus.METHOD_NOT_ALLOWED || status == HttpStatus.UNAUTHORIZED)
                         ? new ModelAndView("index.html", Collections.<String, Object>emptyMap(), HttpStatus.OK)
                         : null;
             }

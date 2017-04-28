@@ -4,6 +4,7 @@ import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
 import com.ebikko.mandate.model.User;
+import com.ebikko.mandate.model.event.MandateCreatedEvent;
 import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
@@ -90,6 +91,7 @@ public class MerchantController {
             Merchant merchant = userService.getMerchant((User) auth.getPrincipal());
             mandate.setMerchant(merchant);
             mandateService.save(mandate);
+            applicationEventPublisher.publishEvent(new MandateCreatedEvent(mandate));
             return new ResponseEntity(HttpStatus.CREATED);
         }
     }

@@ -16,7 +16,7 @@
             </div>
             <div id="secondPasswordContainer" *ngIf="loggedIn" fxFill fxLayout="column" fxLayoutAlign="space-between center">
                 <div>
-                    Authorizing {{mandate.amount}} from {{mandate.accountNumber}}, please enter your OTP
+                    Authorizing {{mandate.amount}}RM from account number {{mandate.customer.bankAccounts[0].accountNumber}}, please enter your OTP
                 </div>
                 <md-input-container>
                     <input mdInput placeholder="One Time Password" type="text" required [(ngModel)]="model.otp" name="otp" />

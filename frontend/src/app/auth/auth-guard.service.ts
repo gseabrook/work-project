@@ -23,13 +23,15 @@ export class AuthGuard implements CanActivate {
 			return Promise.resolve(true);
 		}
 
-		return this.authService.getUserDetails().then(function(response){
-			return true;
-		}, function(error) {
-			this.authService.redirectUrl = url;
-
-			this.router.navigate(['/login']);
-			return false;
-		});
+		return this.authService.getUserDetails().then( 
+			response => {
+				return true
+			}, 
+			error => {
+				this.authService.redirectUrl = url;
+				this.router.navigate(['/login']);
+				return false;
+			}
+		);
 	}
 }

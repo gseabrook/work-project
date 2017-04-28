@@ -6,17 +6,14 @@ import com.ebikko.mandate.TestAuthenticationManager;
 import com.ebikko.mandate.TestDataService;
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.repository.CustomerRepository;
-import com.ebikko.mandate.repository.UserVerificationTokenRepository;
-import com.ebikko.mandate.service.CustomerService;
-import com.ebikko.mandate.service.MandateService;
-import com.ebikko.mandate.service.MerchantService;
-import com.ebikko.mandate.service.UserVerificationTokenService;
+import com.ebikko.mandate.service.*;
+import com.ebikko.signup.UserVerificationTokenRepository;
+import com.ebikko.signup.UserVerificationTokenService;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.MailSender;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -54,9 +51,11 @@ public abstract class AbstractEmbeddedDBControllerTest {
     @Autowired
     protected UserVerificationTokenRepository userVerificationTokenRepository;
     @Autowired
-    protected MailSender mailSender;
+    protected EmailService emailService;
     @Autowired
     protected SessionService sessionService;
+    @Autowired
+    protected NodeService nodeService;
 
     protected MockMvc mockMvc;
 

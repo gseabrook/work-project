@@ -16,15 +16,18 @@ public class MandateService {
     private final MandateRepository mandateRepository;
     private final MerchantService merchantService;
     private final CustomerService customerService;
+    private final NodeService nodeService;
 
     @Autowired
-    public MandateService(MandateRepository mandateRepository, MerchantService merchantService, CustomerService customerService) {
+    public MandateService(MandateRepository mandateRepository, MerchantService merchantService, CustomerService customerService, NodeService nodeService) {
         this.mandateRepository = mandateRepository;
         this.merchantService = merchantService;
         this.customerService = customerService;
+        this.nodeService = nodeService;
     }
 
     public Mandate save(final Mandate mandate) {
+        nodeService.saveNode(mandate);
         return mandateRepository.save(mandate);
     }
 
@@ -50,5 +53,9 @@ public class MandateService {
 
     private List<Mandate> getMandates(Customer customer) {
         return mandateRepository.findByCustomer(customer);
+    }
+
+    public Mandate findByMerchantAndReferenceNumber(Merchant merchant, String value) {
+        return mandateRepository.findByMerchantAndReferenceNumber(merchant, value);
     }
 }

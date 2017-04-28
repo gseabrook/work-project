@@ -3,8 +3,9 @@ package com.ebikko.mandate;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.*;
-import com.ebikko.mandate.repository.UserVerificationTokenRepository;
+import com.ebikko.signup.UserVerificationTokenRepository;
 import com.ebikko.mandate.service.*;
+import com.ebikko.signup.UserVerificationToken;
 import ebikko.EbikkoException;
 import ebikko.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +81,8 @@ public class TestDataService {
     }
 
     private void createPrincipal(Customer customer, Boolean active) throws EbikkoException {
-        final String sql = String.format("insert into principal (uid, username, name, email, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
-                "values ('aaa111', '%s', '%s', '%s', 0, 0, 0, 3, %s, 5, '%s')",
+        final String sql = String.format("insert into principal (uid, username, name, email, profile_uid, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
+                "values ('aaa111', '%s', '%s', '%s', '00000000000000000000000000000003', 0, 0, 0, 3, %s, 5, '%s')",
                 customer.getEmailAddress(), customer.getName(), customer.getEmailAddress(), active ? "1" : "0", customer.getId() );
 
         sessionService.performSessionAction(new SessionAction<Void>() {

@@ -1,13 +1,13 @@
 package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.*;
+import com.ebikko.signup.UserVerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.List;
@@ -16,9 +16,11 @@ import java.util.Map;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -78,22 +80,26 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         ).andExpect(status().isCreated());
 
         List<Mandate> mandates = mandateService.getMandates(merchant);
-        assertThat(mandates, Matchers.hasSize(1));
+        assertThat(mandates, hasSize(1));
 
         Customer customer = customerService.get("456789123", IDType.PASSPORT_NUMBER);
-        assertThat(customer.getName(), is("Joe"));
 
         Map<String, Object> map = jdbcTemplate.queryForMap("select * from principal where email = 'joe@example.com'");
         assertThat(map.get("email"), Matchers.<Object>is("joe@example.com"));
         assertThat(map.get("ptype"), Matchers.<Object>is(5));
         assertThat(map.get("isgroup"), Matchers.<Object>is(0));
         assertThat(map.get("canlogin"), Matchers.<Object>is(0));
+        assertThat(map.get("jc2300d55f3547e3a495f6332e259604"), Matchers.<Object>is(customer.getId().toString()));
 
         String userId = (String) map.get("uid");
         UserVerificationToken token = userVerificationTokenRepository.findByPrincipalUid(userId);
         assertNotNull(token);
 
-        verify(mailSender).send(any(SimpleMailMessage.class));
+        assertThat(customer.getName(), is("Joe"));
+        assertThat(customer.getPrincipalUid(), is(userId));
+
+        verify(emailService).sendNewCustomerEmail(any(UserVerificationToken.class), any(Customer.class));
+        verify(nodeService).saveNode(any(Mandate.class));
     }
 
     @Test
@@ -102,29 +108,51 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
         super.setAuthenticationPrincipal(user);
 
-        String json = exampleMandateDTO();
-
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(json.replaceAll("'", "\""))
+                        .content(exampleMandateDTO("abc-1").replaceAll("'", "\""))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(json.replaceAll("'", "\""))
+                        .content(exampleMandateDTO("abc-2").replaceAll("'", "\""))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         Iterable<Customer> customers = customerRepository.findAll();
         assertThat(Iterables.size(customers), is(1));
+
+        verify(emailService, times(2)).sendNewCustomerEmail(any(UserVerificationToken.class), any(Customer.class));
+    }
+
+    @Test
+    public void shouldRejectMandateWithDuplicateReferenceNumber() throws Exception {
+        Mandate mandate = testDataService.createMandate();
+        Merchant merchant = mandate.getMerchant();
+
+        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
+        super.setAuthenticationPrincipal(user);
+
+        String json = exampleMandateDTO(mandate.getReferenceNumber());
+
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(json.replaceAll("'", "\""))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isUnprocessableEntity());
     }
 
     private String exampleMandateDTO() {
+        return exampleMandateDTO("123-abc-def");
+    }
+
+    private String exampleMandateDTO(String referenceNumber) {
         return "{" +
-                    "'referenceNumber': '123-abc-def'," +
+                    "'referenceNumber': '" + referenceNumber +"'," +
                     "'registrationDate': '2017-03-25'," +
                     "    'amount': '123.45'," +
                     "    'frequency': 'MONTHLY'," +

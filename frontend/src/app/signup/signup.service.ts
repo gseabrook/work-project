@@ -13,4 +13,9 @@ export class SignUpService {
 		return this.http.post('signup', JSON.stringify(signUp), { headers: this.headers });
 	}
 
+	getToken(token: string) {
+		return this.http
+				.get('token/' + token)
+				.map(response => response.json());
+	}
 }

@@ -1,5 +1,7 @@
 package com.ebikko.signup;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -11,8 +13,9 @@ public class PasswordsMatchValidator implements ConstraintValidator<PasswordsMat
 
     @Override
     public boolean isValid(SignUpDTO value, ConstraintValidatorContext context) {
-        if (value.getPassword() == null || value.getRepeatPassword() == null) {
-            return false;
+        // 'NotBlank' validation will catch this, we don't need to repeat here
+        if (StringUtils.isBlank(value.getPassword()) && StringUtils.isBlank(value.getRepeatPassword())) {
+            return true;
         }
         return value.getPassword().equals(value.getRepeatPassword());
     }

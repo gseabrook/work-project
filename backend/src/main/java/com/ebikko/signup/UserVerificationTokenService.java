@@ -1,7 +1,5 @@
-package com.ebikko.mandate.service;
+package com.ebikko.signup;
 
-import com.ebikko.mandate.model.UserVerificationToken;
-import com.ebikko.mandate.repository.UserVerificationTokenRepository;
 import ebikko.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

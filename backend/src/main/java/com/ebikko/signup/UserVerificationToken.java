@@ -1,4 +1,4 @@
-package com.ebikko.mandate.model;
+package com.ebikko.signup;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +22,8 @@ public class UserVerificationToken {
     private String principalUid;
     @Column
     private Date expiryDate;
+    @Transient
+    private String emailAddress;
 
     public UserVerificationToken() {}
 
@@ -37,6 +39,14 @@ public class UserVerificationToken {
 
     public String getPrincipalUid() {
         return principalUid;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     private Date calculateExpiryDate(int expiryTimeInMinutes) {

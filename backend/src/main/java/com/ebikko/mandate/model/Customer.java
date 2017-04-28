@@ -19,6 +19,8 @@ public class Customer {
     private String idValue;
     @Column
     private IDType idType;
+    @Column
+    private String principalUid;
     @OneToMany(cascade = CascadeType.ALL)
     private List<CustomerBankAccount> bankAccounts;
 
@@ -85,6 +87,14 @@ public class Customer {
 
     public void setBankAccounts(List<CustomerBankAccount> bankAccounts) {
         this.bankAccounts = bankAccounts;
+    }
+
+    public String getPrincipalUid() {
+        return principalUid;
+    }
+
+    public void setPrincipalUid(String principalUid) {
+        this.principalUid = principalUid;
     }
 
     @Override

@@ -1,12 +1,19 @@
 package com.ebikko.mandate.web.dto;
 
+import com.ebikko.mandate.web.UniqueReferenceNumber;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class MandateDTO {
 
+    @UniqueReferenceNumber
     private String referenceNumber;
     private Date registrationDate;
+    @NotNull(message = "Amount cannot be blank")
+    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
     private String frequency;
     private CustomerDTO customer;

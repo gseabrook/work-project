@@ -26,6 +26,7 @@ export class SignUpComponent implements OnInit {
 		this.route.queryParams.subscribe((params: Params) => {
 			if (params["token"]) {
 				this.model.token = params["token"];
+				this.signUpService.getToken(params["token"]).subscribe(token => this.model.email = token.emailAddress);
 			}
 		});
 	}
@@ -39,7 +40,9 @@ export class SignUpComponent implements OnInit {
 					this.complete = true;
 				}
 			},
-			error => Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(error.json()).fieldErrors)
+			error => {
+				Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(error.json()).fieldErrors)
+			}
 		);
 	}
 

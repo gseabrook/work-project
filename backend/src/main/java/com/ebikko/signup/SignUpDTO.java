@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-
 @PasswordsMatch
 @UniqueEmail
 public class SignUpDTO {
 
     @NotBlank(message = "Please enter an email address")
-    @NotNull(message = "Please enter an email address")
     private final String email;
     @NotBlank(message = "Please enter a password")
     private final String password;

@@ -1,66 +1,78 @@
 /* tslint:disable:no-unused-variable */
 import { By } from '@angular/platform-browser';
-import { TestBed, async, inject } from '@angular/core/testing';
+import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angular/core/testing';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { MockBackend, MockConnection } from '@angular/http/testing';
 import { MandateService } from '../mandate.service';
 import { Mandate } from '../model/mandate';
 import { MaterialModule } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Observable } from 'rxjs/Observable';
 
-import data from '/fixtures/mandates.json';
+import * as Mandates from '../../../../fixtures/mandates.json';
 
 import { MandateListComponent } from './mandate-list.component';
 
 describe('MandateListComponent', () => {
-  let component: MandateListComponent;
-  let fixture: ComponentFixture<MandateListComponent>;
+	let component: MandateListComponent;
+	let fixture: ComponentFixture<MandateListComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [MandateListComponent],
-      imports: [HttpModule, MaterialModule, RouterTestingModule],
-      providers: [MandateService,
-        {
-          provide: Http,
-          useFactory: (mockBackend, options) => {
-            return new Http(mockBackend, options);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        MockBackend,
-        BaseRequestOptions
-      ]
-    })
-      .compileComponents(); ;
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			declarations: [MandateListComponent],
+			imports: [HttpModule, MaterialModule, RouterTestingModule],
+			providers: [MandateService,
+				{
+					provide: Http,
+					useFactory: (mockBackend, options) => {
+						return new Http(mockBackend, options);
+					},
+					deps: [MockBackend, BaseRequestOptions]
+				}, {
+					provide: ActivatedRoute,
+					useValue: {
+						data: Observable.of({
+							 user: {
+							 	type: "MERCHANT"
+							 }
+						}),
+						snapshot: {}
+					}
+				},
+				MockBackend,
+				BaseRequestOptions
+			]
+		})
+			.compileComponents(); ;
+	});
 
-  function createComponent() {
-    fixture = TestBed.createComponent(MandateListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }
+	function createComponent() {
+		fixture = TestBed.createComponent(MandateListComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	}
 
-  it('should create', () => {
-    createComponent();
+	it('should create', () => {
+		createComponent();
 
-    expect(component).toBeTruthy();
-  });
+		expect(component).toBeTruthy();
+	});
 
-  it('should load all the mandates and display them in the table',
-    async(inject([MockBackend], (mockBackend) => {
-      mockBackend.connections.subscribe((connection) => {
-        expect(connection.request.method).toBe(RequestMethod.Get);
-        connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: [{ accountHolderName: 'Graham' }] })));
-      });
+	it('should load all the mandates and display them in the table', fakeAsync(inject([MockBackend], (mockBackend) => {
+		
+		let connection: MockConnection;
+		mockBackend.connections.subscribe((c: MockConnection) => connection = c);
 
-      createComponent();
+		createComponent();
 
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
+		fixture.whenStable().then(() => {
 
-        expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(1);
-      });
-    })));
+			connection.mockRespond(new Response(new ResponseOptions({ body: Mandates, status: 200 })));
+			tick();
+			fixture.detectChanges();
 
+			expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(1);
+		})
+	})));
 });

@@ -15,8 +15,8 @@ import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver
 @SpringBootApplication
 @ComponentScan("com.ebikko")
 @EnableLoadTimeWeaving
-@EnableJpaRepositories(basePackages = "com.ebikko.mandate.repository")
-@EntityScan(basePackages = "com.ebikko.mandate.model")
+@EnableJpaRepositories(basePackages = {"com.ebikko.mandate.repository","com.ebikko.signup"})
+@EntityScan(basePackages = "com.ebikko")
 @EnableAutoConfiguration(exclude={HazelcastAutoConfiguration.class})
 public class DirectDebitApplication extends SpringBootServletInitializer {
 

@@ -1,7 +1,6 @@
 package com.ebikko.mandate.service;
 
 import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.event.CustomerCreatedEvent;
 import com.ebikko.mandate.service.translator.CustomerDTOTranslator;
 import com.ebikko.mandate.web.dto.CustomerDTO;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,7 +29,6 @@ public class CustomerResolver {
         if (customer == null) {
             customer = customerDTOTranslator.translate(customerDTO);
             customerService.save(customer);
-            applicationEventPublisher.publishEvent(new CustomerCreatedEvent(customer));
         }
 
         return customer;

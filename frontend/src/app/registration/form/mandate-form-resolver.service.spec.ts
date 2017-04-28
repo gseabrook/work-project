@@ -1,15 +1,20 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { MandateFormResolverService } from './mandate-form-resolver.service';
+import { MandateFormResolver } from './mandate-form-resolver.service';
+import { MandateFormService } from './mandate-form.service';
 
-describe('MandateFormResolverService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [MandateFormResolverService]
-    });
-  });
+describe('MandateFormResolver', () => {
+	
+	let service: MandateFormResolver;
 
-  it('should ...', inject([MandateFormResolverService], (service: MandateFormResolverService) => {
-    expect(service).toBeTruthy();
-  }));
+	var mockService = {
+		getMandate: function(id) {
+
+		}
+	};
+	
+	it('should ...', () => {
+		service = new MandateFormResolver(mockService as MandateFormService);
+		expect(service).toBeTruthy();
+	});
 });

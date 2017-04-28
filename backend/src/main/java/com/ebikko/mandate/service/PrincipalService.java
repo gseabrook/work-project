@@ -4,8 +4,9 @@ import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.User;
-import com.ebikko.mandate.model.UserVerificationToken;
+import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.SignUpDTO;
+import com.ebikko.signup.UserVerificationTokenService;
 import ebikko.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class PrincipalService {
     }
 
     public Principal createPrincipal(final Customer customer) throws EbikkoException {
-        return sessionService.performSessionAction(new SessionAction<Principal>() {
+        Principal principal = sessionService.performSessionAction(new SessionAction<Principal>() {
             @Override
             public Principal perform(Session session) throws EbikkoException {
                 Property customerId = session.getPropertyByName("Customer ID");
@@ -80,6 +81,10 @@ public class PrincipalService {
                 return principal;
             }
         });
+
+        customer.setPrincipalUid(principal.getUid());
+        customerService.save(customer);
+        return principal;
     }
 
     public Principal activatePrincipal(final String token, final String password) throws EbikkoException {
@@ -93,6 +98,11 @@ public class PrincipalService {
                 if (!StringUtils.isBlank(password)) {
                     principal.setPassword(password);
                 }
+                // The addition values are not loaded so if we save without setting them they will be wiped out
+                Property customerId = session.getPropertyByName("Customer ID");
+                String value = session.getPrincipalPropertyValueById(customerId.getUid(), principal.getUid());
+                principal.setValue(customerId, value);
+                principal.save();
                 return principal;
             }
         });
@@ -120,5 +130,14 @@ public class PrincipalService {
             }
         });
         return principals.isEmpty() ? null : principals.get(0);
+    }
+
+    public Principal findById(final String id) throws EbikkoException {
+        return sessionService.performSessionAction(new SessionAction<Principal>() {
+            @Override
+            public Principal perform(Session session) throws EbikkoException {
+                return session.getPrincipal(id);
+            }
+        });
     }
 }

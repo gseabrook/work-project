@@ -1,8 +1,9 @@
-package com.ebikko.signup;
+package com.ebikko.mandate.service;
 
 import com.ebikko.mandate.model.Customer;
+import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.User;
-import com.ebikko.mandate.model.UserVerificationToken;
+import com.ebikko.signup.UserVerificationToken;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,15 @@ import org.springframework.stereotype.Service;
 import static java.lang.String.format;
 
 @Service
-public class SignUpEmailService {
+public class EmailService {
 
     private final MailSender mailSender;
     private final String appUrl;
 
-    private final static Log logger = LogFactory.getLog(SignUpEmailService.class);
+    private final static Log logger = LogFactory.getLog(EmailService.class);
 
     @Autowired
-    public SignUpEmailService(MailSender mailSender, @Value("${app.url}") String appUrl) {
+    public EmailService(MailSender mailSender, @Value("${app.url}") String appUrl) {
         this.mailSender = mailSender;
         this.appUrl = appUrl;
     }
@@ -43,6 +44,17 @@ public class SignUpEmailService {
         String confirmationUrl = appUrl + "/signup?token=" + userVerificationToken.getToken();
         String message = "Welcome to MyDirectDebit, the future of direct debit.\nPlease follow the link below to register and review your direct debits.\n";
         message += confirmationUrl;
+
+        sendEmail(recipientAddress, subject, message);
+    }
+
+    public void sendCustomerMandateConfirmationEmail(Mandate mandate) {
+        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String subject = "MyDirectDebit - Mandate created";
+        String message = "A new mandate has been created for you";
+        message += "\n\nMerchant: " + mandate.getMerchant().getCompanyName();
+        message += "\nAmount: " + mandate.getAmount();
+        message += "\nFrequency: " + mandate.getFrequency().getDisplayValue();
 
         sendEmail(recipientAddress, subject, message);
     }

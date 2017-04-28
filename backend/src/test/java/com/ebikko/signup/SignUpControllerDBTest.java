@@ -3,7 +3,6 @@ package com.ebikko.signup;
 import com.ebikko.SessionAction;
 import com.ebikko.mandate.IDs;
 import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.UserVerificationToken;
 import com.ebikko.mandate.web.AbstractEmbeddedDBControllerTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ebikko.EbikkoException;
@@ -98,6 +97,7 @@ public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest {
         sessionService.performSessionAction(new SessionAction<Void>() {
             @Override
             public Void perform(Session session) throws EbikkoException {
+                session.clearPrincipalCache();
                 Principal principal = session.getPrincipal("aaa111");
                 assertTrue(principal.isCanLogin());
                 return null;
