@@ -32,7 +32,7 @@ public class EmailService {
         String recipientAddress = user.getEmailAddress();
         String subject = "Sign Up Confirmation";
         String confirmationUrl = appUrl + "/signup/confirm?token=" + token;
-        String message = "Thanks for signing up to MyDirectDebit, the future of direct debit.\nPlease follow the link below to confirm your account\n";
+        String message = "Thanks for signing up to MyDirectDebit, the future of direct debit.<br/>Please follow the link below to confirm your account<br/>";
         message += confirmationUrl;
 
         sendEmail(recipientAddress, subject, message);
@@ -42,7 +42,7 @@ public class EmailService {
         String recipientAddress = customer.getEmailAddress();
         String subject = "Welcome to MyDirectDebit";
         String confirmationUrl = appUrl + "/signup?token=" + userVerificationToken.getToken();
-        String message = "Welcome to MyDirectDebit, the future of direct debit.\nPlease follow the link below to register and review your direct debits.\n";
+        String message = "Welcome to MyDirectDebit, the future of direct debit.<br/>Please follow the link below to register and review your direct debits.<br/>";
         message += confirmationUrl;
 
         sendEmail(recipientAddress, subject, message);
@@ -52,9 +52,10 @@ public class EmailService {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate created";
         String message = "A new mandate has been created for you";
-        message += "\n\nMerchant: " + mandate.getMerchant().getCompanyName();
-        message += "\nAmount: " + mandate.getAmount();
-        message += "\nFrequency: " + mandate.getFrequency().getDisplayValue();
+        message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
+        message += "<br/>Amount: " + mandate.getAmount();
+        message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
+        message += "<br/>Please log in to review - " + appUrl;
 
         sendEmail(recipientAddress, subject, message);
     }

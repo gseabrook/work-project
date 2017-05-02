@@ -9,6 +9,7 @@ frontend/unit.xml
 npm-debug.log
 
 backend/src/main/resources/lib/api/*
+backend/*.log
 backend/.idea
 backend/target
 backend/src/main/resources/static/

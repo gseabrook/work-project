@@ -10,7 +10,7 @@ import { Md2Module } from 'md2';
 
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
-import { MandateModule } from './registration/mandate.module';
+import { MandateModule } from './mandate/mandate.module';
 import { SignUpModule } from './signup/signup.module';
 import { AuthModule } from './auth/auth.module';
 

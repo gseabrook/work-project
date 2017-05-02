@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MandateFormComponent } from './registration/form/mandate-form.component';
-import { MandateFormResolver } from './registration/form/mandate-form-resolver.service';
-import { CompleteComponent } from './registration/complete/complete.component';
+import { MandateFormComponent } from './mandate/form/mandate-form.component';
+import { MandateFormResolver } from './mandate/form/mandate-form-resolver.service';
+import { CompleteComponent } from './mandate/complete/complete.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
 

@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth/auth-guard.service';
 
 import { HomeComponent } from './home.component';
-import { MandateListComponent } from '../registration/list/mandate-list.component';
-import { MandateFormComponent } from '../registration/form/mandate-form.component';
-import { MandateFormResolver } from '../registration/form/mandate-form-resolver.service';
+import { MandateListComponent } from '../mandate/list/mandate-list.component';
+import { MandateFormComponent } from '../mandate/form/mandate-form.component';
+import { MandateFormResolver } from '../mandate/form/mandate-form-resolver.service';
 import { UserResolverService } from '../auth/user-resolver.service';
 
 const homeRoutes: Routes = [
