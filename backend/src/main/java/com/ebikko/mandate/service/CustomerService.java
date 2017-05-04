@@ -28,8 +28,12 @@ public class CustomerService {
         return customerRepository.findByEmailAddress(emailAddress);
     }
 
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findOne(id);
+    }
+
     public Customer getCustomerById(String id) {
-        return customerRepository.findOne(Long.valueOf(id));
+        return getCustomerById(Long.valueOf(id));
     }
 
     public Customer save(String emailAddress) {

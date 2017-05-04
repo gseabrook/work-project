@@ -7,7 +7,6 @@ public class CustomerDTO {
     private String idType;
     private String idValue;
     private String phoneNumber;
-    private BankAccountDTO bankAccount;
 
     public CustomerDTO() {
     }
@@ -42,14 +41,6 @@ public class CustomerDTO {
 
     public void setIdValue(String idValue) {
         this.idValue = idValue;
-    }
-
-    public BankAccountDTO getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(BankAccountDTO bankAccount) {
-        this.bankAccount = bankAccount;
     }
 
     public String getPhoneNumber() {

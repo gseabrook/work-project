@@ -3,7 +3,6 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.*;
 import com.ebikko.signup.UserVerificationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.util.List;
 import java.util.Map;
 
+import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
+import static com.ebikko.mandate.model.MandateStatus.PENDING_AUTHORISATION;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
+import static com.google.common.collect.Iterables.size;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -82,6 +84,10 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         List<Mandate> mandates = mandateService.getMandates(merchant);
         assertThat(mandates, hasSize(1));
 
+        Mandate mandate = mandates.get(0);
+        assertThat(mandate.getCustomerBankAccount().getAccountNumber(), is("12323537"));
+        assertThat(mandate.getStatus(), is(MandateStatus.AUTHORISED));
+
         Customer customer = customerService.get("456789123", IDType.PASSPORT_NUMBER);
 
         Map<String, Object> map = jdbcTemplate.queryForMap("select * from principal where email = 'joe@example.com'");
@@ -97,6 +103,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         assertThat(customer.getName(), is("Joe"));
         assertThat(customer.getPrincipalUid(), is(userId));
+        assertThat(customer.getBankAccounts(), hasSize(1));
 
         verify(emailService).sendNewCustomerEmail(any(UserVerificationToken.class), any(Customer.class));
         verify(nodeService).saveNode(any(Mandate.class));
@@ -123,7 +130,10 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         ).andExpect(status().isCreated());
 
         Iterable<Customer> customers = customerRepository.findAll();
-        assertThat(Iterables.size(customers), is(1));
+        assertThat(size(customers), is(1));
+
+        Customer customer = customers.iterator().next();
+        assertThat(customer.getBankAccounts(), hasSize(1));
 
         verify(emailService, times(2)).sendNewCustomerEmail(any(UserVerificationToken.class), any(Customer.class));
     }
@@ -146,6 +156,23 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         ).andExpect(status().isUnprocessableEntity());
     }
 
+    @Test
+    public void shouldSupportMandatesWithoutCustomerBankInformation() throws Exception {
+        Merchant merchant = testDataService.createMerchant();
+        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
+        super.setAuthenticationPrincipal(user);
+
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(exampleMandateBuilder().toJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isCreated());
+
+        Mandate mandate = mandateService.getMandates(merchant).get(0);
+        assertThat(mandate.getStatus(), is(PENDING_AUTHORISATION));
+    }
+
     private String exampleMandateDTO() {
         return exampleMandateDTO("123-abc-def");
     }
@@ -154,18 +181,18 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         return "{" +
                     "'referenceNumber': '" + referenceNumber +"'," +
                     "'registrationDate': '2017-03-25'," +
-                    "    'amount': '123.45'," +
-                    "    'frequency': 'MONTHLY'," +
-                    "    'customer': {" +
-                        "    'name': 'Joe'," +
-                        "    'emailAddress': 'joe@example.com'," +
-                        "    'idType': 'PASSPORT_NUMBER'," +
-                        "    'idValue': '456789123'," +
-                        "    'bankAccount': {" +
-                            "    'bankId': '5'," +
-                            "    'accountNumber': '12323537'" +
-                        "    }" +
-                    "    }" +
+                    "'amount': '123.45'," +
+                    "'frequency': 'MONTHLY'," +
+                    "'customerBankAccount': {" +
+                    "    'bankId': '5'," +
+                    "    'accountNumber': '12323537'" +
+                    "}," +
+                    "'customer': {" +
+                        "'name': 'Joe'," +
+                        "'emailAddress': 'joe@example.com'," +
+                        "'idType': 'PASSPORT_NUMBER'," +
+                        "'idValue': '456789123'" +
+                        "}" +
                     "}";
     }
 }

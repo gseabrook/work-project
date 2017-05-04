@@ -1,7 +1,9 @@
 package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.event.MandateCreatedEvent;
+import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateStatus;
+import com.ebikko.mandate.model.event.MandateUpdatedEvent;
 import com.ebikko.mandate.service.EmailService;
 import com.ebikko.mandate.service.PrincipalService;
 import com.ebikko.signup.UserVerificationToken;
@@ -13,14 +15,14 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MandateCreatedListener {
+public class MandateUpdatedListener {
 
     private final PrincipalService principalService;
     private final UserVerificationTokenService userVerificationTokenService;
     private final EmailService emailService;
 
     @Autowired
-    public MandateCreatedListener(PrincipalService principalService,
+    public MandateUpdatedListener(PrincipalService principalService,
                                   UserVerificationTokenService userVerificationTokenService,
                                   EmailService emailService) {
         this.principalService = principalService;
@@ -29,19 +31,29 @@ public class MandateCreatedListener {
     }
 
     @EventListener
-    public void handleMandateCreatedEvent(MandateCreatedEvent mandateCreatedEvent) throws EbikkoException {
-        Customer customer = mandateCreatedEvent.getMandate().getCustomer();
-        if (customer.getPrincipalUid() == null) {
-            Principal principal = principalService.createPrincipal(customer);
-            sendSignUpEmail(customer, principal);
-        } else {
-            Principal principal = principalService.findById(customer.getPrincipalUid());
+    public void handleMandateUpdatedEvent(MandateUpdatedEvent mandateUpdatedEvent) throws EbikkoException {
+        Mandate mandate = mandateUpdatedEvent.getMandate();
+        Customer customer = mandate.getCustomer();
 
-            if (principal.isCanLogin()) {
-                emailService.sendCustomerMandateConfirmationEmail(mandateCreatedEvent.getMandate());
-            } else {
+        if (mandate.getStatus() == MandateStatus.AUTHORISED) {
+            if (customer.getPrincipalUid() == null) {
+                Principal principal = principalService.createPrincipal(customer);
                 sendSignUpEmail(customer, principal);
+            } else {
+                Principal principal = principalService.findById(customer.getPrincipalUid());
+
+                if (principal.isCanLogin()) {
+                    emailService.sendCustomerMandateConfirmationEmail(mandate);
+                } else {
+                    sendSignUpEmail(customer, principal);
+                }
             }
+        } else {
+            if (customer.getPrincipalUid() == null) {
+                principalService.createPrincipal(customer);
+            }
+
+            emailService.sendPendingAuthorisationEmail(mandate);
         }
     }
 

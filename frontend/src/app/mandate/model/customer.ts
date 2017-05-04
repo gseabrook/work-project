@@ -24,9 +24,11 @@ export class Customer implements Serializable<Customer> {
 	deserialize(input) {
 		this.name = input.name;
 		this.phoneNumber = input.phoneNumber;
-		this.idType = input.idType ? input.idType.displayValue : undefined;
+		this.idType = input.idType ? input.idType.value : undefined;
 		this.idValue = input.idValue;
-		this.bankAccounts = input.bankAccounts.map(x => new BankAccount().deserialize(x));
+		if (input.bankAccounts) {
+			this.bankAccounts = input.bankAccounts.map(x => new BankAccount().deserialize(x));
+		}
 		this.emailAddress = input.emailAddress;
 		return this;
 	}

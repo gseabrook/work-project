@@ -3,10 +3,12 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.builder.MandateBuilder;
 import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.service.MandateService;
+import com.ebikko.mandate.service.translator.MandateDTOTranslator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
@@ -29,10 +31,14 @@ public class MandateControllerTest extends AbstractControllerTest {
 
     @Mock
     private MandateService mandateService;
+    @Mock
+    private MandateDTOTranslator mandateDTOTranslator;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Object getController() {
-        return new MandateController(mandateService);
+        return new MandateController(mandateService, mandateDTOTranslator, applicationEventPublisher);
     }
 
     @Test
@@ -62,10 +68,6 @@ public class MandateControllerTest extends AbstractControllerTest {
         assertThat(customer.getEmailAddress(), is("test@example.com"));
         assertThat(customer.getIdType(), is(IDType.PASSPORT_NUMBER));
         assertThat(customer.getIdValue(), is(customerIdValue));
-
-        CustomerBankAccount customerBankAccount = customer.getBankAccounts().get(0);
-        assertThat(customerBankAccount.getBank().getName(), is("HSBC"));
-        assertThat(customerBankAccount.getAccountNumber(), is("242536"));
     }
 
     @Test

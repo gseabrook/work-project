@@ -1,0 +1,82 @@
+[
+  {
+    "code": "AFFB0123",
+    "name": "Affin Bank",
+    "id": 1
+  },
+  {
+    "code": "BCBB0235",
+    "name": "CIMB Bank",
+    "id": 2
+  },
+  {
+    "code": "BIMB0340",
+    "name": "Bank Islam",
+    "id": 3
+  },
+  {
+    "code": "BKR1602",
+    "name": "Bank Rakyat",
+    "id": 4
+  },
+  {
+    "code": "BOFA0207",
+    "name": "Bank of America",
+    "id": 5
+  },
+  {
+    "code": "CIT0217",
+    "name": "Citibank",
+    "id": 6
+  },
+  {
+    "code": "DBB0219",
+    "name": "Deutsche Bank",
+    "id": 7
+  },
+  {
+    "code": "HLB0224",
+    "name": "Hong Leong Bank",
+    "id": 8
+  },
+  {
+    "code": "HSBC0222",
+    "name": "HSBC Bank",
+    "id": 9
+  },
+  {
+    "code": "JPMC0215",
+    "name": "JPMorgan",
+    "id": 10
+  },
+  {
+    "code": "MBB0227",
+    "name": "Maybank",
+    "id": 11
+  },
+  {
+    "code": "OCBC0229",
+    "name": "OCBC Bank",
+    "id": 12
+  },
+  {
+    "code": "PBB0233",
+    "name": "Public Bank",
+    "id": 13
+  },
+  {
+    "code": "REV0123",
+    "name": "TPAREVENUE",
+    "id": 14
+  },
+  {
+    "code": "RHB0218",
+    "name": "RHB Bank",
+    "id": 15
+  },
+  {
+    "code": "SCB0214",
+    "name": "Standard Chartered Bank",
+    "id": 16
+  }
+]

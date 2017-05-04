@@ -3,6 +3,8 @@ package com.ebikko.mandate.model;
 import javax.persistence.*;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Entity
 public class Customer {
 
@@ -97,6 +99,10 @@ public class Customer {
         this.principalUid = principalUid;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,5 +129,14 @@ public class Customer {
         result = 31 * result + (idType != null ? idType.hashCode() : 0);
         result = 31 * result + (bankAccounts != null ? bankAccounts.hashCode() : 0);
         return result;
+    }
+
+    public void addBankAccount(CustomerBankAccount customerBankAccount) {
+        if (bankAccounts == null) {
+            bankAccounts = newArrayList();
+        }
+        if (!bankAccounts.contains(customerBankAccount)) {
+            bankAccounts.add(customerBankAccount);
+        }
     }
 }

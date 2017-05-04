@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class MandateDTO {
 
+    private String id;
     @UniqueReferenceNumber
     private String referenceNumber;
     private Date registrationDate;
@@ -17,9 +18,9 @@ public class MandateDTO {
     private BigDecimal amount;
     private String frequency;
     private CustomerDTO customer;
+    private BankAccountDTO customerBankAccount;
 
-    public MandateDTO() {
-    }
+    public MandateDTO() {}
 
     public String getReferenceNumber() {
         return referenceNumber;
@@ -53,11 +54,27 @@ public class MandateDTO {
         this.frequency = frequency;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public CustomerDTO getCustomer() {
         return customer;
     }
 
     public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
+    }
+
+    public BankAccountDTO getCustomerBankAccount() {
+        return customerBankAccount;
+    }
+
+    public void setCustomerBankAccount(BankAccountDTO customerBankAccount) {
+        this.customerBankAccount = customerBankAccount;
     }
 }

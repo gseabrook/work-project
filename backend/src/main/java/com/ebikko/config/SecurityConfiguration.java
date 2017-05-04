@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // Allow these requests
                 .authorizeRequests()
-                .antMatchers("/**/*.js", "/**/*.css", "/signup", "/token/*", "/heartbeat", "/signup/confirm", "/login", "/user", "/mandate-form", "/mandate/*", "/").permitAll()
+                .antMatchers("/**/*.js", "/**/*.css", "/signup", "/token/*", "/heartbeat", "/bank", "/signup/confirm", "/login", "/user", "/mandate-form", "/mandate/*", "/").permitAll()
                 .and()
 
                 // Require authentication for anything else

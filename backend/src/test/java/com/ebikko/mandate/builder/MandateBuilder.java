@@ -1,15 +1,11 @@
 package com.ebikko.mandate.builder;
 
-import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.MandateFrequency;
-import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.model.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +13,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ebikko.mandate.builder.CustomerBuilder.exampleCustomer;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
+import static com.ebikko.mandate.model.MandateFrequency.*;
+import static com.ebikko.mandate.model.MandateStatus.AUTHORISED;
+import static com.ebikko.mandate.model.MandateStatus.PENDING_AUTHORISATION;
 
 public class MandateBuilder {
 
@@ -61,14 +60,6 @@ public class MandateBuilder {
         bank.put("name", "HSBC");
         bank.put("id", 9l);
 
-        ArrayList<Map<String, Object>> bankAccounts = new ArrayList<Map<String, Object>>();
-        Map<String, Object> bankAccount = new HashMap<>();
-        bankAccount.put("bank", bank);
-        bankAccount.put("accountNumber", "242536");
-        bankAccounts.add(bankAccount);
-
-        customer.put("bankAccounts", bankAccounts);
-
         mandateBuilder.with("customer", customer);
 
         return mandateBuilder;
@@ -79,8 +70,20 @@ public class MandateBuilder {
     }
 
     public static Mandate exampleMandate(Customer customer, Merchant merchant) {
-        return new Mandate("ABC-123", new Date(), BigDecimal.TEN, MandateFrequency.MONTHLY, customer, merchant);
-
+        Mandate mandate = new Mandate();
+        mandate.setReferenceNumber("ABC-123");
+        mandate.setRegistrationDate(new Date());
+        mandate.setAmount(BigDecimal.TEN);
+        mandate.setFrequency(MONTHLY);
+        mandate.setCustomer(customer);
+        mandate.setMerchant(merchant);
+        if (!customer.getBankAccounts().isEmpty()) {
+            mandate.setCustomerBankAccount(customer.getBankAccounts().get(0));
+            mandate.setStatus(AUTHORISED);
+        } else {
+            mandate.setStatus(PENDING_AUTHORISATION);
+        }
+        return mandate;
     }
 
     public static Mandate exampleMandate(Customer customer) {

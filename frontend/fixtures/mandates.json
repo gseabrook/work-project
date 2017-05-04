@@ -1,39 +1,51 @@
 [
   {
-    "id": 30,
-    "referenceNumber": "BBB333",
-    "registrationDate": 1493515260000,
-    "amount": 100.00,
-    "frequency": {
-      "value": "DAILY",
-      "displayValue": "Daily"
-    },
-    "customer": {
-      "id": 10,
-      "name": "Fred",
-      "emailAddress": "fred.bloggs@example.com",
-      "phoneNumber": "123456",
-      "idValue": "93202",
-      "idType": {
-        "value": "BUSINESS_REGISTRATION_NUMBER",
-        "displayValue": "Business Registration Number"
-      },
-      "bankAccounts": [
-        {
-          "bank": {
-            "code": "BIMB0340",
-            "name": "Bank Islam",
-            "id": 3
-          },
-          "accountNumber": "123456"
-        }
-      ]
-    },
-    "merchant": {
-      "companyName": "Ag I Solutions",
-      "companyRegistrationNumber": "WP010101334",
-      "id": 1,
-      "merchantBankAccounts": []
-    }
+	"id": 30,
+	"referenceNumber": "BBB333",
+	"registrationDate": 1493515260000,
+	"amount": 100.00,
+	"frequency": {
+	  "value": "DAILY",
+	  "displayValue": "Daily"
+	},
+	"status": {
+	  "value": "AUTHORISED",
+	  "displayValue": "Authorised"
+	},
+	"customerBankAccount": {
+	  "bank": {
+		"code": "BIMB0340",
+		"name": "Bank Islam",
+		"id": 3
+	  },
+	  "accountNumber": "123456"
+	},
+	"customer": {
+	  "id": 10,
+	  "name": "Fred",
+	  "emailAddress": "fred.bloggs@example.com",
+	  "phoneNumber": "123456",
+	  "idValue": "93202",
+	  "idType": {
+		"value": "BUSINESS_REGISTRATION_NUMBER",
+		"displayValue": "Business Registration Number"
+	  },
+	  "bankAccounts": [
+		{
+		  "bank": {
+			"code": "BIMB0340",
+			"name": "Bank Islam",
+			"id": 3
+		  },
+		  "accountNumber": "123456"
+		}
+	  ]
+	},
+	"merchant": {
+	  "companyName": "Ag I Solutions",
+	  "companyRegistrationNumber": "WP010101334",
+	  "id": 1,
+	  "merchantBankAccounts": []
+	}
   }
 ]

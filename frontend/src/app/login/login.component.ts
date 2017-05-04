@@ -14,7 +14,12 @@ export class LoginComponent {
 	showError = false;
 
 	constructor(private authService: AuthService, private router: Router) {
-		authService.getUserDetails().then(() => router.navigate(['home'])).catch(() => {});
+		authService.getUserDetails()
+			.then(
+				() => router.navigate(['home']),
+				() => {})
+			.catch(() => {}
+		);
 	}
 
 	login() {

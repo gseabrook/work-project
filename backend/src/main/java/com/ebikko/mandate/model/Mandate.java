@@ -24,21 +24,16 @@ public class Mandate {
     private BigDecimal amount;
     @Column
     private MandateFrequency frequency;
+    @Column
+    private MandateStatus status;
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
     @ManyToOne
     private Merchant merchant;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private CustomerBankAccount customerBankAccount;
 
     public Mandate() {
-    }
-
-    public Mandate(String referenceNumber, Date registrationDate, BigDecimal amount, MandateFrequency frequency, Customer customer, Merchant merchant) {
-        this.referenceNumber = referenceNumber;
-        this.registrationDate = registrationDate;
-        this.amount = amount;
-        this.frequency = frequency;
-        this.customer = customer;
-        this.merchant = merchant;
     }
 
     public Long getId() {
@@ -91,6 +86,26 @@ public class Mandate {
 
     public void setMerchant(Merchant merchant) {
         this.merchant = merchant;
+    }
+
+    public CustomerBankAccount getCustomerBankAccount() {
+        return customerBankAccount;
+    }
+
+    public void setCustomerBankAccount(CustomerBankAccount customerBankAccount) {
+        this.customerBankAccount = customerBankAccount;
+    }
+
+    public MandateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MandateStatus status) {
+        this.status = status;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

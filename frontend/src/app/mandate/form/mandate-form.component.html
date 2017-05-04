@@ -1,4 +1,4 @@
-<h1 class="subheader" color="primary">New Mandate</h1>    
+<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone'">New Mandate</h1>    
 <div fxLayout="column" fxLayoutAlign="center center">
     <form #registrationForm="ngForm">
         <md-input-container>
@@ -10,7 +10,7 @@
             <md-hint align="start" class="errorHint" *ngIf="!name.valid && name.touched">Please enter a name</md-hint>
         </md-input-container>
         <md-input-container>
-            <input mdInput placeholder="Email" type="email" [(ngModel)]="model.customer.emailAddress" name="email" />
+            <input mdInput placeholder="Email" type="email" required [(ngModel)]="model.customer.emailAddress" name="email" />
         </md-input-container>
         <md-input-container>
             <input mdInput placeholder="Phone Number" type="text" [(ngModel)]="model.customer.phoneNumber" name="phoneNumber" />
@@ -27,13 +27,13 @@
             </md-input-container>
         </div>
         <div class="align-horizontally">
-            <md-select placeholder="Bank Name" required [(ngModel)]="model.customer.bankAccounts[0].bank" name="bank">
+            <md-select placeholder="Bank Name" [(ngModel)]="model.customerBankAccount.bank" name="bank">
                 <md-option *ngFor="let bank of banks" [value]="bank">
                     {{ bank.name }}
                 </md-option>
             </md-select>
             <md-input-container>
-                <input mdInput placeholder="Bank Account Number" type="text" required [(ngModel)]="model.customer.bankAccounts[0].accountNumber" name="accountNumber" #accountNumber="ngModel"/>
+                <input mdInput placeholder="Bank Account Number" type="text" [(ngModel)]="model.customerBankAccount.accountNumber" name="accountNumber" #accountNumber="ngModel"/>
                 <md-hint align="start" class="errorHint" *ngIf="!accountNumber.valid && accountNumber.touched">Please enter a bank account number</md-hint>
             </md-input-container>
         </div>
@@ -54,10 +54,13 @@
                 {{ fieldError.message}}
             </div>
         </div>
-        <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center">
+        <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode != 'standAlone'">
             <button md-raised-button type="button" routerLink="/registrations">Cancel</button>
             <button md-raised-button type="button" (click)="email(registrationForm)">Email</button>
             <button md-raised-button type="button" (click)="save(registrationForm)" color="primary">Proceed</button>
+        </div>
+        <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode == 'standAlone'">
+            <button md-raised-button type="button" (click)="update(registrationForm)" color="primary">Update</button>
         </div>
     </form>
 </div>

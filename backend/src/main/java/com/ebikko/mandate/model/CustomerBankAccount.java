@@ -12,6 +12,8 @@ public class CustomerBankAccount {
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne
+    private Customer customer;
+    @ManyToOne
     private Bank bank;
     @Column
     private String accountNumber;
@@ -39,6 +41,14 @@ public class CustomerBankAccount {
 
     public String getAccountNumber() {
         return accountNumber;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

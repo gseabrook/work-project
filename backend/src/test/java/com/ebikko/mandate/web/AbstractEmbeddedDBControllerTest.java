@@ -6,6 +6,7 @@ import com.ebikko.mandate.TestAuthenticationManager;
 import com.ebikko.mandate.TestDataService;
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.repository.CustomerRepository;
+import com.ebikko.mandate.repository.MandateRepository;
 import com.ebikko.mandate.service.*;
 import com.ebikko.signup.UserVerificationTokenRepository;
 import com.ebikko.signup.UserVerificationTokenService;
@@ -40,6 +41,8 @@ public abstract class AbstractEmbeddedDBControllerTest {
     protected MerchantService merchantService;
     @Autowired
     protected MandateService mandateService;
+    @Autowired
+    protected MandateRepository mandateRepository;
     @Autowired
     protected CustomerService customerService;
     @Autowired

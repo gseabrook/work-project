@@ -2,11 +2,11 @@ package com.ebikko.mandate.model.event;
 
 import com.ebikko.mandate.model.Mandate;
 
-public class MandateCreatedEvent {
+public class MandateUpdatedEvent {
 
     private final Mandate mandate;
 
-    public MandateCreatedEvent(Mandate mandate) {
+    public MandateUpdatedEvent(Mandate mandate) {
         this.mandate = mandate;
     }
 

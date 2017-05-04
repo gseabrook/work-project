@@ -23,6 +23,7 @@ export class MandateFormComponent implements OnInit {
 
   	banks: Bank[];
   	model: Mandate;
+  	mode: string;
 	errors : ValidationError[] = [];
 
 	constructor(
@@ -35,8 +36,9 @@ export class MandateFormComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.route.data.subscribe((data: { mandate: Mandate}) => {
+		this.route.data.subscribe((data: { mandate: Mandate, mode: string}) => {
 			this.model = data.mandate;
+			this.mode = data.mode;
 		});
 
 		this.mandateFormService.getBanks().subscribe(banks => this.banks = banks);
@@ -55,19 +57,22 @@ export class MandateFormComponent implements OnInit {
 		{ value: 'WEEKLY', viewValue: 'Weekly' },
 		{ value: 'MONTHLY', viewValue: 'Monthly' },
 		{ value: 'QUARTERLY', viewValue: 'Quarterly' },
+
 		{ value: 'YEARLY', viewValue: 'Yearly' }
 	];
 
 	email(mandateForm: NgForm) {
 		if (mandateForm.valid) {
-			this.mandateFormService.email(this.model).subscribe(this.handleSuccess, this.handleError);
+			this.mandateFormService.email(this.model).subscribe(
+				result => this.handleSuccess(result),
+				error => this.handleError(error)
+			)
 		}
 	}
 
 	save(mandateForm: NgForm) {
-
 		if (mandateForm.valid) {
-			 const dialogRef = this.dialog.open(FpxAuthenticationComponent, {
+			const dialogRef = this.dialog.open(FpxAuthenticationComponent, {
 				data: {
 					mandate: this.model
 				}
@@ -75,10 +80,27 @@ export class MandateFormComponent implements OnInit {
 
 			dialogRef.afterClosed().subscribe(success => {
 				if (success) {
-					this.mandateService.save(this.model)
-						.subscribe(
-							result => this.router.navigate(['../mandate-list'], { relativeTo: this.route }),
-							error => Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(error.json()).fieldErrors)
+					this.mandateService.save(this.model).subscribe(
+						result => this.handleSuccess(result),
+						error => this.handleError(error)
+					);
+				}
+			});
+		}
+	}
+
+	update(mandateForm: NgForm) {
+		if (mandateForm.valid) {
+			const dialogRef = this.dialog.open(FpxAuthenticationComponent, {
+				data: {
+					mandate: this.model
+				}
+			});
+
+			dialogRef.afterClosed().subscribe(success => {
+				if (success) {
+					this.mandateService.update(this.model).subscribe(
+						result => this.router.navigate(['/mandate-complete'])
 					);
 				}
 			});

@@ -9,22 +9,26 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import static java.lang.String.format;
 
 @Service
 public class EmailService {
 
-    private final MailSender mailSender;
+    private final JavaMailSenderImpl mailSender;
     private final String appUrl;
 
     private final static Log logger = LogFactory.getLog(EmailService.class);
 
     @Autowired
     public EmailService(MailSender mailSender, @Value("${app.url}") String appUrl) {
-        this.mailSender = mailSender;
+        this.mailSender = (JavaMailSenderImpl) mailSender;
         this.appUrl = appUrl;
     }
 
@@ -61,13 +65,30 @@ public class EmailService {
     }
 
     private void sendEmail(String recipientAddress, String subject, String message) {
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setFrom("donotreply@mydirectdebit.com");
-        email.setSubject(subject);
-        email.setText(message);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+
+        try {
+            mimeMessageHelper.setTo(recipientAddress);
+            mimeMessageHelper.setFrom("donotreply@mydirectdebit.com");
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(message, true);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
         logger.debug(format("Sending email to %s, subject: %s", recipientAddress, subject));
-        mailSender.send(email);
+        mailSender.send(mimeMessage);
+    }
+
+    public void sendPendingAuthorisationEmail(Mandate mandate) {
+        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String subject = "MyDirectDebit - Transaction pending authorisation";
+        String message = "A new mandate is pending your authorisation, please follow the link to enter your bank details";
+        message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
+        message += "<br/>Amount: " + mandate.getAmount();
+        message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
+        message += "<br/>" + appUrl + "/mandate-form?id=" + mandate.getId();
+        sendEmail(recipientAddress, subject, message);
     }
 }

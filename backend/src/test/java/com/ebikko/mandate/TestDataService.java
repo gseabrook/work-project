@@ -64,7 +64,6 @@ public class TestDataService {
         CustomerBankAccount customerBankAccount = customerBankAccountService.save(exampleCustomerBankAccount());
 
         Customer customer = exampleCustomer(customerBankAccount);
-        System.out.println("Created: " + customer.getName());
         return customerService.save(customer);
     }
 
@@ -119,5 +118,12 @@ public class TestDataService {
                 return null;
             }
         });
+    }
+
+    public Mandate createPendingMandate() {
+        Customer customer = exampleCustomer(null);
+        customer.setId(null);
+
+        return createMandate(customer);
     }
 }

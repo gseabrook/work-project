@@ -40,9 +40,11 @@ public class NodeService {
                     mandateNode.setValue("ID Type", customer.getIdType().getDisplayValue());
                     mandateNode.setValue("ID Number", customer.getIdValue());
 
-                    CustomerBankAccount customerBankAccount = customer.getBankAccounts().get(0);
-                    mandateNode.setValue("Name of the Bank", customerBankAccount.getBank().getName());
-                    mandateNode.setValue("Bank Account Number", customerBankAccount.getAccountNumber());
+                    CustomerBankAccount customerBankAccount = mandate.getCustomerBankAccount();
+                    if (customerBankAccount != null) {
+                        mandateNode.setValue("Name of the Bank", customerBankAccount.getBank().getName());
+                        mandateNode.setValue("Bank Account Number", customerBankAccount.getAccountNumber());
+                    }
 
                     mandateNode.setValue("Maximum Amount", mandate.getAmount());
                     mandateNode.setValue("Frequency", mandate.getFrequency().getDisplayValue());

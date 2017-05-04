@@ -17,6 +17,11 @@ export class MandateService {
 			.post('merchant/mandate', JSON.stringify(mandate), { headers: this.headers });
 	}
 
+	update(mandate: Mandate) {
+		return this.http
+			.put('mandate/' + mandate.id, JSON.stringify(mandate), { headers: this.headers});
+	}
+
 	get() {
 		return this.http
 			.get('user/mandate', { headers: this.headers })

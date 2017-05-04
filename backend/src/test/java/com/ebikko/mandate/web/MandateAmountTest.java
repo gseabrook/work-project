@@ -1,11 +1,13 @@
 package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.service.MandateService;
+import com.ebikko.mandate.service.translator.MandateDTOTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -22,10 +24,14 @@ public class MandateAmountTest {
     private MockMvc mockMvc;
     @Mock
     private MandateService mandateService;
+    @Mock
+    private MandateDTOTranslator mandateDTOTranslator;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Before
     public void setUp() throws Exception {
-        MandateController mandateController = new MandateController(mandateService);
+        MandateController mandateController = new MandateController(mandateService, mandateDTOTranslator, applicationEventPublisher);
         mockMvc = MockMvcBuilders.standaloneSetup(mandateController).build();
     }
 
