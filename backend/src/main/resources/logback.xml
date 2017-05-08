@@ -1,12 +1,22 @@
-<configuration scan="true">
+<configuration scan="true" debug="true">
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
+    <if condition='isDefined("catalina.base")'>
+        <then>
+            <property name="log.folder" value="${catalina.base}/logs"/>
+        </then>
+        <else>
+            <property name="log.folder" value="./target/logs"/>
+        </else>
+    </if>
+
     <appender name="MDD_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./mydirectdebit.log</file>
+        <file>${log.folder}/mydirectdebit.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>mydirectdebit.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>

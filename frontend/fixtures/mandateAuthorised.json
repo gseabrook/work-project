@@ -1,0 +1,52 @@
+{
+    "id": 440,
+    "referenceNumber": "TEST-1",
+    "registrationDate": 1496212920000,
+    "amount": 150.00,
+    "frequency": {
+      "value": "DAILY",
+      "displayValue": "Daily"
+    },
+    "status": {
+      "value": "AUTHORISED",
+      "displayValue": "Authorised"
+    },
+    "customer": {
+      "id": 430,
+      "name": "Graham",
+      "emailAddress": "graham.seabrook@ag-isolutions.com",
+      "phoneNumber": null,
+      "idValue": "11223344",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "ab54d5878e154c1abc252bfcaf1ed7b9",
+      "bankAccounts": [
+        {
+          "bank": {
+            "code": "BKR1602",
+            "name": "Bank Rakyat",
+            "id": 4
+          },
+          "accountNumber": "1",
+          "customer": null
+        }
+      ]
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": {
+      "bank": {
+        "code": "BKR1602",
+        "name": "Bank Rakyat",
+        "id": 4
+      },
+      "accountNumber": "1",
+      "customer": null
+    }
+  }

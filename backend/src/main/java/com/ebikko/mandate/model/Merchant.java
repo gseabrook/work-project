@@ -1,6 +1,7 @@
 package com.ebikko.mandate.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -21,6 +22,9 @@ public class Merchant {
     private String companyName;
     @OneToMany
     private List<MerchantBankAccount> merchantBankAccounts;
+    @JsonIgnore
+    @OneToMany(mappedBy = "merchant")
+    private List<Mandate> mandates = newArrayList();
 
     public Merchant() {}
 
@@ -73,6 +77,14 @@ public class Merchant {
         return id;
     }
 
+    public List<Mandate> getMandates() {
+        return mandates;
+    }
+
+    public void setMandates(List<Mandate> mandates) {
+        this.mandates = mandates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,5 +105,9 @@ public class Merchant {
         result = 31 * result + (companyName != null ? companyName.hashCode() : 0);
         result = 31 * result + (merchantBankAccounts != null ? merchantBankAccounts.hashCode() : 0);
         return result;
+    }
+
+    public void addMandate(Mandate mandate) {
+        mandates.add(mandate);
     }
 }

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MdDialog } from '@angular/material';
 
 import { Mandate } from '../model/mandate';
 import { User } from '../../model/user';
 import { MandateService } from '../mandate.service';
+import { MandateFormComponent } from '../form/mandate-form.component';
 
 @Component({
 	selector: 'app-mandate-list',
@@ -18,7 +20,8 @@ export class MandateListComponent implements OnInit {
 	constructor(
 		private mandateService: MandateService,
 		private router: Router,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private dialog: MdDialog
 	) { }
 
 	ngOnInit() {
@@ -27,6 +30,14 @@ export class MandateListComponent implements OnInit {
 		});
 
 		this.mandateService.get().then(mandates => this.mandates = mandates);
+	}
+
+	selectMandate(mandate: Mandate) {
+		this.dialog.open(MandateFormComponent, {
+			data: {
+				mandate: mandate
+			}
+		});
 	}
 
 }

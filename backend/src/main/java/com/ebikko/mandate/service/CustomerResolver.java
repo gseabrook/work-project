@@ -38,7 +38,6 @@ public class CustomerResolver {
             customer.addBankAccount(customerBankAccount);
         }
 
-        customerService.save(customer);
         return customer;
     }
 }

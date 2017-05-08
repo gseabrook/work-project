@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { Location } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgForm } from '@angular/forms';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdDialog } from '@angular/material';
+import { MdDialog, MdDialogRef } from '@angular/material';
 
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
@@ -13,6 +13,7 @@ import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentica
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
 import { MandateFormService } from './mandate-form.service';
+import { DisplayEnum } from '../model/displayEnum';
 
 @Component({
 	selector: 'mandate-form',
@@ -21,10 +22,12 @@ import { MandateFormService } from './mandate-form.service';
 })
 export class MandateFormComponent implements OnInit {
 
-  	banks: Bank[];
-  	model: Mandate;
-  	mode: string;
-	errors : ValidationError[] = [];
+	banks: Bank[];
+	frequencyTypes: DisplayEnum[];
+	idTypes: DisplayEnum[];
+	model: Mandate;
+	mode: string;
+	errors: ValidationError[] = [];
 
 	constructor(
 		private mandateService: MandateService,
@@ -32,34 +35,63 @@ export class MandateFormComponent implements OnInit {
 		private dialog: MdDialog,
 		private location: Location,
 		private router: Router,
-    	private route: ActivatedRoute
+		private route: ActivatedRoute,
+		@Optional() private dialogRef: MdDialogRef<FpxAuthenticationComponent>
 	) { }
 
 	ngOnInit() {
-		this.route.data.subscribe((data: { mandate: Mandate, mode: string}) => {
-			this.model = data.mandate;
-			this.mode = data.mode;
+		if (this.dialogRef) {
+			this.model = this.dialogRef.config.data.mandate;
+			this.mode = 'dialog';
+		} else {
+			this.route.data.subscribe((data: { mandate: Mandate, mode: string }) => {
+				this.model = data.mandate;
+				this.mode = data.mode;
+			});
+		}
+
+		this.mandateFormService.getBanks().subscribe(banks => {
+			this.banks = banks
+
+			if (this.model.customerBankAccount && this.model.customerBankAccount.bank) {
+				this.model.customerBankAccount.bank = banks.filter(bank => bank.id === this.model.customerBankAccount.bank.id)[0];
+			}
 		});
 
-		this.mandateFormService.getBanks().subscribe(banks => this.banks = banks);
+		this.mandateFormService.getFrequencies().subscribe(frequencies => {
+			this.frequencyTypes = frequencies;
+
+			if (this.model.frequency) {
+				this.model.frequency = frequencies.filter(freq => freq.value === this.model.frequency.value)[0];
+			}
+		});
+
+		this.mandateFormService.getIdTypes().subscribe(idTypes => {
+			this.idTypes = idTypes;
+
+			if (this.model.customer.idType) {
+				this.model.customer.idType = idTypes.filter(idType => idType.value === this.model.customer.idType.value)[0];
+			}
+		});
 	}
 
+	close() {
+		this.dialogRef.close();
+	}
 
-	idTypes = [
-		{ value: 'PASSPORT_NUMBER', viewValue: 'Passport Number' },
-		{ value: 'NRIC', viewValue: 'NRIC' },
-		{ value: 'OLD_IC', viewValue: 'Old IC' },
-		{ value: 'BUSINESS_REGISTRATION_NUMBER', viewValue: 'Business Registration' }
-	];
-
-	frequencyTypes = [
-		{ value: 'DAILY', viewValue: 'Daily' },
-		{ value: 'WEEKLY', viewValue: 'Weekly' },
-		{ value: 'MONTHLY', viewValue: 'Monthly' },
-		{ value: 'QUARTERLY', viewValue: 'Quarterly' },
-
-		{ value: 'YEARLY', viewValue: 'Yearly' }
-	];
+	displayFormErrors(mandateForm: NgForm) {
+		this.errors = [];
+		let validationErrors = Object.keys(mandateForm.form.controls)
+			.filter(key => !mandateForm.form.controls[key].valid)
+			.map(field => {
+				return new ValidationError().deserialize({
+					field: field, 
+					value: "", 
+					message: field + " is not valid"
+				});
+			});
+		Array.prototype.push.apply(this.errors, validationErrors);
+	}
 
 	email(mandateForm: NgForm) {
 		if (mandateForm.valid) {
@@ -72,13 +104,7 @@ export class MandateFormComponent implements OnInit {
 
 	save(mandateForm: NgForm) {
 		if (mandateForm.valid) {
-			const dialogRef = this.dialog.open(FpxAuthenticationComponent, {
-				data: {
-					mandate: this.model
-				}
-			});
-
-			dialogRef.afterClosed().subscribe(success => {
+			this.showFpxDialog().afterClosed().subscribe(success => {
 				if (success) {
 					this.mandateService.save(this.model).subscribe(
 						result => this.handleSuccess(result),
@@ -86,18 +112,22 @@ export class MandateFormComponent implements OnInit {
 					);
 				}
 			});
+		} else {
+			this.displayFormErrors(mandateForm);
 		}
+	}
+
+	showFpxDialog() {
+		return this.dialog.open(FpxAuthenticationComponent, {
+			data: {
+				mandate: this.model
+			}
+		});
 	}
 
 	update(mandateForm: NgForm) {
 		if (mandateForm.valid) {
-			const dialogRef = this.dialog.open(FpxAuthenticationComponent, {
-				data: {
-					mandate: this.model
-				}
-			});
-
-			dialogRef.afterClosed().subscribe(success => {
+			this.showFpxDialog().afterClosed().subscribe(success => {
 				if (success) {
 					this.mandateService.update(this.model).subscribe(
 						result => this.router.navigate(['/mandate-complete'])
@@ -111,7 +141,13 @@ export class MandateFormComponent implements OnInit {
 		this.router.navigate(['../mandate-list'], { relativeTo: this.route });
 	}
 
-	private handleError(result) {
-		Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(result.json()).fieldErrors);
+	private handleError(result: Response) {
+		if (result.status === 422) {
+			Array.prototype.push.apply(this.errors, new ErrorResponse().deserialize(result.json()).fieldErrors);
+		} else {
+			let error = new ValidationError();
+			error.message = "Error: " + result.json().message;
+			this.errors = [error];
+		}
 	}
 }

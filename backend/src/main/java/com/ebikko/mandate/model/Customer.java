@@ -1,5 +1,7 @@
 package com.ebikko.mandate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,7 +26,10 @@ public class Customer {
     @Column
     private String principalUid;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<CustomerBankAccount> bankAccounts;
+    private List<CustomerBankAccount> bankAccounts = newArrayList();
+    @JsonIgnore
+    @OneToMany(mappedBy = "customer")
+    private List<Mandate> mandates = newArrayList();
 
     public Customer() {
     }
@@ -103,6 +108,10 @@ public class Customer {
         this.id = id;
     }
 
+    public List<Mandate> getMandates() {
+        return mandates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,11 +141,14 @@ public class Customer {
     }
 
     public void addBankAccount(CustomerBankAccount customerBankAccount) {
-        if (bankAccounts == null) {
-            bankAccounts = newArrayList();
-        }
         if (!bankAccounts.contains(customerBankAccount)) {
             bankAccounts.add(customerBankAccount);
+        }
+    }
+
+    public void addMandate(Mandate mandate) {
+        if (!mandates.contains(mandate)) {
+            mandates.add(mandate);
         }
     }
 }

@@ -36,11 +36,13 @@ export class AuthService {
 	}
 
 	getUserDetails(): Promise<User> {
-		return this.http.get('user').toPromise().then(response => new User().deserialize(response.json()));
+		return this.http
+			.get('user')
+			.toPromise()
+			.then(response => new User().deserialize(response.json()));
 	}
 
 	private handleError(error: any): Promise<any> {
-		console.error('An error occurred', error);
 		return Promise.reject(error.message || error);
 	}
 

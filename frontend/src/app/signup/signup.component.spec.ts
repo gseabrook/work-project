@@ -81,9 +81,9 @@ describe('SignUpComponent', () => {
 		async(inject([MockBackend], (mockBackend) => {
 			createComponent();
 			fixture.whenStable().then(() => {
-				TestHelpers.inputValue(fixture.debugElement.query(By.css('input[name="email"]')), 'joe@dog.com');
-				TestHelpers.inputValue(fixture.debugElement.query(By.css('input[name="password"]')), 'supersecretpassword');
-				TestHelpers.inputValue(fixture.debugElement.query(By.css('input[name="repeatPassword"]')), 'supersecretpassword');
+				TestHelpers.inputValue('input[name="email"]', 'joe@dog.com', fixture);
+				TestHelpers.inputValue('input[name="password"]', 'supersecretpassword', fixture);
+				TestHelpers.inputValue('input[name="repeatPassword"]', 'supersecretpassword', fixture);
 
 				mockBackend.connections.subscribe((connection) => {
 					expect(connection.request.method).toBe(RequestMethod.Post);

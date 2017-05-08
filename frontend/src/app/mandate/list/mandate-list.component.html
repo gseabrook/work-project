@@ -2,7 +2,7 @@
 
 <div [ngSwitch]="user.type">
 
-    <table class="material-table" *ngSwitchCase="'MERCHANT'">
+    <table class="material-table mandateTable" *ngSwitchCase="'MERCHANT'">
         <thead>
             <tr>
                 <th>Reference Number</th>
@@ -15,13 +15,13 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let mandate of mandates">
+            <tr *ngFor="let mandate of mandates" (click)="selectMandate(mandate)">
                 <td>{{mandate.referenceNumber}}</td>
                 <td>{{mandate.registrationDate | date:'mediumDate'}}</td>
                 <td class="numeric">{{mandate.amount | number:'1.2-2'}}</td>
-                <td>{{mandate.frequency}}</td>
+                <td>{{mandate.frequency.displayValue}}</td>
                 <td>{{mandate.customer.name}}</td>
-                <td>{{mandate.customer.idValue}} ({{mandate.customer.idType}})</td>
+                <td>{{mandate.customer.idValue}} ({{mandate.customer.idType.displayValue}})</td>
                 <td>{{mandate.status.displayValue}}</td>
             </tr>
         </tbody>
@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let mandate of mandates">
+            <tr *ngFor="let mandate of mandates" (click)="selectMandate(mandate)">
                 <td>{{mandate.referenceNumber}}</td>
                 <td>{{mandate.registrationDate | date:'mediumDate'}}</td>
                 <td class="numeric">{{mandate.amount | number:'1.2-2'}}</td>

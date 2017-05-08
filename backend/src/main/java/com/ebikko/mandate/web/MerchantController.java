@@ -90,6 +90,7 @@ public class MerchantController {
             Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
             Merchant merchant = userService.getMerchant((User) auth.getPrincipal());
             mandate.setMerchant(merchant);
+            merchant.addMandate(mandate);
             mandateService.save(mandate);
             applicationEventPublisher.publishEvent(new MandateUpdatedEvent(mandate));
             return new ResponseEntity(HttpStatus.CREATED);

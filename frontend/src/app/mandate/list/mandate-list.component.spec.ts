@@ -73,6 +73,8 @@ describe('MandateListComponent', () => {
 			fixture.detectChanges();
 
 			expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(1);
+			expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Daily');
+			expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Business Registration Number');
 		})
 	})));
 });

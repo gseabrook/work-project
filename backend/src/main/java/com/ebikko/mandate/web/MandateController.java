@@ -1,7 +1,9 @@
 package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.ErrorResponse;
+import com.ebikko.mandate.model.IDType;
 import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateFrequency;
 import com.ebikko.mandate.model.event.MandateUpdatedEvent;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.translator.MandateDTOTranslator;
@@ -17,7 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -57,6 +62,16 @@ public class MandateController {
         } else {
             return new ResponseEntity(mandate, OK);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/frequency")
+    public List<MandateFrequency> getFrequencies() {
+        return newArrayList(MandateFrequency.values());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/idType")
+    public List<IDType> getIdTypes() {
+        return newArrayList(IDType.values());
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{mandateId}")

@@ -22,3 +22,8 @@ td.numeric {
 	text-align: right;
 	padding-right: 10px;
 }
+
+table.mandateTable tbody tr:hover {
+	cursor: pointer;
+	background-color: #f2f2f2;
+}

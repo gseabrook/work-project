@@ -83,6 +83,8 @@ public class MandateBuilder {
         } else {
             mandate.setStatus(PENDING_AUTHORISATION);
         }
+        customer.addMandate(mandate);
+        merchant.addMandate(mandate);
         return mandate;
     }
 

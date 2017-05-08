@@ -10,4 +10,8 @@ export class DisplayEnum implements Serializable<DisplayEnum> {
 		this.displayValue = input.displayValue;
 		return this;
 	}
+
+	toJSON(): string {
+		return this.value;
+	}
 }

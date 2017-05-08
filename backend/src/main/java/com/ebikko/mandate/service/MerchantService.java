@@ -16,7 +16,11 @@ public class MerchantService {
     }
 
     public Merchant getMerchant(String id) {
-        return merchantRepository.findOne(Long.valueOf(id));
+        return getMerchant(Long.valueOf(id));
+    }
+
+    public Merchant getMerchant(Long id) {
+        return merchantRepository.findOne(id);
     }
 
     public Merchant save(Merchant merchant) {

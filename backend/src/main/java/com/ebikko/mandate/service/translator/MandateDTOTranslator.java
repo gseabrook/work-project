@@ -32,18 +32,19 @@ public class MandateDTOTranslator {
         mandate.setFrequency(MandateFrequency.valueOf(mandateDTO.getFrequency()));
 
         Customer customer = customerResolver.resolveCustomer(mandateDTO.getCustomer(), mandateDTO.getCustomerBankAccount());
+
         BankAccountDTO bankAccountDTO = mandateDTO.getCustomerBankAccount();
         if (bankAccountDTO != null && bankAccountDTO.getBankId() != null) {
             Bank bank = bankService.getBank(bankAccountDTO.getBankId());
             CustomerBankAccount customerBankAccount = new CustomerBankAccount(bank, bankAccountDTO.getAccountNumber());
             mandate.setCustomerBankAccount(customerBankAccount);
-            customer.addBankAccount(customerBankAccount);
             mandate.setStatus(MandateStatus.AUTHORISED);
         } else {
             mandate.setStatus(MandateStatus.PENDING_AUTHORISATION);
         }
 
         mandate.setCustomer(customer);
+        customer.addMandate(mandate);
 
         return mandate;
     }

@@ -11,7 +11,7 @@ md-card {
     padding: 0px;
 }
 
-form > * {
+form > *:not(.alert) {
     height: 55px;
 }
 

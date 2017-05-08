@@ -10,7 +10,7 @@ export class Mandate implements Serializable<Mandate> {
 	public referenceNumber: string;
 	public registrationDate: Date;
 	public amount: string;
-	public frequency: string;
+	public frequency: DisplayEnum;
 	public customer: Customer;
 	public merchant: Merchant;
 	public customerBankAccount: BankAccount;
@@ -26,7 +26,7 @@ export class Mandate implements Serializable<Mandate> {
     	this.referenceNumber = input.referenceNumber;
     	this.registrationDate = new Date(input.registrationDate);
     	this.amount = input.amount;
-    	this.frequency = input.frequency.value;
+    	this.frequency = new DisplayEnum().deserialize(input.frequency);
     	this.customer = new Customer().deserialize(input.customer);
     	this.merchant = new Merchant().deserialize(input.merchant);
     	this.status = new DisplayEnum().deserialize(input.status);

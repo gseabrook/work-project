@@ -84,6 +84,9 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         List<Mandate> mandates = mandateService.getMandates(merchant);
         assertThat(mandates, hasSize(1));
 
+        Merchant savedMerchant = merchantService.getMerchant(merchant.getId());
+        assertThat(savedMerchant.getMandates(), hasSize(1));
+
         Mandate mandate = mandates.get(0);
         assertThat(mandate.getCustomerBankAccount().getAccountNumber(), is("12323537"));
         assertThat(mandate.getStatus(), is(MandateStatus.AUTHORISED));
@@ -104,6 +107,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         assertThat(customer.getName(), is("Joe"));
         assertThat(customer.getPrincipalUid(), is(userId));
         assertThat(customer.getBankAccounts(), hasSize(1));
+        assertThat(customer.getMandates(), hasSize(1));
 
         verify(emailService).sendNewCustomerEmail(any(UserVerificationToken.class), any(Customer.class));
         verify(nodeService).saveNode(any(Mandate.class));

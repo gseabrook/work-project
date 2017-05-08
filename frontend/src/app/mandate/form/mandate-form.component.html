@@ -1,4 +1,4 @@
-<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone'">New Mandate</h1>    
+<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'">New Mandate</h1>    
 <div fxLayout="column" fxLayoutAlign="center center">
     <form #registrationForm="ngForm">
         <md-input-container>
@@ -17,8 +17,8 @@
         </md-input-container>
         <div class="align-horizontally">
             <md-select placeholder="ID Type" required [(ngModel)]="model.customer.idType" name="idType" #idType="ngModel">
-                <md-option *ngFor="let idType of idTypes" [value]="idType.value">
-                    {{ idType.viewValue }}
+                <md-option *ngFor="let idType of idTypes" [value]="idType">
+                    {{ idType.displayValue }}
                 </md-option>
             </md-select>
             <md-input-container>
@@ -37,30 +37,33 @@
                 <md-hint align="start" class="errorHint" *ngIf="!accountNumber.valid && accountNumber.touched">Please enter a bank account number</md-hint>
             </md-input-container>
         </div>
-        <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [required]="true" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
+        <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
         <div class="align-horizontally">
             <md-input-container>
                 <input mdInput placeholder="Amount" type="text" required [(ngModel)]="model.amount" name="amount" #amount="ngModel"/>
                 <md-hint align="start" class="errorHint" *ngIf="!amount.valid && amount.touched">Please enter an amount</md-hint>
             </md-input-container>
             <md-select placeholder="Frequency" required [(ngModel)]="model.frequency" name="frequency">
-                <md-option *ngFor="let frequency of frequencyTypes" [value]="frequency.value">
-                    {{ frequency.viewValue }}
+                <md-option *ngFor="let frequency of frequencyTypes" [value]="frequency">
+                    {{ frequency.displayValue }}
                 </md-option>
             </md-select>
         </div>
-        <div class="errors" *ngIf="errors.length > 0">
-            <div *ngFor="let fieldError of errors">
-                {{ fieldError.message}}
+        <div class="alert alert-danger fade" *ngIf="errors.length !== 0">
+            <div *ngFor="let fieldError of errors">{{ fieldError.message}}</div>
+        </div>
+        <span [ngSwitch]="mode">
+            <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchCase="'standAlone'">
+                <button md-raised-button type="button" (click)="update(registrationForm)" color="primary">Update</button>
             </div>
-        </div>
-        <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode != 'standAlone'">
-            <button md-raised-button type="button" routerLink="/registrations">Cancel</button>
-            <button md-raised-button type="button" (click)="email(registrationForm)">Email</button>
-            <button md-raised-button type="button" (click)="save(registrationForm)" color="primary">Proceed</button>
-        </div>
-        <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode == 'standAlone'">
-            <button md-raised-button type="button" (click)="update(registrationForm)" color="primary">Update</button>
-        </div>
+            <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchCase="'dialog'">
+                <button md-raised-button type="button" (click)="close()" color="primary">Close</button>
+            </div>
+            <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchDefault>
+                <button md-raised-button type="button" routerLink="/registrations">Cancel</button>
+                <button md-raised-button type="button" (click)="email(registrationForm)">Email</button>
+                <button md-raised-button type="button" (click)="save(registrationForm)" color="primary">Proceed</button>
+            </div>
+        </span>
     </form>
 </div>
