@@ -1,0 +1,22 @@
+[
+  {
+    "value": "DAILY",
+    "displayValue": "Daily"
+  },
+  {
+    "value": "WEEKLY",
+    "displayValue": "Weekly"
+  },
+  {
+    "value": "MONTHLY",
+    "displayValue": "Monthly"
+  },
+  {
+    "value": "QUARTERLY",
+    "displayValue": "Quarterly"
+  },
+  {
+    "value": "YEARLY",
+    "displayValue": "Yearly"
+  }
+]

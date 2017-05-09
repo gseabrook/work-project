@@ -21,6 +21,13 @@ export class Mandate implements Serializable<Mandate> {
 		this.customerBankAccount = new BankAccount();
 	}
 
+	clone(): Mandate {
+		let clone = Object.assign(new Mandate(), this);
+		clone.customer = Object.assign(new Customer(), this.customer);
+
+		return clone;
+	}
+
     deserialize(input){
     	this.id = input.id;
     	this.referenceNumber = input.referenceNumber;

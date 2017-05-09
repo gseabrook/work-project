@@ -42,7 +42,7 @@
                 <td>{{mandate.referenceNumber}}</td>
                 <td>{{mandate.registrationDate | date:'mediumDate'}}</td>
                 <td class="numeric">{{mandate.amount | number:'1.2-2'}}</td>
-                <td>{{mandate.frequency}}</td>
+                <td>{{mandate.frequency.displayValue}}</td>
                 <td>{{mandate.merchant.companyName}}</td>
             </tr>
         </tbody>

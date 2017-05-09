@@ -41,7 +41,7 @@ export class MandateFormComponent implements OnInit {
 
 	ngOnInit() {
 		if (this.dialogRef) {
-			this.model = this.dialogRef.config.data.mandate;
+			this.model = this.dialogRef.config.data.mandate.clone();
 			this.mode = 'dialog';
 		} else {
 			this.route.data.subscribe((data: { mandate: Mandate, mode: string }) => {

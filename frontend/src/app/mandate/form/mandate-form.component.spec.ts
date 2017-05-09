@@ -2,7 +2,7 @@ import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angu
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { By } from '@angular/platform-browser';
-import { MaterialModule } from '@angular/material';
+import { MaterialModule, MdDialogRef } from '@angular/material';
 import { Md2Module } from 'md2';
 import { FormsModule } from '@angular/forms';
 import { MandateFormComponent } from './mandate-form.component';
@@ -13,14 +13,23 @@ import { MandateFormService } from './mandate-form.service';
 import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';
+import { DisplayEnum } from '../model/displayEnum';
 
 import * as mandatePendingAuthorisation from '../../../../fixtures/mandatePendingAuthorisation.json';
 import * as mandateAuthorised from '../../../../fixtures/mandateAuthorised.json';
 import * as banks from '../../../../fixtures/banks.json';
+import * as idTypes from '../../../../fixtures/idTypes.json';
+import * as frequencies from '../../../../fixtures/frequencies.json';
 
 describe('MandateFormComponent', () => {
 	let component: MandateFormComponent;
 	let fixture: ComponentFixture<MandateFormComponent>;
+	let dialogMock = {
+		close: function(){},
+		config: {
+			data: {}
+		}
+	};
 
 	function createComponent() {
 		fixture = TestBed.createComponent(MandateFormComponent);
@@ -28,25 +37,48 @@ describe('MandateFormComponent', () => {
 		fixture.detectChanges();
 	}
 
-	function setupTestBed(routeData) {
+	function setupTestBed(routeData: any, includeDialog: boolean) {
+		let providers: any[] = [{
+			provide: ActivatedRoute,
+			useValue: {
+				data: routeData,
+				snapshot: {}
+			}
+		}, {
+			provide: Http,
+			useFactory: (mockBackend, options) => {
+				return new Http(mockBackend, options);
+			},
+			deps: [MockBackend, BaseRequestOptions]
+		}, MockBackend, BaseRequestOptions, MandateService, MandateFormService];
+
+		if (includeDialog) {
+			dialogMock.config.data = routeData;
+			providers.push({
+				provide: MdDialogRef,
+				useValue: dialogMock
+			});
+		}
+
 		TestBed.configureTestingModule({
 			declarations: [MandateFormComponent],
 			imports: [MaterialModule, RouterTestingModule, Md2Module, FormsModule],
-			providers: [MandateService, MandateFormService, {
-				provide: ActivatedRoute,
-				useValue: {
-					data: routeData,
-					snapshot: {}
-				}
-			}, {
-					provide: Http,
-					useFactory: (mockBackend, options) => {
-						return new Http(mockBackend, options);
-					},
-					deps: [MockBackend, BaseRequestOptions]
-				}, MockBackend, BaseRequestOptions]
+			providers: providers
 		})
 			.compileComponents();
+	}
+
+	function initialiseComponentWithReferenceData(mockBackend: MockBackend) {
+		let connections: MockConnection[] = [];
+		mockBackend.connections.subscribe((c: MockConnection) => connections.push(c));
+
+		createComponent();
+
+		connections[0].mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
+		connections[1].mockRespond(new Response(new ResponseOptions({ body: frequencies, status: 200 })));
+		connections[2].mockRespond(new Response(new ResponseOptions({ body: idTypes, status: 200 })));
+		tick();
+		fixture.detectChanges();
 	}
 
 	describe("new mandate", () => {
@@ -54,22 +86,11 @@ describe('MandateFormComponent', () => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate(),
 				mode: 'form'
-			}));
+			}), false);
 		}));
 
-		function initialiseComponentWithBankData(mockBackend: MockBackend) {
-			let connection: MockConnection;
-			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
-
-			createComponent();
-
-			connection.mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
-			tick();
-			fixture.detectChanges();
-		}
-
 		it('should display error messages for failed validation', fakeAsync(inject([MockBackend], (mockBackend) => {
-			initialiseComponentWithBankData(mockBackend);
+			initialiseComponentWithReferenceData(mockBackend);
 
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
 			fixture.detectChanges();
@@ -78,7 +99,7 @@ describe('MandateFormComponent', () => {
 		})));
 
 		it('should fill in all the fields', fakeAsync(inject([MockBackend], (mockBackend) => {
-			initialiseComponentWithBankData(mockBackend);
+			initialiseComponentWithReferenceData(mockBackend);
 
 			TestHelpers.inputValue('input[name="referenceNumber"]', 'TEST-1', fixture);
 			TestHelpers.inputValue('input[name="accountHolderName"]', 'Joe', fixture);
@@ -86,18 +107,45 @@ describe('MandateFormComponent', () => {
 			TestHelpers.pickFromMdSelect('md-select[name="idType"]', '1', fixture);
 			TestHelpers.inputValue('input[name="idValue"]', '12341234', fixture);
 			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
-			TestHelpers.pickFromMdSelectByValue('md-select[name="frequency"]', 'WEEKLY', fixture);
+			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '3', fixture, '4');
 
 			tick(1000);
 		})));
 	});
 
+	describe("dialog popup", () => {
+
+		let mandate = new Mandate().deserialize(mandatePendingAuthorisation);
+
+		beforeEach(async(() => {
+			setupTestBed({
+				mandate: mandate,
+				mode: 'dialog'
+			}, true);
+		}));
+
+		it('should clone the mandate to avoid unsaved changes modifying the list', () => {
+			createComponent();
+
+			component.model.referenceNumber = "ABC-123";
+			expect(mandate.referenceNumber).toEqual("BBB333");
+
+			component.model.customer.idType = <DisplayEnum>{
+				value: 'PASSPORT_NUMBER',
+				displayValue: 'Passport Number'
+			};
+			expect(mandate.customer.idType.value).toEqual('BUSINESS_REGISTRATION_NUMBER');
+		});
+
+	});
+
 	describe("pending authorisation", () => {
+
 		beforeEach(async(() => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
 				mode: 'standAlone'
-			}));
+			}), false);
 		}));
 
 		it('should create', () => {
@@ -112,14 +160,7 @@ describe('MandateFormComponent', () => {
 		});
 
 		it('should update the mandate when clicking the button', fakeAsync(inject([MockBackend], (mockBackend) => {
-			let connection: MockConnection;
-			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
-
-			createComponent();
-
-			connection.mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
-			tick();
-			fixture.detectChanges();
+			initialiseComponentWithReferenceData(mockBackend);
 
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
 			TestHelpers.inputValue('input[name="accountNumber"]', '11223344', fixture);
@@ -134,16 +175,11 @@ describe('MandateFormComponent', () => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandateAuthorised),
 				mode: 'standAlone'
-			}));
+			}), false);
 		}));
 
 		it("should update the mandate with the bank details from the rest call", fakeAsync(inject([MockBackend], (mockBackend) => {
-			let connection: MockConnection;
-			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
-
-			createComponent();
-			connection.mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
-			tick();
+			initialiseComponentWithReferenceData(mockBackend);
 
 			expect(component.model.customerBankAccount.bank).toEqual(component.banks[3]);
 		})));

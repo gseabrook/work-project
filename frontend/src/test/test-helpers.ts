@@ -10,11 +10,16 @@ export class TestHelpers {
 		el.dispatchEvent(new Event('input'));
 	}
 
-	static pickFromMdSelect(cssSelector: string, itemIdx: string, fixture: ComponentFixture<any>) {
+	static pickFromMdSelect(cssSelector: string, itemIdx: string, fixture: ComponentFixture<any>, selectIdx?: string) {
 		fixture.debugElement.query(By.css(cssSelector + ' .mat-select-trigger')).nativeElement.click();
 	  	fixture.detectChanges();
 
-	    fixture.debugElement.query(By.css('md-option:nth-child(' + itemIdx + ')')).nativeElement.click();
+	  	let selector = 'md-option:nth-child(' + itemIdx + ')';
+	  	if (selectIdx) {
+	  		selector = 'div.cdk-overlay-pane:nth-child(' + selectIdx + ') ' + selector;
+	  	}
+
+	    fixture.debugElement.query(By.css(selector)).nativeElement.click();
 	  	fixture.detectChanges();
 	}
 

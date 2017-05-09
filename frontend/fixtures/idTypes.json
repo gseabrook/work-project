@@ -1,0 +1,18 @@
+[
+  {
+    "value": "PASSPORT_NUMBER",
+    "displayValue": "Passport Number"
+  },
+  {
+    "value": "NRIC",
+    "displayValue": "New IC Number"
+  },
+  {
+    "value": "OLD_IC",
+    "displayValue": "Old IC Number"
+  },
+  {
+    "value": "BUSINESS_REGISTRATION_NUMBER",
+    "displayValue": "Business Registration Number"
+  }
+]
