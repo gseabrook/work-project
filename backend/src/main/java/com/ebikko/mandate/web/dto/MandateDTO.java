@@ -17,6 +17,7 @@ public class MandateDTO {
     @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
     private String frequency;
+    private String status;
     private CustomerDTO customer;
     private BankAccountDTO customerBankAccount;
 
@@ -76,5 +77,13 @@ public class MandateDTO {
 
     public void setCustomerBankAccount(BankAccountDTO customerBankAccount) {
         this.customerBankAccount = customerBankAccount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

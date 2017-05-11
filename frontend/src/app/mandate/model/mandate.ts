@@ -42,4 +42,8 @@ export class Mandate implements Serializable<Mandate> {
     	}
     	return this;
 	}
+
+	isTerminated() {
+		return this.status.value === "TERMINATED";
+	}
 }

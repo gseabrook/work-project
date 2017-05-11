@@ -9,6 +9,7 @@ import { MaterialModule, MdDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/Observable';
+import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
 
 import * as Mandates from '../../../../fixtures/mandates.json';
 
@@ -18,8 +19,13 @@ describe('MandateListComponent', () => {
 	let component: MandateListComponent;
 	let fixture: ComponentFixture<MandateListComponent>;
 	let dialogMock = {
-		open: function(a, b) { 
+		open: function(a, b) {
 			console.log("In mock");
+		}
+	};
+	let confirmationDialogMock = {
+		openConfirmationDialog: function(){
+			return Observable.of(true);
 		}
 	};
 
@@ -42,6 +48,9 @@ describe('MandateListComponent', () => {
 			}, {
 				provide: MdDialog,
 				useValue: dialogMock
+			}, {
+				provide: ConfirmationDialogService,
+				useValue: confirmationDialogMock
 			},
 				MockBackend,
 				BaseRequestOptions,
@@ -73,10 +82,8 @@ describe('MandateListComponent', () => {
 		});
 
 		it('should load all the mandates and display them in the table', fakeAsync(inject([MockBackend], (mockBackend) => {
-
 			let connection: MockConnection;
 			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
-
 			createComponent();
 
 			fixture.whenStable().then(() => {
@@ -91,17 +98,44 @@ describe('MandateListComponent', () => {
 			});
 		})));
 
-		it('should open a dialog when clicking on a row', fakeAsync(inject([MockBackend], (mockBackend) => {
+		it('should terminate a mandate after clicking the terminate button', fakeAsync(inject([MockBackend], (mockBackend) => {
+			spyOn(confirmationDialogMock, 'openConfirmationDialog').and.returnValue(Observable.of(true));
+
 			let connection: MockConnection;
 			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
 			createComponent();
 
 			fixture.whenStable().then(() => {
+
 				connection.mockRespond(new Response(new ResponseOptions({ body: Mandates, status: 200 })));
 				tick();
 				fixture.detectChanges();
 
-				fixture.debugElement.queryAll(By.css('tbody tr'))[0].nativeElement.click();;
+				fixture.debugElement.queryAll(By.css("tbody tr button"))[1].nativeElement.click();
+
+				connection.mockRespond(new Response(new ResponseOptions({ status: 204 })));
+				tick(1000);
+				fixture.detectChanges();
+
+				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Terminated');
+				expect(connection.request.getBody()).toContain('"status":"TERMINATED"');
+
+				tick(1000);
+			});
+		})));
+
+		it('should open a dialog when clicking on the update button', fakeAsync(inject([MockBackend], (mockBackend) => {
+			let connection: MockConnection;
+			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
+			createComponent();
+
+			fixture.whenStable().then(() => {
+
+				connection.mockRespond(new Response(new ResponseOptions({ body: Mandates, status: 200 })));
+				tick();
+				fixture.detectChanges();
+
+				fixture.debugElement.queryAll(By.css('tbody tr button'))[0].nativeElement.click();;
 
 				expect(dialogMock.open).toHaveBeenCalled();
 			});

@@ -14,4 +14,11 @@ export class DisplayEnum implements Serializable<DisplayEnum> {
 	toJSON(): string {
 		return this.value;
 	}
+
+	static of(value: string, displayValue: string): DisplayEnum {
+		let displayEnum = new DisplayEnum();
+		displayEnum.value = value;
+		displayEnum.displayValue = displayValue;
+		return displayEnum;
+	}
 }

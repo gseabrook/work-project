@@ -16,24 +16,33 @@ import { AuthModule } from './auth/auth.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FlexLayoutModule,
-    FormsModule,
-    HttpModule,
-    MaterialModule.forRoot(),
-    Md2Module.forRoot(),
-    HomeModule,
-    LoginModule,
-    MandateModule,
-    SignUpModule,
-    AppRoutingModule
-  ],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		ConfirmationDialogComponent
+	],
+	imports: [
+		BrowserModule,
+		FlexLayoutModule,
+		FormsModule,
+		HttpModule,
+		MaterialModule.forRoot(),
+		Md2Module.forRoot(),
+		HomeModule,
+		LoginModule,
+		MandateModule,
+		SignUpModule,
+		AppRoutingModule
+	],
+	entryComponents: [
+		ConfirmationDialogComponent
+	],
+	providers: [
+		ConfirmationDialogService
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

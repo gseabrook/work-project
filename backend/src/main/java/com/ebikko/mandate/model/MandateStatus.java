@@ -3,7 +3,8 @@ package com.ebikko.mandate.model;
 public enum MandateStatus implements DisplayEnum {
 
     PENDING_AUTHORISATION("Pending Authorisation"),
-    AUTHORISED("Authorised");
+    AUTHORISED("Authorised"),
+    TERMINATED("Terminated");
 
     private final String displayValue;
 

@@ -56,9 +56,7 @@ public class EmailService {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate created";
         String message = "A new mandate has been created for you";
-        message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
-        message += "<br/>Amount: " + mandate.getAmount();
-        message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
+        message = addMandateDetails(mandate, message);
         message += "<br/>Please log in to review - " + appUrl;
 
         sendEmail(recipientAddress, subject, message);
@@ -85,10 +83,24 @@ public class EmailService {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
         String subject = "MyDirectDebit - Transaction pending authorisation";
         String message = "A new mandate is pending your authorisation, please follow the link to enter your bank details";
+        message = addMandateDetails(mandate, message);
+        message += "<br/>" + appUrl + "/mandate-form?id=" + mandate.getId();
+        sendEmail(recipientAddress, subject, message);
+    }
+
+    public void sendCustomerMandateTerminatedEmail(Mandate mandate) {
+        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String subject = "MyDirectDebit - Mandated has been terminated";
+        String message = "One of your mandates has been terminated";
+        message = addMandateDetails(mandate, message);
+        message += "<br/>Please log in to review - " + appUrl;
+        sendEmail(recipientAddress, subject, message);
+    }
+
+    private String addMandateDetails(Mandate mandate, String message) {
         message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
         message += "<br/>Amount: " + mandate.getAmount();
         message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
-        message += "<br/>" + appUrl + "/mandate-form?id=" + mandate.getId();
-        sendEmail(recipientAddress, subject, message);
+        return message;
     }
 }

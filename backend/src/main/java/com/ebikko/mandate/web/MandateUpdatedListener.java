@@ -48,12 +48,14 @@ public class MandateUpdatedListener {
                     sendSignUpEmail(customer, principal);
                 }
             }
-        } else {
+        } else if (mandate.getStatus() == MandateStatus.PENDING_AUTHORISATION) {
             if (customer.getPrincipalUid() == null) {
                 principalService.createPrincipal(customer);
             }
 
             emailService.sendPendingAuthorisationEmail(mandate);
+        } else if (mandate.getStatus() == MandateStatus.TERMINATED) {
+            emailService.sendCustomerMandateTerminatedEmail(mandate);
         }
     }
 
