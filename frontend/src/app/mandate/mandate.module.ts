@@ -13,13 +13,15 @@ import { MandateService } from './mandate.service';
 import { MandateFormService } from './form/mandate-form.service';
 import { MandateFormResolver } from './form/mandate-form-resolver.service';
 import { CompleteComponent } from './complete/complete.component';
+import { CustomerInformationComponent } from './form/customer-information/customer-information.component';
+import { MerchantInformationComponent } from './form/merchant-information/merchant-information.component';
 
 @NgModule({
 	imports: [
 		CommonModule, FormsModule, MaterialModule, RouterModule, Md2Module.forRoot(), FlexLayoutModule
 	],
 	declarations: [
-		MandateFormComponent, MandateListComponent, FpxAuthenticationComponent, CompleteComponent
+		MandateFormComponent, MandateListComponent, FpxAuthenticationComponent, CompleteComponent, CustomerInformationComponent, MerchantInformationComponent
 	],
 	entryComponents: [
 		FpxAuthenticationComponent

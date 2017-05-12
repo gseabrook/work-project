@@ -12,10 +12,11 @@
                 <th>Customer Name</th>
                 <th>Customer ID</th>
                 <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let mandate of mandates" (click)="selectMandate(mandate)">
+            <tr *ngFor="let mandate of mandates">
                 <td>{{mandate.referenceNumber}}</td>
                 <td>{{mandate.registrationDate | date:'mediumDate'}}</td>
                 <td class="numeric">{{mandate.amount | number:'1.2-2'}}</td>
@@ -23,6 +24,11 @@
                 <td>{{mandate.customer.name}}</td>
                 <td>{{mandate.customer.idValue}} ({{mandate.customer.idType.displayValue}})</td>
                 <td>{{mandate.status.displayValue}}</td>
+                <td>
+                    <button md-icon-button mdTooltip="Update mandate" (click)="selectMandate(mandate)">
+                        <md-icon>edit</md-icon>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>

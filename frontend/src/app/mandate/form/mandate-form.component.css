@@ -3,7 +3,7 @@ form {
     max-width: 500px;
 }
 
-form md-input-container {
+/deep/ form md-input-container {
     width: 100%;
 }
 
@@ -15,15 +15,15 @@ form > *:not(.alert) {
     height: 55px;
 }
 
-div.align-horizontally {
+/deep/ div.align-horizontally {
 	display: block;
 }
 
-div.align-horizontally > *:nth-child(1) {
+/deep/ div.align-horizontally > *:nth-child(1) {
 	width: 39%;
 }
 
-div.align-horizontally > *:nth-child(2) {
+/deep/ div.align-horizontally > *:nth-child(2) {
 	width: 59%;
 }
 
@@ -39,6 +39,6 @@ div.buttonContainer button {
     margin: 0px 5px 0px 5px;
 }
 
-md-input-container.selectContainer md-select {
+/deep/ md-input-container.selectContainer md-select {
     width: 100%;
 }

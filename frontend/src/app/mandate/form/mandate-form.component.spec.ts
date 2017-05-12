@@ -10,6 +10,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MandateService } from '../mandate.service';
 import { MandateFormService } from './mandate-form.service';
+import { CustomerInformationComponent } from './customer-information/customer-information.component';
+import { MerchantInformationComponent } from './merchant-information/merchant-information.component';
 import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';
@@ -61,21 +63,26 @@ describe('MandateFormComponent', () => {
 		}
 
 		TestBed.configureTestingModule({
-			declarations: [MandateFormComponent],
+			declarations: [MandateFormComponent, CustomerInformationComponent, MerchantInformationComponent],
 			imports: [MaterialModule, RouterTestingModule, Md2Module, FormsModule],
 			providers: providers
 		})
 			.compileComponents();
 	}
 
+	let connections: MockConnection[] = [];
+
 	function initialiseComponentWithReferenceData(mockBackend: MockBackend) {
-		let connections: MockConnection[] = [];
+		connections = [];
 		mockBackend.connections.subscribe((c: MockConnection) => connections.push(c));
 
 		createComponent();
 
 		connections[0].mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
 		connections[1].mockRespond(new Response(new ResponseOptions({ body: frequencies, status: 200 })));
+		tick();
+		fixture.detectChanges();
+
 		connections[2].mockRespond(new Response(new ResponseOptions({ body: idTypes, status: 200 })));
 		tick();
 		fixture.detectChanges();
@@ -85,7 +92,10 @@ describe('MandateFormComponent', () => {
 		beforeEach(async(() => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate(),
-				mode: 'form'
+				mode: 'form',
+				user: {
+					type: "MERCHANT"
+				}
 			}), false);
 		}));
 
@@ -120,7 +130,10 @@ describe('MandateFormComponent', () => {
 		beforeEach(async(() => {
 			setupTestBed({
 				mandate: mandate,
-				mode: 'dialog'
+				mode: 'dialog',
+				user: {
+					type: "MERCHANT"
+				}
 			}, true);
 		}));
 
@@ -144,7 +157,10 @@ describe('MandateFormComponent', () => {
 		beforeEach(async(() => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
-				mode: 'standAlone'
+				mode: 'standAlone',
+				user: {
+					type: "MERCHANT"
+				}
 			}), false);
 		}));
 
@@ -174,7 +190,10 @@ describe('MandateFormComponent', () => {
 		beforeEach(async(() => {
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandateAuthorised),
-				mode: 'standAlone'
+				mode: 'standAlone',
+				user: {
+					type: "MERCHANT"
+				}
 			}), false);
 		}));
 

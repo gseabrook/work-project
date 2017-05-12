@@ -5,27 +5,16 @@
             <input mdInput placeholder="Reference Number" required [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
             <md-hint align="start" class="errorHint" *ngIf="!referenceNumber.valid && referenceNumber.touched">Please enter a reference number</md-hint>
         </md-input-container>
-        <md-input-container>
-            <input mdInput placeholder="Name" required [(ngModel)]="model.customer.name" name="accountHolderName" #name="ngModel"/>
-            <md-hint align="start" class="errorHint" *ngIf="!name.valid && name.touched">Please enter a name</md-hint>
-        </md-input-container>
-        <md-input-container>
-            <input mdInput placeholder="Email" type="email" required [(ngModel)]="model.customer.emailAddress" name="email" />
-        </md-input-container>
-        <md-input-container>
-            <input mdInput placeholder="Phone Number" type="text" [(ngModel)]="model.customer.phoneNumber" name="phoneNumber" />
-        </md-input-container>
-        <div class="align-horizontally">
-            <md-select placeholder="ID Type" required [(ngModel)]="model.customer.idType" name="idType" #idType="ngModel">
-                <md-option *ngFor="let idType of idTypes" [value]="idType">
-                    {{ idType.displayValue }}
-                </md-option>
-            </md-select>
-            <md-input-container>
-                <input mdInput placeholder="ID Number" type="text" required [(ngModel)]="model.customer.idValue" name="idValue" #idValue="ngModel" />
-                <md-hint align="start" class="errorHint" *ngIf="!idValue.valid && idValue.touched">Please your ID number</md-hint>
-            </md-input-container>
-        </div>
+        
+        <span *ngIf="user" [ngSwitch]="user.type">
+            <customer-information *ngSwitchCase="'MERCHANT'" [customer]="model.customer"></customer-information>
+            <merchant-information *ngSwitchCase="'CUSTOMER'" [merchant]="model.merchant"></merchant-information>
+        </span>
+
+        <span *ngIf="!user">
+            <merchant-information [merchant]="model.merchant"></merchant-information>
+        </span>
+
         <div class="align-horizontally">
             <md-select placeholder="Bank Name" [(ngModel)]="model.customerBankAccount.bank" name="bank">
                 <md-option *ngFor="let bank of banks" [value]="bank">

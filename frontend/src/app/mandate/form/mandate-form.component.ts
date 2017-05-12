@@ -12,6 +12,7 @@ import { MandateService } from '../mandate.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
+import { User } from '../../model/user'; 
 import { MandateFormService } from './mandate-form.service';
 import { DisplayEnum } from '../model/displayEnum';
 
@@ -26,6 +27,7 @@ export class MandateFormComponent implements OnInit {
 	frequencyTypes: DisplayEnum[];
 	idTypes: DisplayEnum[];
 	model: Mandate;
+	user: User;
 	mode: string;
 	errors: ValidationError[] = [];
 
@@ -43,10 +45,12 @@ export class MandateFormComponent implements OnInit {
 		if (this.dialogRef) {
 			this.model = this.dialogRef.config.data.mandate.clone();
 			this.mode = 'dialog';
+			this.user = this.dialogRef.config.data.user;
 		} else {
-			this.route.data.subscribe((data: { mandate: Mandate, mode: string }) => {
+			this.route.data.subscribe((data: { user: User, mandate: Mandate, mode: string }) => {
 				this.model = data.mandate;
 				this.mode = data.mode;
+				this.user = data.user;
 			});
 		}
 
@@ -63,14 +67,6 @@ export class MandateFormComponent implements OnInit {
 
 			if (this.model.frequency) {
 				this.model.frequency = frequencies.filter(freq => freq.value === this.model.frequency.value)[0];
-			}
-		});
-
-		this.mandateFormService.getIdTypes().subscribe(idTypes => {
-			this.idTypes = idTypes;
-
-			if (this.model.customer.idType) {
-				this.model.customer.idType = idTypes.filter(idType => idType.value === this.model.customer.idType.value)[0];
 			}
 		});
 	}

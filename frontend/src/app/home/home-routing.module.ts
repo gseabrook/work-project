@@ -24,7 +24,8 @@ const homeRoutes: Routes = [
         path: 'mandate-form',
         component: MandateFormComponent,
         resolve: {
-          mandate: MandateFormResolver
+          mandate: MandateFormResolver,
+          user: UserResolverService
         }
       }, {
         path: '',

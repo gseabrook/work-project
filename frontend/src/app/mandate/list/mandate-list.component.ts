@@ -39,7 +39,8 @@ export class MandateListComponent implements OnInit {
 	selectMandate(mandate: Mandate) {
 		this.dialog.open(MandateFormComponent, {
 			data: {
-				mandate: mandate
+				mandate: mandate,
+				user: this.user
 			}
 		});
 	}
