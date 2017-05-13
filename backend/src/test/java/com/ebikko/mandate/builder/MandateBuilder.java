@@ -47,6 +47,7 @@ public class MandateBuilder {
                 .with("registrationDate", "2017-03-25")
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
+                .with("status", "AUTHORISED")
                 .with("merchant", 7l);
 
         Map<String, Object> customer = new HashMap<>();

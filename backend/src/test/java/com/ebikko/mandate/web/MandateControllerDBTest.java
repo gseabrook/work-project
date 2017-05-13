@@ -40,6 +40,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         mandate.setCustomerBankAccount(customerBankAccount);
 
         MandateDTO mandateDTO = mandateDTO(mandate);
+        mandateDTO.setStatus("AUTHORISED");
 
         mockMvc
                 .perform(

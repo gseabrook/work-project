@@ -19,9 +19,7 @@ describe('MandateListComponent', () => {
 	let component: MandateListComponent;
 	let fixture: ComponentFixture<MandateListComponent>;
 	let dialogMock = {
-		open: function(a, b) {
-			console.log("In mock");
-		}
+		open: function(a, b) {}
 	};
 	let confirmationDialogMock = {
 		openConfirmationDialog: function(){
@@ -68,7 +66,11 @@ describe('MandateListComponent', () => {
 	describe('Customer view', () => {
 
 		beforeEach(() => {
-			spyOn(dialogMock, 'open');
+			spyOn(dialogMock, 'open').and.returnValue({
+				afterClosed: function() {
+					return Observable.of(true);
+				}
+			});
 			setupTestBed(Observable.of({
 				user: {
 					type: "CUSTOMER"

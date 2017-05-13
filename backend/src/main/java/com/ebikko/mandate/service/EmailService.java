@@ -52,10 +52,10 @@ public class EmailService {
         sendEmail(recipientAddress, subject, message);
     }
 
-    public void sendCustomerMandateConfirmationEmail(Mandate mandate) {
+    public void sendCustomerMandateAuthorisedEmail(Mandate mandate) {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
-        String subject = "MyDirectDebit - Mandate created";
-        String message = "A new mandate has been created for you";
+        String subject = "MyDirectDebit - Mandate authorised";
+        String message = "A new mandate has been authorised for you";
         message = addMandateDetails(mandate, message);
         message += "<br/>Please log in to review - " + appUrl;
 

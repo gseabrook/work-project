@@ -9,42 +9,45 @@ import { MandateFormResolver } from '../mandate/form/mandate-form-resolver.servi
 import { UserResolverService } from '../auth/user-resolver.service';
 
 const homeRoutes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'mandate-list',
-        component: MandateListComponent,
-        resolve: {
-          user: UserResolverService
-        }
-      }, {
-        path: 'mandate-form',
-        component: MandateFormComponent,
-        resolve: {
-          mandate: MandateFormResolver,
-          user: UserResolverService
-        }
-      }, {
-        path: '',
-        redirectTo: 'mandate-list',
-        pathMatch: 'full'
-      }
-    ]
-  }
+	{
+		path: 'home',
+		component: HomeComponent,
+		canActivate: [AuthGuard],
+		resolve: {
+			user: UserResolverService
+		},
+		children: [
+			{
+				path: 'mandate-list',
+				component: MandateListComponent,
+				resolve: {
+					user: UserResolverService
+				}
+			}, {
+				path: 'mandate-form',
+				component: MandateFormComponent,
+				resolve: {
+					mandate: MandateFormResolver,
+					user: UserResolverService
+				}
+			}, {
+				path: '',
+				redirectTo: 'mandate-list',
+				pathMatch: 'full'
+			}
+		]
+	}
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(homeRoutes)
-  ],
-  exports: [
-    RouterModule
-  ],
-  providers: [
-    MandateFormResolver
-  ]
+	imports: [
+		RouterModule.forChild(homeRoutes)
+	],
+	exports: [
+		RouterModule
+	],
+	providers: [
+		MandateFormResolver
+	]
 })
 export class HomeRoutingModule { }

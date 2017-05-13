@@ -19,6 +19,11 @@ export class Mandate implements Serializable<Mandate> {
 	constructor() {
 		this.customer = new Customer();
 		this.customerBankAccount = new BankAccount();
+		this.status = DisplayEnum.of("PENDING_AUTHORISATION", "Pending Authorisation");
+	}
+
+	authorise() {
+		this.status = DisplayEnum.of('AUTHORISED', 'Authorised');
 	}
 
 	clone(): Mandate {
@@ -43,7 +48,20 @@ export class Mandate implements Serializable<Mandate> {
     	return this;
 	}
 
+	hasBankInformation() {
+		return this.customerBankAccount && 
+			this.customerBankAccount.accountNumber &&
+			this.customerBankAccount.accountNumber.length > 0 &&
+			this.customerBankAccount.bank &&
+			this.customerBankAccount.bank.id &&
+			this.customerBankAccount.bank.id.toString().length > 0;
+	}
+
 	isTerminated() {
 		return this.status.value === "TERMINATED";
+	}
+
+	terminate() {
+		this.status = DisplayEnum.of("TERMINATED", "Terminated");
 	}
 }

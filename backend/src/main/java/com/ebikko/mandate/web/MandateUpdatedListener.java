@@ -43,7 +43,7 @@ public class MandateUpdatedListener {
                 Principal principal = principalService.findById(customer.getPrincipalUid());
 
                 if (principal.isCanLogin()) {
-                    emailService.sendCustomerMandateConfirmationEmail(mandate);
+                    emailService.sendCustomerMandateAuthorisedEmail(mandate);
                 } else {
                     sendSignUpEmail(customer, principal);
                 }

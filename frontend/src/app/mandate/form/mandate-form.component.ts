@@ -71,8 +71,8 @@ export class MandateFormComponent implements OnInit {
 		});
 	}
 
-	close() {
-		this.dialogRef.close();
+	close(success) {
+		this.dialogRef.close(success ? this.model : undefined);
 	}
 
 	displayFormErrors(mandateForm: NgForm) {
@@ -102,6 +102,7 @@ export class MandateFormComponent implements OnInit {
 		if (mandateForm.valid) {
 			this.showFpxDialog().afterClosed().subscribe(success => {
 				if (success) {
+					this.model.authorise();
 					this.mandateService.save(this.model).subscribe(
 						result => this.handleSuccess(result),
 						error => this.handleError(error)
@@ -121,12 +122,19 @@ export class MandateFormComponent implements OnInit {
 		});
 	}
 
-	update(mandateForm: NgForm) {
+	authorise(mandateForm: NgForm) {
 		if (mandateForm.valid) {
 			this.showFpxDialog().afterClosed().subscribe(success => {
 				if (success) {
+					this.model.authorise();
 					this.mandateService.update(this.model).subscribe(
-						result => this.router.navigate(['/mandate-complete'])
+						result => {
+							if (this.dialogRef) {
+								this.close(true);
+							} else {
+								this.router.navigate(['/mandate-complete'])
+							}
+						}
 					);
 				}
 			});

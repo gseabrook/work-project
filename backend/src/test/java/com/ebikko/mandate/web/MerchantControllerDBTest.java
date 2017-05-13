@@ -168,7 +168,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateBuilder().toJson())
+                        .content(exampleMandateBuilder().with("status", "PENDING_AUTHORISATION").toJson())
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
@@ -187,6 +187,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
                     "'registrationDate': '2017-03-25'," +
                     "'amount': '123.45'," +
                     "'frequency': 'MONTHLY'," +
+                    "'status': 'AUTHORISED'," +
                     "'customerBankAccount': {" +
                     "    'bankId': '5'," +
                     "    'accountNumber': '12323537'" +

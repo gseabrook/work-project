@@ -17,6 +17,7 @@ public class MandateDTO {
     @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
     private String frequency;
+    @NotNull(message = "Status cannot be blank")
     private String status;
     private CustomerDTO customer;
     private BankAccountDTO customerBankAccount;

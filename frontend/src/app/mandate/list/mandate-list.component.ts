@@ -42,6 +42,11 @@ export class MandateListComponent implements OnInit {
 				mandate: mandate,
 				user: this.user
 			}
+		}).afterClosed().subscribe(updatedMandate => {
+			if (updatedMandate) {
+				let idx = this.mandates.findIndex(m => m.id === updatedMandate.id);
+				this.mandates.splice(idx, 1, updatedMandate);
+			}
 		});
 	}
 
@@ -50,7 +55,7 @@ export class MandateListComponent implements OnInit {
 			message: 'Are you sure you wish to terminate this mandate?'
 		}).subscribe((success) => {
 			if (success) {
-				mandate.status = DisplayEnum.of("TERMINATED", "Terminated");
+				mandate.terminate();
 				this.mandateService.update(mandate).subscribe(() => { });
 				this.snackBar.open("Mandate terminated", "", {
 					duration: 2000

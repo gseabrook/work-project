@@ -31,6 +31,7 @@ public class MandateDTOTranslator {
         mandate.setRegistrationDate(mandateDTO.getRegistrationDate());
         mandate.setAmount(mandateDTO.getAmount());
         mandate.setFrequency(MandateFrequency.valueOf(mandateDTO.getFrequency()));
+        mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
 
         if (!isBlank(mandateDTO.getStatus())) {
             mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
@@ -38,21 +39,15 @@ public class MandateDTOTranslator {
 
         Customer customer = customerResolver.resolveCustomer(mandateDTO.getCustomer(), mandateDTO.getCustomerBankAccount());
 
-        if (mandate.getStatus() != MandateStatus.TERMINATED) {
-            BankAccountDTO bankAccountDTO = mandateDTO.getCustomerBankAccount();
-            if (bankAccountDTO != null && bankAccountDTO.getBankId() != null) {
-                Bank bank = bankService.getBank(bankAccountDTO.getBankId());
-                CustomerBankAccount customerBankAccount = new CustomerBankAccount(bank, bankAccountDTO.getAccountNumber());
-                mandate.setCustomerBankAccount(customerBankAccount);
-                mandate.setStatus(MandateStatus.AUTHORISED);
-            } else {
-                mandate.setStatus(MandateStatus.PENDING_AUTHORISATION);
-            }
+        BankAccountDTO bankAccountDTO = mandateDTO.getCustomerBankAccount();
+        if (bankAccountDTO != null && bankAccountDTO.getBankId() != null) {
+            Bank bank = bankService.getBank(bankAccountDTO.getBankId());
+            CustomerBankAccount customerBankAccount = new CustomerBankAccount(bank, bankAccountDTO.getAccountNumber());
+            mandate.setCustomerBankAccount(customerBankAccount);
         }
 
         mandate.setCustomer(customer);
         customer.addMandate(mandate);
-
         return mandate;
     }
 }
