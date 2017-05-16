@@ -21,6 +21,7 @@ public class MandateDTO {
     private String status;
     private CustomerDTO customer;
     private BankAccountDTO customerBankAccount;
+    private String nodeId;
 
     public MandateDTO() {}
 
@@ -86,5 +87,13 @@ public class MandateDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 }

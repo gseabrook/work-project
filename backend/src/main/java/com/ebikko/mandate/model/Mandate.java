@@ -32,6 +32,8 @@ public class Mandate {
     private Merchant merchant;
     @ManyToOne(cascade = CascadeType.ALL)
     private CustomerBankAccount customerBankAccount;
+    @Column
+    private String nodeId;
 
     public Mandate() {
     }
@@ -106,6 +108,14 @@ public class Mandate {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
 
     @Override

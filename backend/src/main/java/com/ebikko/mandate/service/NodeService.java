@@ -9,6 +9,7 @@ import com.ebikko.mandate.model.Merchant;
 import ebikko.EbikkoException;
 import ebikko.Node;
 import ebikko.Session;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,14 @@ public class NodeService {
             sessionService.performSessionAction(new SessionAction<Void>() {
                 @Override
                 public Void perform(Session session) throws EbikkoException {
-                    Node mandateNode = new Node(session.getNodeTypeByName(MANDATE_NODE_TYPE));
+
+                    Node mandateNode;
+
+                    if (StringUtils.isBlank(mandate.getNodeId())) {
+                        mandateNode = new Node(session.getNodeTypeByName(MANDATE_NODE_TYPE));
+                    } else {
+                        mandateNode = session.getNode(mandate.getNodeId());
+                    }
 
                     Customer customer = mandate.getCustomer();
                     mandateNode.setValue("Name", customer.getName());
@@ -39,6 +47,7 @@ public class NodeService {
                     mandateNode.setValue("Phone Number", customer.getPhoneNumber());
                     mandateNode.setValue("ID Type", customer.getIdType().getDisplayValue());
                     mandateNode.setValue("ID Number", customer.getIdValue());
+                    mandateNode.setValue("Status", mandate.getStatus().toString());
 
                     CustomerBankAccount customerBankAccount = mandate.getCustomerBankAccount();
                     if (customerBankAccount != null) {
@@ -57,6 +66,7 @@ public class NodeService {
                     mandateNode.setValue("Company Registration No", merchant.getCompanyRegistrationNumber());
 
                     mandateNode.save();
+                    mandate.setNodeId(mandateNode.getUid());
 
                     return null;
                 }

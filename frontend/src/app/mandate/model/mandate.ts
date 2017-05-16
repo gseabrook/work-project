@@ -7,6 +7,7 @@ import { DisplayEnum } from './displayEnum';
 export class Mandate implements Serializable<Mandate> {
 
 	public id: number;
+	public nodeId: string;
 	public referenceNumber: string;
 	public registrationDate: Date;
 	public amount: string;
@@ -35,6 +36,7 @@ export class Mandate implements Serializable<Mandate> {
 
     deserialize(input){
     	this.id = input.id;
+    	this.nodeId = input.nodeId;
     	this.referenceNumber = input.referenceNumber;
     	this.registrationDate = new Date(input.registrationDate);
     	this.amount = input.amount;

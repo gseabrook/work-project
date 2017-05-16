@@ -24,9 +24,14 @@ public class MandateDTOTranslator {
 
     public Mandate translate(MandateDTO mandateDTO) {
         Mandate mandate = new Mandate();
+
         if (!isBlank(mandateDTO.getId())) {
             mandate.setId(Long.valueOf(mandateDTO.getId()));
         }
+        if (!isBlank(mandateDTO.getNodeId())) {
+            mandate.setNodeId(mandateDTO.getNodeId());
+        }
+
         mandate.setReferenceNumber(mandateDTO.getReferenceNumber());
         mandate.setRegistrationDate(mandateDTO.getRegistrationDate());
         mandate.setAmount(mandateDTO.getAmount());
