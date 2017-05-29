@@ -1,9 +1,6 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.mandate.model.ErrorResponse;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.Merchant;
-import com.ebikko.mandate.model.User;
+import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.model.event.MandateUpdatedEvent;
 import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
@@ -93,7 +90,7 @@ public class MerchantController {
             merchant.addMandate(mandate);
             mandateService.save(mandate);
             applicationEventPublisher.publishEvent(new MandateUpdatedEvent(mandate));
-            return new ResponseEntity(HttpStatus.CREATED);
+            return new ResponseEntity(new FpxADMessageDTO(mandate), HttpStatus.CREATED);
         }
     }
 }

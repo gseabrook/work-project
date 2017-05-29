@@ -3,8 +3,14 @@ package com.ebikko.mandate.builder;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.web.dto.MandateDTO;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import static com.ebikko.mandate.builder.BankAccountDTOBuilder.bankAccountDTO;
+import static com.ebikko.mandate.builder.BankAccountDTOBuilder.exampleBankAccountDTO;
 import static com.ebikko.mandate.builder.CustomerDTOBuilder.customerDTO;
+import static com.ebikko.mandate.builder.CustomerDTOBuilder.exampleCustomerDTO;
 
 public class MandateDTOBuilder {
 
@@ -22,5 +28,23 @@ public class MandateDTOBuilder {
             mandateDTO.setCustomerBankAccount(bankAccountDTO(mandate.getCustomerBankAccount()));
         }
         return mandateDTO;
+    }
+
+    public static MandateDTO exampleMandateDTO(String referenceNumber) {
+        MandateDTO mandateDTO = new MandateDTO();
+        mandateDTO.setReferenceNumber(referenceNumber);
+        try {
+            mandateDTO.setRegistrationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-03-25"));
+        } catch (ParseException e) {}
+        mandateDTO.setAmount(BigDecimal.valueOf(123.45));
+        mandateDTO.setFrequency("MONTHLY");
+        mandateDTO.setStatus("AUTHORISED");
+        mandateDTO.setCustomerBankAccount(exampleBankAccountDTO());
+        mandateDTO.setCustomer(exampleCustomerDTO());
+        return mandateDTO;
+    }
+
+    public static MandateDTO exampleMandateDTO() {
+        return exampleMandateDTO("123-abc-def");
     }
 }

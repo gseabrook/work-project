@@ -1,7 +1,6 @@
-package com.ebikko.mandate.service;
+package com.ebikko.banks;
 
 import com.ebikko.mandate.model.Bank;
-import com.ebikko.mandate.repository.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

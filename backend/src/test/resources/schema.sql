@@ -12,7 +12,7 @@ drop table if exists user_verification_token CASCADE;
 
 create sequence hibernate_sequence;
 
-create table bank (id SERIAL UNIQUE, code varchar(255), name varchar(255), primary key (id));
+create table bank (id SERIAL UNIQUE, code varchar(255), name varchar(255), display_name varchar(255), primary key (id));
 create table customer (id SERIAL UNIQUE, email_address varchar(255), id_type integer, id_value varchar(255), name varchar(255), phone_number varchar(255), principal_uid varchar(255), primary key (id));
 create table customer_bank_accounts (customer_id integer not null, bank_accounts_id integer not null);
 create table customer_bank_account (id SERIAL UNIQUE, account_number varchar(255), bank_id integer, customer_id integer, primary key (id));

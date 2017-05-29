@@ -1,10 +1,16 @@
 package com.ebikko.mandate.web.dto;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class CustomerDTO {
 
+    @NotBlank(message = "Please enter a name")
     private String name;
+    @NotBlank(message = "Please enter an email address")
     private String emailAddress;
+    @NotBlank(message = "Please enter an ID Type")
     private String idType;
+    @NotBlank(message = "Please enter an ID Value")
     private String idValue;
     private String phoneNumber;
 

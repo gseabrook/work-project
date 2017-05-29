@@ -141,7 +141,7 @@ describe('MandateFormComponent', () => {
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
 			let connection = connections.pop();
 
-			expect(connection.request.getBody()).toContain('"status":"AUTHORISED"');
+			expect(connection.request.getBody()).toContain('"status":"PENDING_AUTHORISATION"');
 			tick(1000);
 		})));
 	});

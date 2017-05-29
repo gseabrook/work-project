@@ -1,5 +1,6 @@
 package com.ebikko.mandate.service;
 
+import com.ebikko.banks.BankService;
 import com.ebikko.mandate.model.Bank;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.CustomerBankAccount;

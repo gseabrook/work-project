@@ -38,7 +38,9 @@ export class Mandate implements Serializable<Mandate> {
     	this.id = input.id;
     	this.nodeId = input.nodeId;
     	this.referenceNumber = input.referenceNumber;
-    	this.registrationDate = new Date(input.registrationDate);
+    	if (input.registrationDate) {
+    		this.registrationDate = new Date(input.registrationDate);
+    	}
     	this.amount = input.amount;
     	this.frequency = new DisplayEnum().deserialize(input.frequency);
     	this.customer = new Customer().deserialize(input.customer);

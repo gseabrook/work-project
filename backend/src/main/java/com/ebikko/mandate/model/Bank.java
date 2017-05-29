@@ -15,6 +15,8 @@ public class Bank {
     private String code;
     @Column
     private String name;
+    @Column
+    private String displayName;
 
     public Bank() {
     }
@@ -43,6 +45,10 @@ public class Bank {
 
     public Long getId() {
         return id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     @Override

@@ -11,4 +11,12 @@ public class BankAccountDTOBuilder {
         bankAccountDTO.setBankId(customerBankAccount.getBank().getId());
         return bankAccountDTO;
     }
+
+    public static BankAccountDTO exampleBankAccountDTO() {
+        BankAccountDTO bankAccountDTO = new BankAccountDTO();
+        bankAccountDTO.setBankId(5l);
+        bankAccountDTO.setAccountNumber("12323537");
+        return bankAccountDTO;
+    }
+
 }

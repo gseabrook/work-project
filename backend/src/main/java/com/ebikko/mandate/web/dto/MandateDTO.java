@@ -2,6 +2,7 @@ package com.ebikko.mandate.web.dto;
 
 import com.ebikko.mandate.web.UniqueReferenceNumber;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class MandateDTO {
     private String frequency;
     @NotNull(message = "Status cannot be blank")
     private String status;
+    @Valid
     private CustomerDTO customer;
     private BankAccountDTO customerBankAccount;
     private String nodeId;

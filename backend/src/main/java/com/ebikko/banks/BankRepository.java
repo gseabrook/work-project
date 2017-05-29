@@ -1,4 +1,4 @@
-package com.ebikko.mandate.repository;
+package com.ebikko.banks;
 
 import com.ebikko.mandate.model.Bank;
 import org.springframework.data.repository.CrudRepository;

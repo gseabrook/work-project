@@ -1,0 +1,19 @@
+{
+  "fpx_msgType": "AD",
+  "fpx_msgToken": "01",
+  "fpx_sellerExId": null,
+  "fpx_sellerExOrderNo": null,
+  "fpx_sellerTxnTime": "20170325000000",
+  "fpx_sellerOrderNo": null,
+  "fpx_sellerId": null,
+  "fpx_sellerBankCode": null,
+  "fpx_txnCurrency": "MYR",
+  "fpx_txnAmount": "123.45",
+  "fpx_buyerEmail": "joe@example.com",
+  "fpx_checkSum": null,
+  "fpx_buyerBankId": "BOFA0207",
+  "fpx_buyerId": "456789123,3",
+  "fpx_buyerIBan": "02,,MT,250317,",
+  "fpx_productDesc": null,
+  "fpx_version": "7.0"
+}

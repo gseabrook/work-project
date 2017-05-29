@@ -14,9 +14,12 @@ import org.springframework.boot.autoconfigure.web.ErrorViewResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.Integer.parseInt;
 
 @Configuration
@@ -48,6 +52,13 @@ public class WebConfiguration {
         SimpleModule m = new SimpleModule();
         m.addSerializer(DisplayEnum.class, new DisplayEnumSerializer());
         return new Jackson2ObjectMapperBuilder().modules(m);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate(newArrayList(
+                new FormHttpMessageConverter(),
+                new StringHttpMessageConverter()));
     }
 
     @Autowired

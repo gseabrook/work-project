@@ -29,6 +29,7 @@ export class MandateFormComponent implements OnInit {
 	model: Mandate;
 	user: User;
 	mode: string;
+	fpxData: any;
 	errors: ValidationError[] = [];
 
 	constructor(
@@ -98,17 +99,30 @@ export class MandateFormComponent implements OnInit {
 		}
 	}
 
+	processFpxRedirect(result: Response) {
+		var form = document.createElement("form");
+    	form.setAttribute("method", "POST");
+    	form.setAttribute("action", "http://localhost:8080");
+		var fpxFormData = result.json();
+
+		for (const key of Object.keys(fpxFormData)) {
+			var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", fpxFormData[key]);
+            form.appendChild(hiddenField);
+		}
+
+		document.body.appendChild(form);
+		form.submit();    	
+	}
+
 	save(mandateForm: NgForm) {
 		if (mandateForm.valid) {
-			this.showFpxDialog().afterClosed().subscribe(success => {
-				if (success) {
-					this.model.authorise();
-					this.mandateService.save(this.model).subscribe(
-						result => this.handleSuccess(result),
-						error => this.handleError(error)
-					);
-				}
-			});
+			this.mandateService.save(this.model).subscribe(
+				result => this.processFpxRedirect(result),
+				error => this.handleError(error)
+			);
 		} else {
 			this.displayFormErrors(mandateForm);
 		}

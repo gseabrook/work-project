@@ -1,9 +1,13 @@
 package com.ebikko.mandate.web;
 
+import com.ebikko.mandate.builder.MandateDTOBuilder;
 import com.ebikko.mandate.model.*;
+import com.ebikko.mandate.web.dto.MandateDTO;
 import com.ebikko.signup.UserVerificationToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -12,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.util.List;
 import java.util.Map;
 
+import static com.ebikko.mandate.builder.CustomerDTOBuilder.customerDtoBuilder;
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
 import static com.ebikko.mandate.model.MandateStatus.PENDING_AUTHORISATION;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
@@ -32,15 +37,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
+    private Merchant merchant;
+    private User user;
+
     @Before
     public void setUp() throws Exception {
+        merchant = testDataService.createMerchant();
+
+        user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
+        super.setAuthenticationPrincipal(user);
+    }
+
+    @After
+    public void tearDown() throws Exception {
         testDataService.resetPrincipals();
     }
 
     @Test
     public void shouldRetrieveMerchantInformation() throws Exception {
-        Merchant merchant = testDataService.createMerchant();
-
         String contentAsString = mockMvc
                 .perform(get(MERCHANT_URL + "/" + merchant.getId()).with(user("Bob")))
                 .andExpect(status().isOk())
@@ -68,15 +82,11 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Test
     public void shouldCreateMandateForMerchant() throws Exception {
-        Merchant merchant = testDataService.createMerchant();
-        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
-        super.setAuthenticationPrincipal(user);
-
-        String json = exampleMandateDTO();
+        String json = exampleMandateDTO("abc-def-123");
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(json.replaceAll("'", "\""))
+                        .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
@@ -115,20 +125,16 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Test
     public void shouldLinkMandatesWithExistingCustomer() throws Exception {
-        Merchant merchant = testDataService.createMerchant();
-        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
-        super.setAuthenticationPrincipal(user);
-
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateDTO("abc-1").replaceAll("'", "\""))
+                        .content(exampleMandateDTO("abc-1"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateDTO("abc-2").replaceAll("'", "\""))
+                        .content(exampleMandateDTO("abc-2"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
@@ -154,7 +160,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(json.replaceAll("'", "\""))
+                        .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isUnprocessableEntity());
@@ -162,9 +168,6 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Test
     public void shouldSupportMandatesWithoutCustomerBankInformation() throws Exception {
-        Merchant merchant = testDataService.createMerchant();
-        User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
-        super.setAuthenticationPrincipal(user);
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
@@ -177,27 +180,30 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         assertThat(mandate.getStatus(), is(PENDING_AUTHORISATION));
     }
 
-    private String exampleMandateDTO() {
-        return exampleMandateDTO("123-abc-def");
+    @Test
+    public void shouldRejectCustomerWithoutRequiredFields() throws Exception {
+        MandateDTO mandateDTO = MandateDTOBuilder.exampleMandateDTO();
+        mandateDTO.setCustomer(customerDtoBuilder().withEmailAddress(null).build());
+
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(toJson(mandateDTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isUnprocessableEntity());
+    }
+
+    private String toJson(MandateDTO mandateDTO) {
+        try {
+            String string = new ObjectMapper().writeValueAsString(mandateDTO);
+            return string.replaceAll("'", "\"");
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String exampleMandateDTO(String referenceNumber) {
-        return "{" +
-                    "'referenceNumber': '" + referenceNumber +"'," +
-                    "'registrationDate': '2017-03-25'," +
-                    "'amount': '123.45'," +
-                    "'frequency': 'MONTHLY'," +
-                    "'status': 'AUTHORISED'," +
-                    "'customerBankAccount': {" +
-                    "    'bankId': '5'," +
-                    "    'accountNumber': '12323537'" +
-                    "}," +
-                    "'customer': {" +
-                        "'name': 'Joe'," +
-                        "'emailAddress': 'joe@example.com'," +
-                        "'idType': 'PASSPORT_NUMBER'," +
-                        "'idValue': '456789123'" +
-                        "}" +
-                    "}";
+        MandateDTO mandateDTO = MandateDTOBuilder.exampleMandateDTO(referenceNumber);
+        return toJson(mandateDTO);
     }
 }

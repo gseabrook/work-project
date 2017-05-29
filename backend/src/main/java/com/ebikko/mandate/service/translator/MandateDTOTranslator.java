@@ -1,7 +1,7 @@
 package com.ebikko.mandate.service.translator;
 
 import com.ebikko.mandate.model.*;
-import com.ebikko.mandate.service.BankService;
+import com.ebikko.banks.BankService;
 import com.ebikko.mandate.service.CustomerResolver;
 import com.ebikko.mandate.web.dto.BankAccountDTO;
 import com.ebikko.mandate.web.dto.MandateDTO;
