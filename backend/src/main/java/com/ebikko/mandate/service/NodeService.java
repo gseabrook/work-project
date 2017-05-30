@@ -9,13 +9,13 @@ import com.ebikko.mandate.model.Merchant;
 import ebikko.EbikkoException;
 import ebikko.Node;
 import ebikko.Session;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 import static com.ebikko.mandate.model.Mandate.MANDATE_NODE_TYPE;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class NodeService {
@@ -35,7 +35,7 @@ public class NodeService {
 
                     Node mandateNode;
 
-                    if (StringUtils.isBlank(mandate.getNodeId())) {
+                    if (isBlank(mandate.getNodeId())) {
                         mandateNode = new Node(session.getNodeTypeByName(MANDATE_NODE_TYPE));
                     } else {
                         mandateNode = session.getNode(mandate.getNodeId());

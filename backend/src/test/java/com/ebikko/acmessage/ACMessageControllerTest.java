@@ -1,10 +1,12 @@
 package com.ebikko.acmessage;
 
+import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.web.AbstractEmbeddedDBControllerTest;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import static com.ebikko.acmessage.ACMessageController.AC_MESSAGE_URL;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,13 +16,15 @@ public class ACMessageControllerTest extends AbstractEmbeddedDBControllerTest {
     @Test
     public void shouldProcessValidACMessage() throws Exception {
 
+        Mandate pendingMandate = testDataService.createPendingMandate();
+
         mockMvc.perform(post(AC_MESSAGE_URL)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("fpx_msgType","AC")
                 .param("fpx_msgToken","01")
                 .param("fpx_fpxTxnId","1610181200130689")
                 .param("fpx_sellerExId","EX00002460")
-                .param("fpx_sellerExOrderNo","2204757146129723630")
+                .param("fpx_sellerExOrderNo",pendingMandate.getId().toString())
                 .param("fpx_fpxTxnTime","20161018115351")
                 .param("fpx_sellerTxnTime","20161018120215")
                 .param("fpx_sellerOrderNo","5408327679348321178")
@@ -41,5 +45,9 @@ public class ACMessageControllerTest extends AbstractEmbeddedDBControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string("OK"));
+
+        Mandate savedMandate = mandateRepository.findOne(pendingMandate.getId());
+
+        assertTrue(savedMandate.getStatus().isAuthorised());
     }
 }

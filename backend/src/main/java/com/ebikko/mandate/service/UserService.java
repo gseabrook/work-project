@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import static com.ebikko.mandate.model.User.UserType;
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class UserService {

@@ -1,25 +1,30 @@
 package com.ebikko.mandate.service.translator;
 
-import com.ebikko.mandate.model.*;
 import com.ebikko.banks.BankService;
+import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.service.CustomerResolver;
+import com.ebikko.mandate.service.MandateStatusService;
 import com.ebikko.mandate.web.dto.BankAccountDTO;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import java.math.BigDecimal;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class MandateDTOTranslator {
 
     private final CustomerResolver customerResolver;
     private final BankService bankService;
+    private final MandateStatusService mandateStatusService;
 
     @Autowired
-    public MandateDTOTranslator(CustomerResolver customerResolver, BankService bankService) {
+    public MandateDTOTranslator(CustomerResolver customerResolver, BankService bankService, MandateStatusService mandateStatusService) {
         this.customerResolver = customerResolver;
         this.bankService = bankService;
+        this.mandateStatusService = mandateStatusService;
     }
 
     public Mandate translate(MandateDTO mandateDTO) {
@@ -34,13 +39,9 @@ public class MandateDTOTranslator {
 
         mandate.setReferenceNumber(mandateDTO.getReferenceNumber());
         mandate.setRegistrationDate(mandateDTO.getRegistrationDate());
-        mandate.setAmount(mandateDTO.getAmount());
+        mandate.setAmount(new BigDecimal(mandateDTO.getAmount()));
         mandate.setFrequency(MandateFrequency.valueOf(mandateDTO.getFrequency()));
-        mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
-
-        if (!isBlank(mandateDTO.getStatus())) {
-            mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
-        }
+        mandate.setStatus(mandateStatusService.getMandateStatus(mandateDTO.getStatus()));
 
         Customer customer = customerResolver.resolveCustomer(mandateDTO.getCustomer(), mandateDTO.getCustomerBankAccount());
 

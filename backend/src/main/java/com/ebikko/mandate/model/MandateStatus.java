@@ -1,25 +1,63 @@
 package com.ebikko.mandate.model;
 
-public enum MandateStatus implements DisplayEnum {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    PENDING_AUTHORISATION("Pending Authorisation", "01"),
-    AUTHORISED("Authorised", "02"),
-    TERMINATED("Terminated", "03");
+import javax.persistence.*;
 
-    private final String displayValue;
-    private final String fpxId;
+@Entity
+public class MandateStatus {
 
-    MandateStatus(String displayValue, String fpxId) {
-        this.displayValue = displayValue;
-        this.fpxId = fpxId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    @Column
+    private String code;
+    @Column
+    private String description;
+
+    public MandateStatus() {}
+
+    @JsonIgnore
+    public boolean isAwaitingFPXProcessing() {
+        return "-1".equals(code);
     }
 
-    @Override
-    public String getDisplayValue() {
-        return displayValue;
+    @JsonIgnore
+    public boolean isAuthorised() {
+        return "00".equals(code);
     }
 
-    public String getFpxId() {
-        return fpxId;
+    @JsonIgnore
+    public boolean isPending() {
+        return "09".equals(code);
+    }
+
+    @JsonIgnore
+    public boolean isCancelled() {
+        return "BC".equals(code);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

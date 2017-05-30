@@ -24,7 +24,7 @@ public class Mandate {
     private BigDecimal amount;
     @Column
     private MandateFrequency frequency;
-    @Column
+    @ManyToOne
     private MandateStatus status;
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;

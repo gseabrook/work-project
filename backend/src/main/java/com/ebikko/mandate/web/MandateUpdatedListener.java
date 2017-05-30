@@ -2,7 +2,6 @@ package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.MandateStatus;
 import com.ebikko.mandate.model.event.MandateUpdatedEvent;
 import com.ebikko.mandate.service.EmailService;
 import com.ebikko.mandate.service.PrincipalService;
@@ -35,7 +34,7 @@ public class MandateUpdatedListener {
         Mandate mandate = mandateUpdatedEvent.getMandate();
         Customer customer = mandate.getCustomer();
 
-        if (mandate.getStatus() == MandateStatus.AUTHORISED) {
+        if (mandate.getStatus().isAuthorised()) {
             if (customer.getPrincipalUid() == null) {
                 Principal principal = principalService.createPrincipal(customer);
                 sendSignUpEmail(customer, principal);
@@ -48,13 +47,13 @@ public class MandateUpdatedListener {
                     sendSignUpEmail(customer, principal);
                 }
             }
-        } else if (mandate.getStatus() == MandateStatus.PENDING_AUTHORISATION) {
+        } else if (mandate.getStatus().isPending()) {
             if (customer.getPrincipalUid() == null) {
                 principalService.createPrincipal(customer);
             }
 
             emailService.sendPendingAuthorisationEmail(mandate);
-        } else if (mandate.getStatus() == MandateStatus.TERMINATED) {
+        } else if (mandate.getStatus().isCancelled()) {
             emailService.sendCustomerMandateTerminatedEmail(mandate);
         }
     }

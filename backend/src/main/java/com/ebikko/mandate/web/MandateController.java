@@ -15,8 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,18 +37,6 @@ public class MandateController {
         this.service = service;
         this.mandateDTOTranslator = mandateDTOTranslator;
         this.applicationEventPublisher = applicationEventPublisher;
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody @Validated Mandate mandate, BindingResult bindingResult) throws EbikkoException {
-
-        if (bindingResult.hasErrors()) {
-            ErrorResponse errorResponse = new ErrorResponse(bindingResult);
-            return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
-        } else {
-            service.save(mandate);
-            return new ResponseEntity(HttpStatus.CREATED);
-        }
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{mandateId}")

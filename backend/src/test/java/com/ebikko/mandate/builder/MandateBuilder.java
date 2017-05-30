@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ebikko.mandate.builder.CustomerBuilder.exampleCustomer;
+import static com.ebikko.mandate.builder.MandateStatusBuilder.authorised;
+import static com.ebikko.mandate.builder.MandateStatusBuilder.pendingFpxProcessing;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
 import static com.ebikko.mandate.model.MandateFrequency.*;
-import static com.ebikko.mandate.model.MandateStatus.AUTHORISED;
-import static com.ebikko.mandate.model.MandateStatus.PENDING_AUTHORISATION;
 
 public class MandateBuilder {
 
@@ -47,7 +47,7 @@ public class MandateBuilder {
                 .with("registrationDate", "2017-03-25")
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
-                .with("status", "AUTHORISED")
+                .with("status", "-1")
                 .with("merchant", 7l);
 
         Map<String, Object> customer = new HashMap<>();
@@ -80,9 +80,9 @@ public class MandateBuilder {
         mandate.setMerchant(merchant);
         if (!customer.getBankAccounts().isEmpty()) {
             mandate.setCustomerBankAccount(customer.getBankAccounts().get(0));
-            mandate.setStatus(AUTHORISED);
+            mandate.setStatus(authorised());
         } else {
-            mandate.setStatus(PENDING_AUTHORISATION);
+            mandate.setStatus(pendingFpxProcessing());
         }
         customer.addMandate(mandate);
         merchant.addMandate(mandate);

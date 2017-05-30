@@ -3,10 +3,10 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.CustomerBankAccount;
 import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.MandateStatus;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
@@ -15,6 +15,7 @@ import static com.ebikko.mandate.builder.MandateDTOBuilder.mandateDTO;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -31,6 +32,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Ignore("Ignoring this as the authorisation will be driven by messages we receive from FPX, so don't think this makes sense")
     @Test
     public void shouldUpdateMandateWithCustomerBankInformation() throws Exception {
         Mandate mandate = testDataService.createPendingMandate();
@@ -63,7 +65,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
     public void shouldEmailTheCustomerWhenMandateIsTerminated() throws Exception {
         Mandate mandate = testDataService.createMandate();
         MandateDTO mandateDTO = mandateDTO(mandate);
-        mandateDTO.setStatus(MandateStatus.TERMINATED.toString());
+        mandateDTO.setStatus("BC");
 
         mockMvc
                 .perform(
@@ -74,7 +76,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
                 .andExpect(status().isNoContent());
 
         Mandate savedMandate = mandateService.getMandate(mandate.getId());
-        assertThat(savedMandate.getStatus(), is(MandateStatus.TERMINATED));
+        assertTrue(savedMandate.getStatus().isCancelled());
 
         verify(emailService).sendCustomerMandateTerminatedEmail(savedMandate);
     }

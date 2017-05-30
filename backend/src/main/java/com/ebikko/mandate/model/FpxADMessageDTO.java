@@ -5,6 +5,34 @@ import java.text.SimpleDateFormat;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 //Fields with a question mark need more info
+/**
+ * The message we post to FPX to start the e mandate authorisation process and pass the
+ * browser over to the FPX flow. Listed is more information to clarify some of the fields
+ *
+ * <table>
+ *  <tr>
+ *      <th>Field</th>
+ *      <th>Info</th>
+ *  </tr>
+ *  <tr>
+ *      <td>fpx_sellerExId</td>
+ *      <td>Exchange ID for Ag-I</td>
+ *  </tr>
+ *  <tr>
+ *      <td>fpx_sellerExOrderNo</td>
+ *      <td>Unique ID we generate for each mandate</td>
+ *  </tr>
+ *  <tr>
+ *      <td>fpx_sellerId</td>
+ *      <td>Seller ID for the Merchant, eg Jim's Gym</td>
+ *  </tr>
+ *  <tr>
+ *      <td>fpx_buyerId</td>
+ *      <td>Comma separated ID Type and ID Value of the customer</td>
+ *  </tr>
+ * </table>
+ *
+ */
 public class FpxADMessageDTO {
 
     private static final String TIMESTAMP_DATEFORMAT = "yyyyMMddHHmmSS";
@@ -13,7 +41,7 @@ public class FpxADMessageDTO {
     private String fpx_msgType;
     private String fpx_msgToken;
     private String fpx_sellerExId; // ?
-    private String fpx_sellerExOrderNo; // ?
+    private String fpx_sellerExOrderNo;
     private String fpx_sellerTxnTime;
     private String fpx_sellerOrderNo; // ?
     private String fpx_sellerId; // ?
@@ -31,6 +59,7 @@ public class FpxADMessageDTO {
     public FpxADMessageDTO(Mandate mandate) {
         this.fpx_msgType = "AD";
         this.fpx_msgToken = "01";
+        this.fpx_sellerExOrderNo = String.valueOf(mandate.getId());
         this.fpx_sellerTxnTime = new SimpleDateFormat(TIMESTAMP_DATEFORMAT).format(mandate.getRegistrationDate());
         this.fpx_txnCurrency = "MYR";
         this.fpx_txnAmount = mandate.getAmount().toString();
@@ -44,10 +73,21 @@ public class FpxADMessageDTO {
 
         // Max Freq
         // Expiry Date
-        String iBan = mandate.getStatus().getFpxId() + "," + defaultIfBlank(customer.getPhoneNumber(), "") + "," + mandate.getFrequency().getFpxId();
+        String iBan = getMsgType(mandate) + "," + defaultIfBlank(customer.getPhoneNumber(), "") + "," + mandate.getFrequency().getFpxId();
         iBan += "," + new SimpleDateFormat(DATE_DATEFORMAT).format(mandate.getRegistrationDate()) + ",";
         this.fpx_buyerIBan = iBan;
         this.fpx_version = "7.0";
+    }
+
+    private String getMsgType(Mandate mandate) {
+        if (mandate.getStatus().isAwaitingFPXProcessing()) {
+            return "01"; // New Application
+        }
+        if (mandate.getStatus().isCancelled()) {
+            return "03"; // Maintenance
+        }
+
+        return "02"; // Termination
     }
 
     private String getCheckSumSource() {

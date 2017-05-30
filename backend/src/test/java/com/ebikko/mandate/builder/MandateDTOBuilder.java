@@ -3,7 +3,6 @@ package com.ebikko.mandate.builder;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.web.dto.MandateDTO;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -11,6 +10,7 @@ import static com.ebikko.mandate.builder.BankAccountDTOBuilder.bankAccountDTO;
 import static com.ebikko.mandate.builder.BankAccountDTOBuilder.exampleBankAccountDTO;
 import static com.ebikko.mandate.builder.CustomerDTOBuilder.customerDTO;
 import static com.ebikko.mandate.builder.CustomerDTOBuilder.exampleCustomerDTO;
+import static java.lang.String.valueOf;
 
 public class MandateDTOBuilder {
 
@@ -21,7 +21,7 @@ public class MandateDTOBuilder {
         }
         mandateDTO.setReferenceNumber(mandate.getReferenceNumber());
         mandateDTO.setRegistrationDate(mandate.getRegistrationDate());
-        mandateDTO.setAmount(mandate.getAmount());
+        mandateDTO.setAmount(valueOf(mandate.getAmount()));
         mandateDTO.setFrequency(mandate.getFrequency().toString());
         mandateDTO.setCustomer(customerDTO(mandate.getCustomer()));
         if (mandate.getCustomerBankAccount() != null) {
@@ -36,9 +36,9 @@ public class MandateDTOBuilder {
         try {
             mandateDTO.setRegistrationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2017-03-25"));
         } catch (ParseException e) {}
-        mandateDTO.setAmount(BigDecimal.valueOf(123.45));
+        mandateDTO.setAmount("123.45");
         mandateDTO.setFrequency("MONTHLY");
-        mandateDTO.setStatus("AUTHORISED");
+        mandateDTO.setStatus("00");
         mandateDTO.setCustomerBankAccount(exampleBankAccountDTO());
         mandateDTO.setCustomer(exampleCustomerDTO());
         return mandateDTO;

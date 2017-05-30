@@ -3,9 +3,7 @@ package com.ebikko.mandate.web.dto;
 import com.ebikko.mandate.web.UniqueReferenceNumber;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class MandateDTO {
@@ -14,9 +12,8 @@ public class MandateDTO {
     @UniqueReferenceNumber
     private String referenceNumber;
     private Date registrationDate;
-    @NotNull(message = "Amount cannot be blank")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
-    private BigDecimal amount;
+    @ValidBigDecimal(min = "0.01", field = "Amount")
+    private String amount;
     private String frequency;
     @NotNull(message = "Status cannot be blank")
     private String status;
@@ -43,11 +40,11 @@ public class MandateDTO {
         this.registrationDate = registrationDate;
     }
 
-    public BigDecimal getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

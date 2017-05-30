@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static com.ebikko.mandate.builder.CustomerDTOBuilder.customerDtoBuilder;
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
-import static com.ebikko.mandate.model.MandateStatus.PENDING_AUTHORISATION;
+import static com.ebikko.mandate.responsematcher.ValidationErrorResponseMatchers.response;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static com.google.common.collect.Iterables.size;
@@ -26,6 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -99,7 +100,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         Mandate mandate = mandates.get(0);
         assertThat(mandate.getCustomerBankAccount().getAccountNumber(), is("12323537"));
-        assertThat(mandate.getStatus(), is(MandateStatus.AUTHORISED));
+        assertTrue(mandate.getStatus().isAuthorised());
 
         Customer customer = customerService.get("456789123", IDType.PASSPORT_NUMBER);
 
@@ -171,13 +172,13 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateBuilder().with("status", "PENDING_AUTHORISATION").toJson())
+                        .content(exampleMandateBuilder().with("status", "-1").toJson())
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         Mandate mandate = mandateService.getMandates(merchant).get(0);
-        assertThat(mandate.getStatus(), is(PENDING_AUTHORISATION));
+        assertTrue(mandate.getStatus().isAwaitingFPXProcessing());
     }
 
     @Test
@@ -192,6 +193,51 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isUnprocessableEntity());
     }
+
+    @Test
+    public void shouldRejectEmptyAmount() throws Exception {
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(exampleMandateBuilder().with("amount", "").toJson())
+                    .with(authentication(new UsernamePasswordAuthenticationToken(user, ""))))
+                .andExpect(response().hasErrorForField("amount", "Amount cannot be blank"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldRejectMissingAmount() throws Exception {
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(exampleMandateBuilder().without("amount").toJson())
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, ""))))
+                .andExpect(response().hasErrorForField("amount", "Amount cannot be blank"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldRejectNonNumericAmount() throws Exception {
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(exampleMandateBuilder().with("amount", "abc-123").toJson())
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, ""))))
+                .andExpect(response().hasErrorForField("amount", "'abc-123' is not a valid Amount"))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldRejectZeroAmount() throws Exception {
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(exampleMandateBuilder().with("amount", "0.00").toJson())
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, ""))))
+                .andExpect(response().hasErrorForField("amount", "Amount must be greater than 0"))
+                .andExpect(status().is4xxClientError());
+    }
+
 
     private String toJson(MandateDTO mandateDTO) {
         try {

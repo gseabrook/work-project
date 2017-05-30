@@ -4,11 +4,10 @@ import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.User;
-import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.SignUpDTO;
+import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.UserVerificationTokenService;
 import ebikko.*;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class PrincipalService {
@@ -95,7 +96,7 @@ public class PrincipalService {
             public Principal perform(Session session) throws EbikkoException {
                 Principal principal = session.getPrincipal(verificationToken.getPrincipalUid());
                 principal.setCanLogin(true);
-                if (!StringUtils.isBlank(password)) {
+                if (!isBlank(password)) {
                     principal.setPassword(password);
                 }
                 // The addition values are not loaded so if we save without setting them they will be wiped out
@@ -119,7 +120,7 @@ public class PrincipalService {
     }
 
     public Principal findByEmail(final String email) throws EbikkoException {
-        if (StringUtils.isBlank(email)) {
+        if (isBlank(email)) {
             return null;
         }
 
