@@ -2,6 +2,8 @@ package com.ebikko.mandate.model;
 
 import java.text.SimpleDateFormat;
 
+import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_AUTHORISATION;
+import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_TERMINATION;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 //Fields with a question mark need more info
@@ -10,6 +12,10 @@ import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
  * browser over to the FPX flow. Listed is more information to clarify some of the fields
  *
  * <table>
+ *  <tr>
+ *      <td>fpx_msgToken</td>
+ *      <td>Indicate business model: 01 - B2C, 02 - B2B1</td>
+ *  </tr>
  *  <tr>
  *      <th>Field</th>
  *      <th>Info</th>
@@ -60,7 +66,8 @@ public class FpxADMessageDTO {
         this.fpx_msgType = "AD";
         this.fpx_msgToken = "01";
         this.fpx_sellerExOrderNo = String.valueOf(mandate.getId());
-        this.fpx_sellerTxnTime = new SimpleDateFormat(TIMESTAMP_DATEFORMAT).format(mandate.getRegistrationDate());
+        String registrationDateString = mandate.getRegistrationDate() != null ? new SimpleDateFormat(TIMESTAMP_DATEFORMAT).format(mandate.getRegistrationDate()) : "";
+        this.fpx_sellerTxnTime = registrationDateString;
         this.fpx_txnCurrency = "MYR";
         this.fpx_txnAmount = mandate.getAmount().toString();
 
@@ -74,20 +81,20 @@ public class FpxADMessageDTO {
         // Max Freq
         // Expiry Date
         String iBan = getMsgType(mandate) + "," + defaultIfBlank(customer.getPhoneNumber(), "") + "," + mandate.getFrequency().getFpxId();
-        iBan += "," + new SimpleDateFormat(DATE_DATEFORMAT).format(mandate.getRegistrationDate()) + ",";
+        iBan += "," + registrationDateString + ",";
         this.fpx_buyerIBan = iBan;
         this.fpx_version = "7.0";
     }
 
     private String getMsgType(Mandate mandate) {
-        if (mandate.getStatus().isAwaitingFPXProcessing()) {
+        if (mandate.getStatus() == AWAITING_FPX_AUTHORISATION) {
             return "01"; // New Application
         }
-        if (mandate.getStatus().isCancelled()) {
-            return "03"; // Maintenance
+        if (mandate.getStatus() == AWAITING_FPX_TERMINATION) {
+            return "03"; // Termination
         }
 
-        return "02"; // Termination
+        return "02"; // Maintenance
     }
 
     private String getCheckSumSource() {

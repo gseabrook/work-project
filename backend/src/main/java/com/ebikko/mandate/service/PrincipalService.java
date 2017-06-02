@@ -7,6 +7,7 @@ import com.ebikko.mandate.model.User;
 import com.ebikko.signup.SignUpDTO;
 import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.UserVerificationTokenService;
+import com.google.common.base.Function;
 import ebikko.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -34,6 +37,18 @@ public class PrincipalService {
         this.customerService = customerService;
         this.userService = userService;
         this.userVerificationTokenService = userVerificationTokenService;
+    }
+
+    public void updatePassword(final Principal principal, final String password) throws EbikkoException {
+        sessionService.performSessionAction(new SessionAction<Void>() {
+            @Override
+            public Void perform(Session session) throws EbikkoException {
+                principal.setSession(session);
+                principal.setPassword(password);
+                principal.save();
+                return null;
+            }
+        });
     }
 
     public Principal createPrincipal(final SignUpDTO signUpDTO) throws EbikkoException {
@@ -99,10 +114,7 @@ public class PrincipalService {
                 if (!isBlank(password)) {
                     principal.setPassword(password);
                 }
-                // The addition values are not loaded so if we save without setting them they will be wiped out
-                Property customerId = session.getPropertyByName("Customer ID");
-                String value = session.getPrincipalPropertyValueById(customerId.getUid(), principal.getUid());
-                principal.setValue(customerId, value);
+                addPropertyValues(session, principal);
                 principal.save();
                 return principal;
             }
@@ -113,6 +125,19 @@ public class PrincipalService {
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         return principal;
+    }
+
+    // The additional values are not loaded so if we save without setting them they will be wiped out
+    private Principal addPropertyValues(Session session, Principal principal) {
+        Property customerId = null;
+        try {
+            customerId = session.getPropertyByName("Customer ID");
+            String value = session.getPrincipalPropertyValueById(customerId.getUid(), principal.getUid());
+            principal.setValue(customerId, value);
+            return principal;
+        } catch (EbikkoException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Principal activatePrincipal(String token) throws EbikkoException {
@@ -126,8 +151,13 @@ public class PrincipalService {
 
         List<Principal> principals = sessionService.performSessionAction(new SessionAction<List<Principal>>() {
             @Override
-            public List<Principal> perform(Session session) throws EbikkoException {
-                return session.getPrincipalByEmail(email);
+            public List<Principal> perform(final Session session) throws EbikkoException {
+                List<Principal> principalByEmail = session.getPrincipalByEmail(email);
+                return newArrayList(transform(principalByEmail, new Function<Principal, Principal>() {
+                    public Principal apply(Principal input) {
+                        return addPropertyValues(session, input);
+                    }
+                }));
             }
         });
         return principals.isEmpty() ? null : principals.get(0);

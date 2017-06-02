@@ -8,6 +8,7 @@ export class Mandate implements Serializable<Mandate> {
 
 	public id: number;
 	public nodeId: string;
+	public fpxTransactionId: string;
 	public referenceNumber: string;
 	public registrationDate: Date;
 	public amount: string;
@@ -20,11 +21,7 @@ export class Mandate implements Serializable<Mandate> {
 	constructor() {
 		this.customer = new Customer();
 		this.customerBankAccount = new BankAccount();
-		this.status = DisplayEnum.of("PENDING_AUTHORISATION", "Pending Authorisation");
-	}
-
-	authorise() {
-		this.status = DisplayEnum.of('AUTHORISED', 'Authorised');
+		this.status = DisplayEnum.of("NEW", "New");
 	}
 
 	clone(): Mandate {
@@ -37,6 +34,7 @@ export class Mandate implements Serializable<Mandate> {
     deserialize(input){
     	this.id = input.id;
     	this.nodeId = input.nodeId;
+    	this.fpxTransactionId = input.fpxTransactionId;
     	this.referenceNumber = input.referenceNumber;
     	if (input.registrationDate) {
     		this.registrationDate = new Date(input.registrationDate);
@@ -62,10 +60,11 @@ export class Mandate implements Serializable<Mandate> {
 	}
 
 	isTerminated() {
-		return this.status.value === "TERMINATED";
+		return this.status.value === "TRANSACTION_CANCELLED_BY_CUSTOMER";
 	}
 
-	terminate() {
-		this.status = DisplayEnum.of("TERMINATED", "Terminated");
+	requestAuthorisation() {
+		this.status = DisplayEnum.of("AWAITING_FPX_AUTHORISATION", "Awaiting FPX authorisation");
 	}
+
 }

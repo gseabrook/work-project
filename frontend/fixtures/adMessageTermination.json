@@ -1,0 +1,19 @@
+{
+  "fpx_msgType": "AD",
+  "fpx_msgToken": "01",
+  "fpx_sellerExId": null,
+  "fpx_sellerExOrderNo": "1400",
+  "fpx_sellerTxnTime": "",
+  "fpx_sellerOrderNo": null,
+  "fpx_sellerId": null,
+  "fpx_sellerBankCode": null,
+  "fpx_txnCurrency": "MYR",
+  "fpx_txnAmount": "150.00",
+  "fpx_buyerEmail": "graham.seabrook@ag-isolutions.com",
+  "fpx_checkSum": null,
+  "fpx_buyerBankId": null,
+  "fpx_buyerId": "12312313,3",
+  "fpx_buyerIBan": "03,,DL,,",
+  "fpx_productDesc": null,
+  "fpx_version": "7.0"
+}

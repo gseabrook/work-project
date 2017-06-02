@@ -1,0 +1,31 @@
+{
+  "id": 30,
+  "referenceNumber": "BBB333",
+  "registrationDate": 1493515260000,
+  "amount": 100.00,
+  "frequency": {
+    "value": "DAILY",
+    "displayValue": "Daily"
+  },
+  "status": {
+    "value": "NEW",
+    "displayValue": "New"
+  },
+  "customer": {
+    "id": 10,
+    "name": "Fred",
+    "emailAddress": "fred.bloggs@example.com",
+    "phoneNumber": "123456",
+    "idValue": "93202",
+    "idType": {
+      "value": "BUSINESS_REGISTRATION_NUMBER",
+      "displayValue": "Business Registration Number"
+    }
+  },
+  "merchant": {
+    "companyName": "Ag I Solutions",
+    "companyRegistrationNumber": "WP010101334",
+    "id": 1,
+    "merchantBankAccounts": []
+  }
+}

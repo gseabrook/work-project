@@ -32,16 +32,16 @@ public class BankController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         HttpEntity<Map> entity = new HttpEntity<>(new FpxBEMessageDTO().getMap(), headers);
-
-        ResponseEntity<String> bcMessage = restTemplate.exchange("http://www.test.com", HttpMethod.POST, entity, String.class);
-        FpxBCMessageDTO bcMessageDTO = new FpxBCMessageDTO(bcMessage.getBody());
+        //TODO Uncomment when we are able to post messages to FPX
+//        ResponseEntity<String> bcMessage = restTemplate.exchange("http://www.test.com", HttpMethod.POST, entity, String.class);
+//        FpxBCMessageDTO bcMessageDTO = new FpxBCMessageDTO(bcMessage.getBody());
         Iterable<Bank> banks = bankService.getBanks();
         List<Bank> filteredBanks = newArrayList();
 
         for (Bank bank : banks) {
-            if (dtoContainsBank(bank, bcMessageDTO.getFpx_bankList())) {
+//            if (dtoContainsBank(bank, bcMessageDTO.getFpx_bankList())) {
                 filteredBanks.add(bank);
-            }
+//            }
         }
 
         return new ResponseEntity<>(filteredBanks, HttpStatus.OK);

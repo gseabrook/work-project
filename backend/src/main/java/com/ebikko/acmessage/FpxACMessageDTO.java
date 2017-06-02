@@ -2,7 +2,10 @@ package com.ebikko.acmessage;
 
 /**
  * The message that we receive from FPX whenever a mandate is updated. This can be
- * either immediately when the user  authorises a mandate, or at a later date as part of the B2B flow
+ * either immediately when the user  authorises a mandate, or at a later date as part of the B2B flow.
+ * It is handled in the ACMessageController
+ *
+ * @see ACMessageController ACMessageController
  */
 public class FpxACMessageDTO {
 

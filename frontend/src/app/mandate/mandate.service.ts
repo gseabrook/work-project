@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -29,4 +30,13 @@ export class MandateService {
 			.then(response => response.json().map(x => new Mandate().deserialize(x)));
 	}
 
+	getMandate(id: string): Observable<Mandate> {
+		return this.http
+			.get('mandate/' + id, { headers: this.headers })
+			.map(x => new Mandate().deserialize(x.json()));
+	}
+
+	terminate(mandate: Mandate): Observable<Response> {
+		return this.http.delete('mandate/' + mandate.id);
+	}
 }

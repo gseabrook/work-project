@@ -34,27 +34,38 @@ public class MandateUpdatedListener {
         Mandate mandate = mandateUpdatedEvent.getMandate();
         Customer customer = mandate.getCustomer();
 
-        if (mandate.getStatus().isAuthorised()) {
-            if (customer.getPrincipalUid() == null) {
-                Principal principal = principalService.createPrincipal(customer);
-                sendSignUpEmail(customer, principal);
-            } else {
-                Principal principal = principalService.findById(customer.getPrincipalUid());
 
-                if (principal.isCanLogin()) {
-                    emailService.sendCustomerMandateAuthorisedEmail(mandate);
-                } else {
-                    sendSignUpEmail(customer, principal);
+        switch (mandate.getStatus()) {
+            case NEW:
+                if (customer.getPrincipalUid() == null) {
+                    principalService.createPrincipal(customer);
                 }
-            }
-        } else if (mandate.getStatus().isPending()) {
-            if (customer.getPrincipalUid() == null) {
-                principalService.createPrincipal(customer);
-            }
 
-            emailService.sendPendingAuthorisationEmail(mandate);
-        } else if (mandate.getStatus().isCancelled()) {
-            emailService.sendCustomerMandateTerminatedEmail(mandate);
+                emailService.sendPendingAuthorisationEmail(mandate);
+                break;
+
+            case AWAITING_FPX_TERMINATION:
+                emailService.sendCustomerMandateTerminationRequested(mandate);
+                break;
+
+            case AWAITING_FPX_AUTHORISATION:
+                if (customer.getPrincipalUid() == null) {
+                    Principal principal = principalService.createPrincipal(customer);
+                    sendSignUpEmail(customer, principal);
+                } else {
+                    Principal principal = principalService.findById(customer.getPrincipalUid());
+
+                    if (principal.isCanLogin()) {
+                        emailService.sendCustomerMandateAuthorisedEmail(mandate);
+                    } else {
+                        sendSignUpEmail(customer, principal);
+                    }
+                }
+                break;
+
+            case TRANSACTION_CANCELLED_BY_CUSTOMER:
+                emailService.sendCustomerMandateTerminatedEmail(mandate);
+                break;
         }
     }
 

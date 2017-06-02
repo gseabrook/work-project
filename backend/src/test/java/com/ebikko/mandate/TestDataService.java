@@ -3,9 +3,9 @@ package com.ebikko.mandate;
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
 import com.ebikko.mandate.model.*;
-import com.ebikko.signup.UserVerificationTokenRepository;
 import com.ebikko.mandate.service.*;
 import com.ebikko.signup.UserVerificationToken;
+import com.ebikko.signup.UserVerificationTokenRepository;
 import ebikko.EbikkoException;
 import ebikko.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ import static com.ebikko.mandate.builder.CustomerBuilder.exampleCustomer;
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.builder.MerchantBankAccountBuilder.exampleMerchantBankAccount;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
+import static com.ebikko.mandate.model.MandateStatus.APPROVED;
+import static com.ebikko.mandate.model.MandateStatus.NEW;
+import static java.lang.String.format;
 
 @Service
 public class TestDataService {
@@ -46,12 +49,20 @@ public class TestDataService {
     }
 
     public Mandate createMandate(Customer customer, Merchant merchant) {
-        Mandate mandate = exampleMandate(customer, merchant);
+        return createMandate(APPROVED, customer, merchant);
+    }
+
+    public Mandate createMandate(MandateStatus status, Customer customer, Merchant merchant) {
+        Mandate mandate = exampleMandate(status, customer, merchant);
         return mandateService.save(mandate);
     }
 
-    public Mandate createMandate() {
-        return createMandate(createCustomer(), createMerchant());
+    public Mandate createMandate()   {
+        return createMandate(APPROVED);
+    }
+
+    public Mandate createMandate(MandateStatus status)   {
+        return createMandate(status, createCustomer(), createMerchant());
     }
 
     public Merchant createMerchant() {
@@ -80,7 +91,7 @@ public class TestDataService {
     }
 
     private void createPrincipal(Customer customer, Boolean active) throws EbikkoException {
-        final String sql = String.format("insert into principal (uid, username, name, email, profile_uid, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
+        final String sql = format("insert into principal (uid, username, name, email, profile_uid, isgroup, isinternal, issuspended, gender, canlogin, ptype, jc2300d55f3547e3a495f6332e259604) " +
                 "values ('aaa111', '%s', '%s', '%s', '00000000000000000000000000000003', 0, 0, 0, 3, %s, 5, '%s')",
                 customer.getEmailAddress(), customer.getName(), customer.getEmailAddress(), active ? "1" : "0", customer.getId() );
 
@@ -125,5 +136,9 @@ public class TestDataService {
         customer.setId(null);
 
         return createMandate(customer);
+    }
+
+    public Mandate createNewMandate() {
+        return createMandate(NEW);
     }
 }

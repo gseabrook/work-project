@@ -1,6 +1,7 @@
 package com.ebikko.mandate.builder;
 
 import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateStatus;
 import com.ebikko.mandate.web.dto.MandateDTO;
 
 import java.text.ParseException;
@@ -38,7 +39,7 @@ public class MandateDTOBuilder {
         } catch (ParseException e) {}
         mandateDTO.setAmount("123.45");
         mandateDTO.setFrequency("MONTHLY");
-        mandateDTO.setStatus("00");
+        mandateDTO.setStatus(MandateStatus.NEW.getFpxId());
         mandateDTO.setCustomerBankAccount(exampleBankAccountDTO());
         mandateDTO.setCustomer(exampleCustomerDTO());
         return mandateDTO;

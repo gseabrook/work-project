@@ -88,9 +88,17 @@ public class EmailService {
         sendEmail(recipientAddress, subject, message);
     }
 
+    public void sendCustomerMandateTerminationRequested(Mandate mandate) {
+        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String subject = "MyDirectDebit - Mandate termination has been requested";
+        String message = "We are processing a request to terminate one of your mandates";
+        message = addMandateDetails(mandate, message);
+        sendEmail(recipientAddress, subject, message);
+    }
+
     public void sendCustomerMandateTerminatedEmail(Mandate mandate) {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
-        String subject = "MyDirectDebit - Mandated has been terminated";
+        String subject = "MyDirectDebit - Mandate has been terminated";
         String message = "One of your mandates has been terminated";
         message = addMandateDetails(mandate, message);
         message += "<br/>Please log in to review - " + appUrl;

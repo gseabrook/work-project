@@ -49,6 +49,7 @@ public class SignUpControllerDBTest extends AbstractEmbeddedDBControllerTest {
         assertThat(map.get("ptype"), Matchers.<Object>is(5));
         assertThat(map.get("isgroup"), Matchers.<Object>is(0));
         assertThat(map.get("canlogin"), Matchers.<Object>is(0));
+        assertThat(map.get("password"), Matchers.is(Matchers.notNullValue()));
         assertThat(map.get(IDs.PropertyIDs.CUSTOMER_ID), Matchers.<Object>is(customer.getId().toString()));
 
         String userId = (String) map.get("uid");

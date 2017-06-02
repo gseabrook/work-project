@@ -1,6 +1,9 @@
 package com.ebikko.mandate.builder;
 
-import com.ebikko.mandate.model.*;
+import com.ebikko.mandate.model.Customer;
+import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateStatus;
+import com.ebikko.mandate.model.Merchant;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,10 +15,9 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.ebikko.mandate.builder.CustomerBuilder.exampleCustomer;
-import static com.ebikko.mandate.builder.MandateStatusBuilder.authorised;
-import static com.ebikko.mandate.builder.MandateStatusBuilder.pendingFpxProcessing;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
-import static com.ebikko.mandate.model.MandateFrequency.*;
+import static com.ebikko.mandate.model.MandateFrequency.MONTHLY;
+import static com.ebikko.mandate.model.MandateStatus.APPROVED;
 
 public class MandateBuilder {
 
@@ -66,11 +68,7 @@ public class MandateBuilder {
         return mandateBuilder;
     }
 
-    public Object get(String field) {
-        return mandate.get(field);
-    }
-
-    public static Mandate exampleMandate(Customer customer, Merchant merchant) {
+    public static Mandate exampleMandate(MandateStatus status, Customer customer, Merchant merchant) {
         Mandate mandate = new Mandate();
         mandate.setReferenceNumber("ABC-123");
         mandate.setRegistrationDate(new Date());
@@ -80,20 +78,27 @@ public class MandateBuilder {
         mandate.setMerchant(merchant);
         if (!customer.getBankAccounts().isEmpty()) {
             mandate.setCustomerBankAccount(customer.getBankAccounts().get(0));
-            mandate.setStatus(authorised());
-        } else {
-            mandate.setStatus(pendingFpxProcessing());
         }
+        mandate.setStatus(status);
         customer.addMandate(mandate);
         merchant.addMandate(mandate);
         return mandate;
     }
 
     public static Mandate exampleMandate(Customer customer) {
-        return exampleMandate(customer, exampleMerchant());
+        return exampleMandate(APPROVED, customer);
     }
 
     public static Mandate exampleMandate() {
-        return exampleMandate(exampleCustomer());
+        return exampleMandate(APPROVED);
     }
+
+    public static Mandate exampleMandate(MandateStatus status) {
+        return exampleMandate(status, exampleCustomer());
+    }
+
+    public static Mandate exampleMandate(MandateStatus status, Customer customer) {
+        return exampleMandate(status, customer, exampleMerchant());
+    }
+
 }

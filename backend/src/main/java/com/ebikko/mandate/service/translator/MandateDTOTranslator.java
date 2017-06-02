@@ -3,7 +3,6 @@ package com.ebikko.mandate.service.translator;
 import com.ebikko.banks.BankService;
 import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.service.CustomerResolver;
-import com.ebikko.mandate.service.MandateStatusService;
 import com.ebikko.mandate.web.dto.BankAccountDTO;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,11 @@ public class MandateDTOTranslator {
 
     private final CustomerResolver customerResolver;
     private final BankService bankService;
-    private final MandateStatusService mandateStatusService;
 
     @Autowired
-    public MandateDTOTranslator(CustomerResolver customerResolver, BankService bankService, MandateStatusService mandateStatusService) {
+    public MandateDTOTranslator(CustomerResolver customerResolver, BankService bankService) {
         this.customerResolver = customerResolver;
         this.bankService = bankService;
-        this.mandateStatusService = mandateStatusService;
     }
 
     public Mandate translate(MandateDTO mandateDTO) {
@@ -41,7 +38,7 @@ public class MandateDTOTranslator {
         mandate.setRegistrationDate(mandateDTO.getRegistrationDate());
         mandate.setAmount(new BigDecimal(mandateDTO.getAmount()));
         mandate.setFrequency(MandateFrequency.valueOf(mandateDTO.getFrequency()));
-        mandate.setStatus(mandateStatusService.getMandateStatus(mandateDTO.getStatus()));
+        mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
 
         Customer customer = customerResolver.resolveCustomer(mandateDTO.getCustomer(), mandateDTO.getCustomerBankAccount());
 

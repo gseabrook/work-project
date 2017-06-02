@@ -6,7 +6,9 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import static com.ebikko.acmessage.ACMessageController.AC_MESSAGE_URL;
-import static org.junit.Assert.assertTrue;
+import static com.ebikko.mandate.model.MandateStatus.APPROVED;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +50,7 @@ public class ACMessageControllerTest extends AbstractEmbeddedDBControllerTest {
 
         Mandate savedMandate = mandateRepository.findOne(pendingMandate.getId());
 
-        assertTrue(savedMandate.getStatus().isAuthorised());
+        assertThat(savedMandate.getStatus(), is(APPROVED));
+        assertThat(savedMandate.getFpxTransactionId(), is("1610181200130689"));
     }
 }

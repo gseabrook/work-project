@@ -3,22 +3,23 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.CustomerBankAccount;
 import com.ebikko.mandate.model.Mandate;
+import com.ebikko.mandate.model.MandateStatus;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import static com.ebikko.mandate.builder.CustomerBankAccountBuilder.exampleCustomerBankAccount;
 import static com.ebikko.mandate.builder.MandateDTOBuilder.mandateDTO;
+import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_AUTHORISATION;
+import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_TERMINATION;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
@@ -32,17 +33,16 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Ignore("Ignoring this as the authorisation will be driven by messages we receive from FPX, so don't think this makes sense")
     @Test
     public void shouldUpdateMandateWithCustomerBankInformation() throws Exception {
-        Mandate mandate = testDataService.createPendingMandate();
+        Mandate mandate = testDataService.createNewMandate();
 
         CustomerBankAccount customerBankAccount = exampleCustomerBankAccount();
         customerBankAccount.setId(null);
         mandate.setCustomerBankAccount(customerBankAccount);
 
         MandateDTO mandateDTO = mandateDTO(mandate);
-        mandateDTO.setStatus("AUTHORISED");
+        mandateDTO.setStatus(AWAITING_FPX_AUTHORISATION.toString());
 
         mockMvc
                 .perform(
@@ -50,10 +50,12 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(mandateDTO))
                 )
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(header().string("Location", "http://fpx.admessage.com"));
 
         Mandate savedMandate = mandateService.getMandate(mandate.getId());
         assertThat(savedMandate.getCustomerBankAccount().getAccountNumber(), is(customerBankAccount.getAccountNumber()));
+        assertThat(savedMandate.getStatus(), is(MandateStatus.AWAITING_FPX_AUTHORISATION));
 
         assertThat(Iterables.size(mandateRepository.findAll()), is(1));
 
@@ -62,10 +64,25 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
     }
 
     @Test
+    public void shouldTerminateMandate() throws Exception {
+        Mandate mandate = testDataService.createMandate();
+
+        mockMvc
+                .perform(
+                        delete(MANDATE_URL + "/" + mandate.getId())
+                )
+                .andExpect(status().isOk())
+                .andExpect(header().string("Location", "http://fpx.admessage.com"));
+
+        Mandate savedMandate = mandateService.getMandate(mandate.getId());
+        assertThat(savedMandate.getStatus(), is(AWAITING_FPX_TERMINATION));
+    }
+
+    @Test
     public void shouldEmailTheCustomerWhenMandateIsTerminated() throws Exception {
         Mandate mandate = testDataService.createMandate();
         MandateDTO mandateDTO = mandateDTO(mandate);
-        mandateDTO.setStatus("BC");
+        mandateDTO.setStatus(AWAITING_FPX_TERMINATION.toString());
 
         mockMvc
                 .perform(
@@ -73,11 +90,11 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(new ObjectMapper().writeValueAsString(mandateDTO))
                 )
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         Mandate savedMandate = mandateService.getMandate(mandate.getId());
-        assertTrue(savedMandate.getStatus().isCancelled());
+        assertThat(savedMandate.getStatus(), is(AWAITING_FPX_TERMINATION));
 
-        verify(emailService).sendCustomerMandateTerminatedEmail(savedMandate);
+        verify(emailService).sendCustomerMandateTerminationRequested(savedMandate);
     }
 }

@@ -1,51 +1,279 @@
 [
   {
-	"id": 30,
-	"referenceNumber": "BBB333",
-	"registrationDate": 1493515260000,
-	"amount": 100.00,
-	"frequency": {
-	  "value": "DAILY",
-	  "displayValue": "Daily"
-	},
-	"status": {
-	  "value": "AUTHORISED",
-	  "displayValue": "Authorised"
-	},
-	"customerBankAccount": {
-	  "bank": {
-		"code": "BIMB0340",
-		"name": "Bank Islam",
-		"id": 3
-	  },
-	  "accountNumber": "123456"
-	},
-	"customer": {
-	  "id": 10,
-	  "name": "Fred",
-	  "emailAddress": "fred.bloggs@example.com",
-	  "phoneNumber": "123456",
-	  "idValue": "93202",
-	  "idType": {
-		"value": "BUSINESS_REGISTRATION_NUMBER",
-		"displayValue": "Business Registration Number"
-	  },
-	  "bankAccounts": [
-		{
-		  "bank": {
-			"code": "BIMB0340",
-			"name": "Bank Islam",
-			"id": 3
-		  },
-		  "accountNumber": "123456"
-		}
-	  ]
-	},
-	"merchant": {
-	  "companyName": "Ag I Solutions",
-	  "companyRegistrationNumber": "WP010101334",
-	  "id": 1,
-	  "merchantBankAccounts": []
-	}
+    "id": 1361,
+    "referenceNumber": "Test-3",
+    "registrationDate": 0,
+    "amount": 1500.00,
+    "frequency": {
+      "value": "QUARTERLY",
+      "displayValue": "Quarterly"
+    },
+    "status": {
+      "value": "APPROVED",
+      "displayValue": "Approved"
+    },
+    "customer": {
+      "id": 1370,
+      "name": "Graham",
+      "emailAddress": "graham.seabrook@ag-isolutions.com",
+      "phoneNumber": null,
+      "idValue": "12312313",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "c087a8a791954e7481604caa9b3c2d7e",
+      "bankAccounts": [
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "124523412",
+          "customer": null
+        },
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "10001",
+          "customer": null
+        }
+      ]
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": {
+      "bank": {
+        "code": "AFFB0123",
+        "name": "Affin Bank",
+        "id": 1,
+        "displayName": null
+      },
+      "accountNumber": "124523412",
+      "customer": null
+    },
+    "nodeId": "dc8e3bc6f41f4f15aa445184108a680a-bacdd0b2d19d4884979dc2bd9cd9a2f0"
+  },
+  {
+    "id": 1400,
+    "referenceNumber": "TEST-123",
+    "registrationDate": null,
+    "amount": 150.00,
+    "frequency": {
+      "value": "DAILY",
+      "displayValue": "Daily"
+    },
+    "status": {
+      "value": "APPROVED",
+      "displayValue": "Approved"
+    },
+    "customer": {
+      "id": 1370,
+      "name": "Graham",
+      "emailAddress": "graham.seabrook@ag-isolutions.com",
+      "phoneNumber": null,
+      "idValue": "12312313",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "c087a8a791954e7481604caa9b3c2d7e",
+      "bankAccounts": [
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "124523412",
+          "customer": null
+        },
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "10001",
+          "customer": null
+        }
+      ]
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": null,
+    "nodeId": "dc8e3bc6f41f4f15aa445184108a680a-g8a5342140f64f73bbde76447e14c3cb"
+  },
+  {
+    "id": 1401,
+    "referenceNumber": "TEST-2",
+    "registrationDate": null,
+    "amount": 150.00,
+    "frequency": {
+      "value": "YEARLY",
+      "displayValue": "Yearly"
+    },
+    "status": {
+      "value": "APPROVED",
+      "displayValue": "Approved"
+    },
+    "customer": {
+      "id": 1410,
+      "name": "Graham",
+      "emailAddress": null,
+      "phoneNumber": null,
+      "idValue": "100",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "g55be97af07a455dbde11b4944d1db65",
+      "bankAccounts": []
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": null,
+    "nodeId": "dc8e3bc6f41f4f15aa445184108a680a-h43f059d49bf46028ba31083e6e47b93"
+  },
+  {
+    "id": 1420,
+    "referenceNumber": "TEST-10",
+    "registrationDate": null,
+    "amount": 150.00,
+    "frequency": {
+      "value": "YEARLY",
+      "displayValue": "Yearly"
+    },
+    "status": {
+      "value": "APPROVED",
+      "displayValue": "Approved"
+    },
+    "customer": {
+      "id": 1370,
+      "name": "Graham",
+      "emailAddress": "graham.seabrook@ag-isolutions.com",
+      "phoneNumber": null,
+      "idValue": "12312313",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "c087a8a791954e7481604caa9b3c2d7e",
+      "bankAccounts": [
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "124523412",
+          "customer": null
+        },
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "10001",
+          "customer": null
+        }
+      ]
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": null,
+    "nodeId": "dc8e3bc6f41f4f15aa445184108a680a-i0ec0d4086f648d084ff4e837902781f"
+  },
+  {
+    "id": 1430,
+    "referenceNumber": "TEST-11",
+    "registrationDate": 1495696500000,
+    "amount": 150.00,
+    "frequency": {
+      "value": "YEARLY",
+      "displayValue": "Yearly"
+    },
+     "status": {
+      "value": "APPROVED",
+      "displayValue": "Approved"
+    },
+    "customer": {
+      "id": 1370,
+      "name": "Graham",
+      "emailAddress": "graham.seabrook@ag-isolutions.com",
+      "phoneNumber": null,
+      "idValue": "12312313",
+      "idType": {
+        "value": "PASSPORT_NUMBER",
+        "displayValue": "Passport Number"
+      },
+      "principalUid": "c087a8a791954e7481604caa9b3c2d7e",
+      "bankAccounts": [
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "124523412",
+          "customer": null
+        },
+        {
+          "bank": {
+            "code": "AFFB0123",
+            "name": "Affin Bank",
+            "id": 1,
+            "displayName": null
+          },
+          "accountNumber": "10001",
+          "customer": null
+        }
+      ]
+    },
+    "merchant": {
+      "companyName": "Ag I Solutions",
+      "companyRegistrationNumber": "WP010101334",
+      "id": 1,
+      "merchantBankAccounts": []
+    },
+    "customerBankAccount": {
+      "bank": {
+        "code": "AFFB0123",
+        "name": "Affin Bank",
+        "id": 1,
+        "displayName": null
+      },
+      "accountNumber": "10001",
+      "customer": null
+    },
+    "nodeId": "dc8e3bc6f41f4f15aa445184108a680a-hf771be0abdd46aaa86a53ecf0c7024c"
   }
 ]

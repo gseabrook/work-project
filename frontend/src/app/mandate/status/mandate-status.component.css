@@ -1,0 +1,8 @@
+div.mandateStatus > div > div:nth-child(1) {
+	width: 200px;
+	font-weight: bold;
+}
+
+div.mandateStatus > div {
+	margin: 2px 0px 2px 0px;
+}

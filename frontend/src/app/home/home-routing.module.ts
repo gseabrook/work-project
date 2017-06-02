@@ -5,8 +5,10 @@ import { AuthGuard } from '../auth/auth-guard.service';
 import { HomeComponent } from './home.component';
 import { MandateListComponent } from '../mandate/list/mandate-list.component';
 import { MandateFormComponent } from '../mandate/form/mandate-form.component';
+import { MandateStatusComponent } from '../mandate/status/mandate-status.component';
 import { MandateFormResolver } from '../mandate/form/mandate-form-resolver.service';
 import { UserResolverService } from '../auth/user-resolver.service';
+import { MandateURLResolver } from '../mandate/status/mandate-url-resolver.service';
 
 const homeRoutes: Routes = [
 	{
@@ -28,6 +30,13 @@ const homeRoutes: Routes = [
 				component: MandateFormComponent,
 				resolve: {
 					mandate: MandateFormResolver,
+					user: UserResolverService
+				}
+			}, {
+				path: 'mandate-status/:id',
+				component: MandateStatusComponent,
+				resolve: {
+					mandate: MandateURLResolver,
 					user: UserResolverService
 				}
 			}, {

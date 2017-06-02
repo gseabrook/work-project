@@ -46,7 +46,7 @@
                 <button md-raised-button type="button" (click)="authorise(registrationForm)" color="primary">Authorise</button>
             </div>
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchCase="'dialog'">
-                <button [disabled]="!model.hasBankInformation()" md-raised-button type="button" (click)="authorise(registrationForm)" *ngIf="model.status.value === 'PENDING_AUTHORISATION'">Authorise</button>
+                <button [disabled]="!model.hasBankInformation()" md-raised-button type="button" (click)="authorise(registrationForm)" *ngIf="model.status.value === 'NEW'">Authorise</button>
                 <button md-raised-button type="button" (click)="close()" color="primary">Close</button>
             </div>
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchDefault>

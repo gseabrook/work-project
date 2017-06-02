@@ -1,11 +1,42 @@
 package com.ebikko.mandate.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * The mandate is the agreement that the merchant is able to take money from the customer's bank account.
+ * <br/><br/>
+ * The status is driven by the FPX system, as any change to the agreement (including the initial authorisation) happens
+ * via the customer logging into their online banking. This will trigger an AC message sent to our system, which we will
+ * use to update the status of the mandate.
+ * <br/><br/>
+ * FPX currently assumes that the same amount will be taken at regular intervals (hence the amount & frequency fields),
+ * however in the future we would like to simplify this and remove the amount, frequency and max frequence fields.
+ * <br/><br/>
+ * <b>Fields</b>
+ * <table>
+ *     <tr>
+ *         <td>Reference Number</td>
+ *         <td>Merchant's reference number for their information, in future we would like automatically populate this from the merchant's system</td>
+ *     </tr>
+ *     <tr>
+ *         <td>Customer Bank Account</td>
+ *         <td>We need a direct reference to the customer bank account so that if the customer has multiple bank accounts, we know
+ *         which one was authorised</td>
+ *     </tr>
+ *     <tr>
+ *         <td>Node ID</td>
+ *         <td>This is the ID of the node we are storing in Ebikko for audit purposes</td>
+ *     </tr>
+ *     <tr>
+ *         <td>FPX Transaction ID</td>
+ *         <td>The FPX spec requires us to display the fpx transaction ID upon completion of a mandate, so we store it here</td>
+ *     </tr>
+ * </table>
+ *
+ * @see com.ebikko.acmessage.FpxACMessageDTO FpxACMessageDTO
+ */
 @Entity
 public class Mandate {
 
@@ -19,12 +50,10 @@ public class Mandate {
     @Column
     private Date registrationDate;
     @Column
-    @NotNull(message = "Amount cannot be blank")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
     @Column
     private MandateFrequency frequency;
-    @ManyToOne
+    @Column
     private MandateStatus status;
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
@@ -34,6 +63,8 @@ public class Mandate {
     private CustomerBankAccount customerBankAccount;
     @Column
     private String nodeId;
+    @Column
+    private String fpxTransactionId;
 
     public Mandate() {
     }
@@ -116,6 +147,14 @@ public class Mandate {
 
     public void setNodeId(String nodeId) {
         this.nodeId = nodeId;
+    }
+
+    public String getFpxTransactionId() {
+        return fpxTransactionId;
+    }
+
+    public void setFpxTransactionId(String fpxTransactionId) {
+        this.fpxTransactionId = fpxTransactionId;
     }
 
     @Override

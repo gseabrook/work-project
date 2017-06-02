@@ -1,0 +1,32 @@
+<h1 class="subheader" color="primary">Mandate Status</h1>    
+
+<div fxLayout="column" class="mandateStatus">
+	<div fxLayout="row">
+		<div>Merchant Name</div>
+		<div>{{mandate.merchant.companyName}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>Transaction Status</div>
+		<div>{{mandate.status.displayValue}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>Transaction Date</div>
+		<div>{{mandate.registrationDate | date:'mediumDate'}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>Transaction Amount</div>
+		<div>{{mandate.amount | number:'1.2-2'}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>Seller Order Number</div>
+		<div>{{mandate.id}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>FPX Transaction ID</div>
+		<div>{{mandate.fpxTransactionId}}</div>
+	</div>
+	<div fxLayout="row">
+		<div>Buyer Bank Name</div>
+		<div>{{mandate.customerBankAccount.bank.name}}</div>
+	</div>
+</div>

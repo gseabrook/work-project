@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MdDialog } from '@angular/material';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/mergeMap';
 
 import { Mandate } from '../model/mandate';
 import { User } from '../../model/user';
 import { MandateService } from '../mandate.service';
+import { FpxService } from '../fpx.service';
 import { MandateFormComponent } from '../form/mandate-form.component';
 import { DisplayEnum } from '../model/displayEnum';
 import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
@@ -24,8 +28,8 @@ export class MandateListComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private dialog: MdDialog,
-		private snackBar: MdSnackBar,
-		private confirmationDialogService: ConfirmationDialogService 
+		private confirmationDialogService: ConfirmationDialogService,
+		private fpxService: FpxService
 	) { }
 
 	ngOnInit() {
@@ -53,15 +57,10 @@ export class MandateListComponent implements OnInit {
 	terminateMandate(mandate: Mandate) {
 		this.confirmationDialogService.openConfirmationDialog({
 			message: 'Are you sure you wish to terminate this mandate?'
-		}).subscribe((success) => {
-			if (success) {
-				mandate.terminate();
-				this.mandateService.update(mandate).subscribe(() => { });
-				this.snackBar.open("Mandate terminated", "", {
-					duration: 2000
-				});
-			}
-		});
+		})
+		.filter(mandate => !!mandate)
+		.flatMap(mandate => this.mandateService.terminate(mandate))
+		.subscribe(this.fpxService.processFpxRedirect);
 	}
 
 }

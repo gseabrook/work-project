@@ -60,6 +60,8 @@ public class SignUpController {
             ebikko.Principal principal = principalService.findByEmail(signUpDTO.getEmail());
             if (principal == null) {
                 principal = principalService.createPrincipal(signUpDTO);
+            } else {
+                principalService.updatePassword(principal, signUpDTO.getPassword());
             }
             User user = userService.convertPrincipal(principal);
             applicationEventPublisher.publishEvent(new SignUpCompleteEvent(user));

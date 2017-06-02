@@ -9,6 +9,7 @@ import { MandateFormComponent } from './mandate-form.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MandateService } from '../mandate.service';
+import { FpxService } from '../fpx.service';
 import { MandateFormService } from './mandate-form.service';
 import { MandateModule } from '../mandate.module';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
@@ -17,8 +18,10 @@ import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';
 import { DisplayEnum } from '../model/displayEnum';
 
+import * as mandateNew from '../../../../fixtures/mandateNew.json';
 import * as mandatePendingAuthorisation from '../../../../fixtures/mandatePendingAuthorisation.json';
 import * as mandateAuthorised from '../../../../fixtures/mandateAuthorised.json';
+import * as adMessageAuthorisation from '../../../../fixtures/adMessageAuthorisation.json';
 import * as banks from '../../../../fixtures/banks.json';
 import * as idTypes from '../../../../fixtures/idTypes.json';
 import * as frequencies from '../../../../fixtures/frequencies.json';
@@ -27,12 +30,13 @@ describe('MandateFormComponent', () => {
 	let component: MandateFormComponent;
 	let fixture: ComponentFixture<MandateFormComponent>;
 	let dialogMock = {
-		close: function() { 
-			console.log("In dialog mock");
-		},
+		close: function() { },
 		config: {
 			data: {}
 		}
+	};
+	let fpxMock = {
+		processFpxRedirect: function(response: Response) { }
 	};
 	let mdDialogMock = {
 		open: function() {
@@ -60,11 +64,14 @@ describe('MandateFormComponent', () => {
 		}, {
 			provide: MdDialog,
 			useValue: mdDialogMock
+		}, { 
+			provide: FpxService,
+			useValue: fpxMock
 		}, {
 			provide: Http,
 			useFactory: (mockBackend, options) => {
 				return new Http(mockBackend, options);
-			}, 
+			},
 			deps: [MockBackend, BaseRequestOptions]
 		}, MockBackend, BaseRequestOptions, MandateService, MandateFormService];
 
@@ -122,7 +129,7 @@ describe('MandateFormComponent', () => {
 			fixture.detectChanges();
 
 			expect(fixture.debugElement.query(By.css("div.alert")).nativeElement.textContent).toContain('referenceNumber is not valid');
-			expect(component.model.status.value).toEqual("PENDING_AUTHORISATION");
+			expect(component.model.status.value).toEqual("NEW");
 		})));
 
 		it('should fill in all the fields', fakeAsync(inject([MockBackend], (mockBackend) => {
@@ -141,7 +148,7 @@ describe('MandateFormComponent', () => {
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
 			let connection = connections.pop();
 
-			expect(connection.request.getBody()).toContain('"status":"PENDING_AUTHORISATION"');
+			// expect(connection.request.getBody()).toContain('"status":"PENDING_AUTHORISATION"');
 			tick(1000);
 		})));
 	});
@@ -174,11 +181,13 @@ describe('MandateFormComponent', () => {
 		});
 	});
 
-	describe("dialog popup - pending authorisation - customer", () => {
+	describe("dialog popup - new - customer", () => {
 		beforeEach(async(() => {
 			spyOn(dialogMock, 'close');
+			spyOn(fpxMock, 'processFpxRedirect');
+
 			setupTestBed({
-				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
+				mandate: new Mandate().deserialize(mandateNew),
 				mode: 'dialog',
 				user: {
 					type: "CUSTOMER"
@@ -192,7 +201,7 @@ describe('MandateFormComponent', () => {
 			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.disabled).toBeTruthy();
 		});
 
-		it('should enter bank details and authorise', fakeAsync(inject([MockBackend], (mockBackend) => {
+		it('should post details to FPX', fakeAsync(inject([MockBackend], (mockBackend) => {
 			initialiseComponentWithReferenceData(mockBackend);
 
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
@@ -202,12 +211,15 @@ describe('MandateFormComponent', () => {
 
 			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.disabled).toBeFalsy();
 			fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.click();
+			tick();
+			fixture.detectChanges();	
 
 			let connection = connections.pop();
-			expect(connection.request.getBody()).toContain('"status":"AUTHORISED"');
-			connection.mockRespond(new Response(new ResponseOptions({status: 200})));
+			connection.mockRespond(new Response(new ResponseOptions({ body: adMessageAuthorisation, status: 200 })));
+			tick();
+
+			expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
 			tick(1000);
-			expect(dialogMock.close).toHaveBeenCalled();
 		})));
 	});
 

@@ -18,6 +18,8 @@ import java.util.Map;
 
 import static com.ebikko.mandate.builder.CustomerDTOBuilder.customerDtoBuilder;
 import static com.ebikko.mandate.builder.MandateBuilder.exampleMandateBuilder;
+import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_AUTHORISATION;
+import static com.ebikko.mandate.model.MandateStatus.NEW;
 import static com.ebikko.mandate.responsematcher.ValidationErrorResponseMatchers.response;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_MANDATE_URL;
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
@@ -26,7 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -83,7 +84,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Test
     public void shouldCreateMandateForMerchant() throws Exception {
-        String json = exampleMandateDTO("abc-def-123");
+        String json = exampleMandateDTO(AWAITING_FPX_AUTHORISATION, "abc-def-123");
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
@@ -100,7 +101,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         Mandate mandate = mandates.get(0);
         assertThat(mandate.getCustomerBankAccount().getAccountNumber(), is("12323537"));
-        assertTrue(mandate.getStatus().isAuthorised());
+        assertThat(mandate.getStatus(), is(AWAITING_FPX_AUTHORISATION));
 
         Customer customer = customerService.get("456789123", IDType.PASSPORT_NUMBER);
 
@@ -128,14 +129,14 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
     public void shouldLinkMandatesWithExistingCustomer() throws Exception {
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateDTO("abc-1"))
+                        .content(exampleMandateDTO(AWAITING_FPX_AUTHORISATION, "abc-1"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateDTO("abc-2"))
+                        .content(exampleMandateDTO(AWAITING_FPX_AUTHORISATION, "abc-2"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
@@ -157,7 +158,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
         super.setAuthenticationPrincipal(user);
 
-        String json = exampleMandateDTO(mandate.getReferenceNumber());
+        String json = exampleMandateDTO(AWAITING_FPX_AUTHORISATION, mandate.getReferenceNumber());
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
@@ -172,13 +173,13 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         mockMvc.perform(
                 post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateBuilder().with("status", "-1").toJson())
+                        .content(exampleMandateBuilder().with("status", NEW.toString()).toJson())
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
         ).andExpect(status().isCreated());
 
         Mandate mandate = mandateService.getMandates(merchant).get(0);
-        assertTrue(mandate.getStatus().isAwaitingFPXProcessing());
+        assertThat(mandate.getStatus(), is(NEW));
     }
 
     @Test
@@ -248,8 +249,9 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         }
     }
 
-    private String exampleMandateDTO(String referenceNumber) {
+    private String exampleMandateDTO(MandateStatus status, String referenceNumber) {
         MandateDTO mandateDTO = MandateDTOBuilder.exampleMandateDTO(referenceNumber);
+        mandateDTO.setStatus(status.toString());
         return toJson(mandateDTO);
     }
 }

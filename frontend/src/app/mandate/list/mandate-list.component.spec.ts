@@ -4,6 +4,7 @@ import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angu
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { MandateService } from '../mandate.service';
+import { FpxService } from '../fpx.service';
 import { Mandate } from '../model/mandate';
 import { MaterialModule, MdDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
 
 import * as Mandates from '../../../../fixtures/mandates.json';
+import * as AdMessageTermination from '../../../../fixtures/adMessageTermination.json';
 
 import { MandateListComponent } from './mandate-list.component';
 
@@ -20,6 +22,9 @@ describe('MandateListComponent', () => {
 	let fixture: ComponentFixture<MandateListComponent>;
 	let dialogMock = {
 		open: function(a, b) {}
+	};
+	let fpxMock = {
+		processFpxRedirect: function(response: Response){}
 	};
 	let confirmationDialogMock = {
 		openConfirmationDialog: function(){
@@ -49,6 +54,9 @@ describe('MandateListComponent', () => {
 			}, {
 				provide: ConfirmationDialogService,
 				useValue: confirmationDialogMock
+			}, {
+				provide: FpxService,
+				useValue: fpxMock
 			},
 				MockBackend,
 				BaseRequestOptions,
@@ -71,6 +79,7 @@ describe('MandateListComponent', () => {
 					return Observable.of(true);
 				}
 			});
+			spyOn(fpxMock, 'processFpxRedirect');
 			setupTestBed(Observable.of({
 				user: {
 					type: "CUSTOMER"
@@ -94,9 +103,10 @@ describe('MandateListComponent', () => {
 				tick();
 				fixture.detectChanges();
 
-				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(1);
-				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Daily');
+				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(5);
+				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Quarterly');
 				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(5)')).nativeElement.textContent).toContain('Ag I Solutions');
+				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Approved');
 			});
 		})));
 
@@ -115,14 +125,11 @@ describe('MandateListComponent', () => {
 
 				fixture.debugElement.queryAll(By.css("tbody tr button"))[1].nativeElement.click();
 
-				connection.mockRespond(new Response(new ResponseOptions({ status: 204 })));
+				connection.mockRespond(new Response(new ResponseOptions({ body: AdMessageTermination, status: 204 })));
 				tick(1000);
 				fixture.detectChanges();
 
-				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Terminated');
-				expect(connection.request.getBody()).toContain('"status":"TERMINATED"');
-
-				tick(1000);
+				expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
 			});
 		})));
 
@@ -172,9 +179,10 @@ describe('MandateListComponent', () => {
 				tick();
 				fixture.detectChanges();
 
-				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(1);
-				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Daily');
-				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Business Registration Number');
+				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(5);
+				expect(fixture.debugElement.query(By.css('tbody tr:nth-child(1) td:nth-child(4)')).nativeElement.textContent).toContain('Quarterly');
+				expect(fixture.debugElement.query(By.css('tbody tr:nth-child(1) td:nth-child(6)')).nativeElement.textContent).toContain('Passport Number');
+				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(7)')).nativeElement.textContent).toContain('Approved');
 			});
 		})));
 	});

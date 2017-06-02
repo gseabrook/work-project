@@ -9,10 +9,11 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
 import { MandateService } from '../mandate.service';
+import { FpxService } from '../fpx.service';
 import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
-import { User } from '../../model/user'; 
+import { User } from '../../model/user';
 import { MandateFormService } from './mandate-form.service';
 import { DisplayEnum } from '../model/displayEnum';
 
@@ -35,6 +36,7 @@ export class MandateFormComponent implements OnInit {
 	constructor(
 		private mandateService: MandateService,
 		private mandateFormService: MandateFormService,
+		private fpxService: FpxService,
 		private dialog: MdDialog,
 		private location: Location,
 		private router: Router,
@@ -82,8 +84,8 @@ export class MandateFormComponent implements OnInit {
 			.filter(key => !mandateForm.form.controls[key].valid)
 			.map(field => {
 				return new ValidationError().deserialize({
-					field: field, 
-					value: "", 
+					field: field,
+					value: "",
 					message: field + " is not valid"
 				});
 			});
@@ -99,28 +101,10 @@ export class MandateFormComponent implements OnInit {
 		}
 	}
 
-	processFpxRedirect(result: Response) {
-		var form = document.createElement("form");
-    	form.setAttribute("method", "POST");
-    	form.setAttribute("action", "http://localhost:8080");
-		var fpxFormData = result.json();
-
-		for (const key of Object.keys(fpxFormData)) {
-			var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", fpxFormData[key]);
-            form.appendChild(hiddenField);
-		}
-
-		document.body.appendChild(form);
-		form.submit();    	
-	}
-
 	save(mandateForm: NgForm) {
 		if (mandateForm.valid) {
 			this.mandateService.save(this.model).subscribe(
-				result => this.processFpxRedirect(result),
+				result => this.fpxService.processFpxRedirect(result),
 				error => this.handleError(error)
 			);
 		} else {
@@ -138,20 +122,10 @@ export class MandateFormComponent implements OnInit {
 
 	authorise(mandateForm: NgForm) {
 		if (mandateForm.valid) {
-			this.showFpxDialog().afterClosed().subscribe(success => {
-				if (success) {
-					this.model.authorise();
-					this.mandateService.update(this.model).subscribe(
-						result => {
-							if (this.dialogRef) {
-								this.close(true);
-							} else {
-								this.router.navigate(['/mandate-complete'])
-							}
-						}
-					);
-				}
-			});
+			this.model.requestAuthorisation();
+			this.mandateService
+				.update(this.model)
+				.subscribe(this.fpxService.processFpxRedirect);
 		}
 	}
 
