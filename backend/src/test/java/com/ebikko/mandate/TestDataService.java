@@ -110,6 +110,8 @@ public class TestDataService {
 
     public Customer createActiveCustomer() throws EbikkoException {
         Customer customer = createCustomer();
+        customer.setPrincipalUid("aaa111");
+        customerService.save(customer);
         createPrincipal(customer, true);
         return  customer;
     }

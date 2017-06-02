@@ -2,7 +2,10 @@ package com.ebikko.acmessage;
 
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.MandateStatus;
+import com.ebikko.mandate.model.event.MandateUpdatedEvent;
 import com.ebikko.mandate.service.MandateService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,9 +25,12 @@ public class ACMessageController {
     public static final String AC_MESSAGE_URL = "/acmessage";
 
     private final MandateService mandateService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ACMessageController(MandateService mandateService) {
+    @Autowired
+    public ACMessageController(MandateService mandateService, ApplicationEventPublisher applicationEventPublisher) {
         this.mandateService = mandateService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -34,6 +40,7 @@ public class ACMessageController {
         mandate.setStatus(MandateStatus.fromFpxCode(fpxACMessageDTO.getFpx_debitAuthCode()));
         mandate.setFpxTransactionId(fpxACMessageDTO.getFpx_fpxTxnId());
         mandateService.save(mandate);
+        applicationEventPublisher.publishEvent(new MandateUpdatedEvent(mandate));
 
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }

@@ -111,4 +111,12 @@ public class EmailService {
         message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
         return message;
     }
+
+    public void sendCustomerMandateAuthorisationRequestedEmail(Mandate mandate) {
+        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String subject = "MyDirectDebit - Mandate authorisation has been requested";
+        String message = "We are processing a request to authorise a mandate";
+        message = addMandateDetails(mandate, message);
+        sendEmail(recipientAddress, subject, message);
+    }
 }

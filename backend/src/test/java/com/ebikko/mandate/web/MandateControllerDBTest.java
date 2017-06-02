@@ -17,6 +17,7 @@ import static com.ebikko.mandate.model.MandateStatus.AWAITING_FPX_TERMINATION;
 import static com.ebikko.mandate.web.MandateController.MANDATE_URL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -35,7 +36,8 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
     @Test
     public void shouldUpdateMandateWithCustomerBankInformation() throws Exception {
-        Mandate mandate = testDataService.createNewMandate();
+        Customer activeCustomer = testDataService.createActiveCustomer();
+        Mandate mandate = testDataService.createMandate(activeCustomer);
 
         CustomerBankAccount customerBankAccount = exampleCustomerBankAccount();
         customerBankAccount.setId(null);
@@ -61,6 +63,8 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         Customer savedCustomer = customerService.getCustomerById(mandate.getCustomer().getId());
         assertThat(savedCustomer.getBankAccounts().size(), is(1));
+
+        verify(emailService).sendCustomerMandateAuthorisationRequestedEmail(any(Mandate.class));
     }
 
     @Test

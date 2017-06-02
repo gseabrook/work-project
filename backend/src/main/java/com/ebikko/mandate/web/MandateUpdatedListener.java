@@ -56,7 +56,7 @@ public class MandateUpdatedListener {
                     Principal principal = principalService.findById(customer.getPrincipalUid());
 
                     if (principal.isCanLogin()) {
-                        emailService.sendCustomerMandateAuthorisedEmail(mandate);
+                        emailService.sendCustomerMandateAuthorisationRequestedEmail(mandate);
                     } else {
                         sendSignUpEmail(customer, principal);
                     }
@@ -65,6 +65,10 @@ public class MandateUpdatedListener {
 
             case TRANSACTION_CANCELLED_BY_CUSTOMER:
                 emailService.sendCustomerMandateTerminatedEmail(mandate);
+                break;
+
+            case APPROVED:
+                emailService.sendCustomerMandateAuthorisedEmail(mandate);
                 break;
         }
     }

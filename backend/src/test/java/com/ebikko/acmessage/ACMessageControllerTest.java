@@ -9,6 +9,8 @@ import static com.ebikko.acmessage.ACMessageController.AC_MESSAGE_URL;
 import static com.ebikko.mandate.model.MandateStatus.APPROVED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,5 +54,7 @@ public class ACMessageControllerTest extends AbstractEmbeddedDBControllerTest {
 
         assertThat(savedMandate.getStatus(), is(APPROVED));
         assertThat(savedMandate.getFpxTransactionId(), is("1610181200130689"));
+
+        verify(emailService).sendCustomerMandateAuthorisedEmail(any(Mandate.class));
     }
 }
