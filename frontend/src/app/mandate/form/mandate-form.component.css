@@ -42,3 +42,11 @@ div.buttonContainer button {
 /deep/ md-input-container.selectContainer md-select {
     width: 100%;
 }
+
+/deep/ md-input-container.maxFreq > div {
+    transform: translateY(8px);
+}
+
+/deep/ div.md2-datepicker-trigger {
+    padding: 0px;
+}

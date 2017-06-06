@@ -37,7 +37,12 @@ export class MandateListComponent implements OnInit {
 			this.user = data.user;
 		});
 
-		this.mandateService.get().then(mandates => this.mandates = mandates);
+		this.mandateService.get()
+			.then(mandates => this.mandates = mandates.sort(this.sortMandates));
+	}
+
+	sortMandates(a: Mandate, b: Mandate) {
+		return a.dateCreated.getTime() > b.dateCreated.getTime() ? -1 : 1;
 	}
 
 	selectMandate(mandate: Mandate) {

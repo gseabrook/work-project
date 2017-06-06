@@ -38,7 +38,9 @@ public class MandateDTOTranslator {
         mandate.setRegistrationDate(mandateDTO.getRegistrationDate());
         mandate.setAmount(new BigDecimal(mandateDTO.getAmount()));
         mandate.setFrequency(MandateFrequency.valueOf(mandateDTO.getFrequency()));
+        mandate.setMaximumFrequency(Integer.valueOf(mandateDTO.getMaximumFrequency()));
         mandate.setStatus(MandateStatus.valueOf(mandateDTO.getStatus()));
+        mandate.setPurposeOfPayment(mandateDTO.getPurposeOfPayment());
 
         Customer customer = customerResolver.resolveCustomer(mandateDTO.getCustomer(), mandateDTO.getCustomerBankAccount());
 

@@ -1,5 +1,7 @@
 package com.ebikko.mandate.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -54,6 +56,8 @@ public class Mandate {
     @Column
     private MandateFrequency frequency;
     @Column
+    private Integer maximumFrequency;
+    @Column
     private MandateStatus status;
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
@@ -65,6 +69,13 @@ public class Mandate {
     private String nodeId;
     @Column
     private String fpxTransactionId;
+    @Column
+    private String purposeOfPayment;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private Date dateCreated;
 
     public Mandate() {
     }
@@ -155,6 +166,30 @@ public class Mandate {
 
     public void setFpxTransactionId(String fpxTransactionId) {
         this.fpxTransactionId = fpxTransactionId;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Integer getMaximumFrequency() {
+        return maximumFrequency;
+    }
+
+    public void setMaximumFrequency(Integer maximumFrequency) {
+        this.maximumFrequency = maximumFrequency;
+    }
+
+    public String getPurposeOfPayment() {
+        return purposeOfPayment;
+    }
+
+    public void setPurposeOfPayment(String purposeOfPayment) {
+        this.purposeOfPayment = purposeOfPayment;
     }
 
     @Override

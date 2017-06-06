@@ -2,7 +2,6 @@ package com.ebikko.mandate.web;
 
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.Merchant;
-import com.ebikko.mandate.service.CustomerService;
 import com.ebikko.mandate.service.MandateService;
 import com.ebikko.mandate.service.MerchantService;
 import com.ebikko.mandate.service.UserService;
@@ -38,13 +37,11 @@ public class MerchantControllerTest extends AbstractControllerTest {
     @Mock
     private MandateDTOTranslator mandateDTOTranslator;
     @Mock
-    private CustomerService customerService;
-    @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Object getController() {
-        return new MerchantController(merchantService, userService, mandateService, mandateDTOTranslator, customerService, applicationEventPublisher);
+        return new MerchantController("http://example.com", merchantService, userService, mandateService, mandateDTOTranslator, applicationEventPublisher);
     }
 
     @Test

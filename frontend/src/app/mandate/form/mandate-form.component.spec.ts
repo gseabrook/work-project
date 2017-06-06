@@ -17,6 +17,7 @@ import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';
 import { DisplayEnum } from '../model/displayEnum';
+import { RouterStub } from '../../../test/router-stub';
 
 import * as mandateNew from '../../../../fixtures/mandateNew.json';
 import * as mandatePendingAuthorisation from '../../../../fixtures/mandatePendingAuthorisation.json';
@@ -47,6 +48,7 @@ describe('MandateFormComponent', () => {
 			}
 		}
 	}
+	let routerStub = new RouterStub();
 
 	function createComponent() {
 		fixture = TestBed.createComponent(MandateFormComponent);
@@ -64,6 +66,9 @@ describe('MandateFormComponent', () => {
 		}, {
 			provide: MdDialog,
 			useValue: mdDialogMock
+		}, {
+			provide: Router,
+			useValue: routerStub
 		}, { 
 			provide: FpxService,
 			useValue: fpxMock
@@ -113,6 +118,7 @@ describe('MandateFormComponent', () => {
 
 	describe("new mandate - Merchant", () => {
 		beforeEach(async(() => {
+			spyOn(routerStub, 'navigate');
 			setupTestBed(Observable.of({
 				mandate: new Mandate(),
 				mode: 'form',
@@ -143,12 +149,33 @@ describe('MandateFormComponent', () => {
 			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
 			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '3', fixture, '4');
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '2', fixture, '6');
-			TestHelpers.inputValue('input[name="accountNumber"]', '87288888', fixture);
 
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
 			let connection = connections.pop();
 
-			// expect(connection.request.getBody()).toContain('"status":"PENDING_AUTHORISATION"');
+			tick(1000);
+		})));
+
+		it("should post the form and navigate after clicking email", fakeAsync(inject([MockBackend], (mockBackend) => {
+			initialiseComponentWithReferenceData(mockBackend);
+
+			TestHelpers.inputValue('input[name="referenceNumber"]', 'TEST-1', fixture);
+			TestHelpers.inputValue('input[name="accountHolderName"]', 'Joe', fixture);
+			TestHelpers.inputValue('input[name="email"]', 'Joe', fixture);
+			TestHelpers.pickFromMdSelect('md-select[name="idType"]', '1', fixture);
+			TestHelpers.inputValue('input[name="idValue"]', '12341234', fixture);
+			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
+			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '3', fixture, '4');
+
+			fixture.debugElement.query(By.css("div.buttonContainer button:nth-child(2)")).nativeElement.click();
+
+			let connection = connections.pop();
+			expect(connection.request.url).toEqual("merchant/mandate?email=true");
+
+			connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+
+			expect(routerStub.navigate).toHaveBeenCalled();
+
 			tick(1000);
 		})));
 	});
@@ -205,7 +232,6 @@ describe('MandateFormComponent', () => {
 			initialiseComponentWithReferenceData(mockBackend);
 
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
-			TestHelpers.inputValue('input[name="accountNumber"]', '11223344', fixture);
 			tick();
 			fixture.detectChanges();
 
@@ -226,6 +252,8 @@ describe('MandateFormComponent', () => {
 	describe("pending authorisation - standAlone", () => {
 
 		beforeEach(async(() => {
+			spyOn(fpxMock, 'processFpxRedirect');
+
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
 				mode: 'standAlone'
@@ -243,13 +271,22 @@ describe('MandateFormComponent', () => {
 			expect(fixture.debugElement.queryAll(By.css('h1.subheader')).length).toEqual(0);
 		});
 
-		it('should update the mandate when clicking the button', fakeAsync(inject([MockBackend], (mockBackend) => {
+		it('should post to FPX when clicking authorise', fakeAsync(inject([MockBackend], (mockBackend) => {
 			initialiseComponentWithReferenceData(mockBackend);
 
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
-			TestHelpers.inputValue('input[name="accountNumber"]', '11223344', fixture);
 
-			expect(component.model.customerBankAccount.accountNumber).toEqual('11223344');
+			fixture.detectChanges();
+			tick();
+
+			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
+
+			let connection = connections.pop();
+			connection.mockRespond(new Response(new ResponseOptions({ body: adMessageAuthorisation, status: 200 })));
+			tick();
+
+			expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
+
 			tick(1000);
 		})));
 	});

@@ -92,40 +92,44 @@ export class MandateFormComponent implements OnInit {
 		Array.prototype.push.apply(this.errors, validationErrors);
 	}
 
-	email(mandateForm: NgForm) {
-		if (mandateForm.valid) {
-			this.mandateFormService.email(this.model).subscribe(
-				result => this.handleSuccess(result),
-				error => this.handleError(error)
-			)
-		}
+	authorise(mandateForm: NgForm) {
+		this.checkFormValidity(mandateForm, this.authoriseFormAndHandleResut);		
 	}
 
-	save(mandateForm: NgForm) {
+	email(mandateForm: NgForm) {
+		this.checkFormValidity(mandateForm, this.emailFormAndHandleResult);
+	}
+
+	proceed(mandateForm: NgForm) {
+		this.checkFormValidity(mandateForm, this.saveFormAndHandleResult);
+	}
+
+	private authoriseFormAndHandleResut() {
+		this.model.requestAuthorisation();
+		this.mandateService.update(this.model)
+			.subscribe(this.fpxService.processFpxRedirect);
+	}
+
+	private emailFormAndHandleResult() {
+		this.mandateFormService.email(this.model).subscribe(
+			result => this.handleSuccess(result),
+			error => this.handleError(error)
+		);
+	}
+
+	private saveFormAndHandleResult() {
+		this.model.requestAuthorisation();
+		this.mandateService.save(this.model).subscribe(
+			result => this.fpxService.processFpxRedirect(result),
+			error => this.handleError(error)
+		);
+	}
+
+	private checkFormValidity(mandateForm: NgForm, successCallback: Function) {
 		if (mandateForm.valid) {
-			this.mandateService.save(this.model).subscribe(
-				result => this.fpxService.processFpxRedirect(result),
-				error => this.handleError(error)
-			);
+			successCallback.call(this);
 		} else {
 			this.displayFormErrors(mandateForm);
-		}
-	}
-
-	showFpxDialog() {
-		return this.dialog.open(FpxAuthenticationComponent, {
-			data: {
-				mandate: this.model
-			}
-		});
-	}
-
-	authorise(mandateForm: NgForm) {
-		if (mandateForm.valid) {
-			this.model.requestAuthorisation();
-			this.mandateService
-				.update(this.model)
-				.subscribe(this.fpxService.processFpxRedirect);
 		}
 	}
 

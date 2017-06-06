@@ -21,6 +21,9 @@ public class MandateDTO {
     private CustomerDTO customer;
     private BankAccountDTO customerBankAccount;
     private String nodeId;
+    private String purposeOfPayment;
+    @ValidBigDecimal(min = "0", field = "Maximum frequency")
+    private String maximumFrequency;
 
     public MandateDTO() {}
 
@@ -94,5 +97,21 @@ public class MandateDTO {
 
     public void setNodeId(String nodeId) {
         this.nodeId = nodeId;
+    }
+
+    public String getPurposeOfPayment() {
+        return purposeOfPayment;
+    }
+
+    public void setPurposeOfPayment(String purposeOfPayment) {
+        this.purposeOfPayment = purposeOfPayment;
+    }
+
+    public String getMaximumFrequency() {
+        return maximumFrequency;
+    }
+
+    public void setMaximumFrequency(String maximumFrequency) {
+        this.maximumFrequency = maximumFrequency;
     }
 }

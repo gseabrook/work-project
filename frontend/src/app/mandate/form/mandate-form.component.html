@@ -15,18 +15,16 @@
             <merchant-information [merchant]="model.merchant"></merchant-information>
         </span>
 
-        <div class="align-horizontally">
+        <div>
             <md-select placeholder="Bank Name" [(ngModel)]="model.customerBankAccount.bank" name="bank">
                 <md-option *ngFor="let bank of banks" [value]="bank">
                     {{ bank.name }}
                 </md-option>
             </md-select>
-            <md-input-container>
-                <input mdInput placeholder="Bank Account Number" type="text" [(ngModel)]="model.customerBankAccount.accountNumber" name="accountNumber" #accountNumber="ngModel"/>
-                <md-hint align="start" class="errorHint" *ngIf="!accountNumber.valid && accountNumber.touched">Please enter a bank account number</md-hint>
-            </md-input-container>
         </div>
-        <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
+        <div>
+            <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
+        </div>
         <div class="align-horizontally">
             <md-input-container>
                 <input mdInput placeholder="Amount" type="text" required [(ngModel)]="model.amount" name="amount" #amount="ngModel"/>
@@ -38,6 +36,14 @@
                 </md-option>
             </md-select>
         </div>
+        <div>
+            <md-input-container class="maxFreq">
+                <input mdInput placeholder="Maximum Frequency" type="text" [(ngModel)]="model.maximumFrequency" name="maximumFrequency" #maximumFrequency="ngModel"/>
+            </md-input-container>
+        </div>
+        <md-input-container>
+            <input mdInput placeholder="Purpose of payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
+        </md-input-container>
         <div class="alert alert-danger fade" *ngIf="errors.length !== 0">
             <div *ngFor="let fieldError of errors">{{ fieldError.message}}</div>
         </div>
@@ -52,7 +58,7 @@
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchDefault>
                 <button md-raised-button type="button" routerLink="/registrations">Cancel</button>
                 <button md-raised-button type="button" (click)="email(registrationForm)">Email</button>
-                <button md-raised-button type="button" (click)="save(registrationForm)" color="primary">Proceed</button>
+                <button md-raised-button type="button" (click)="proceed(registrationForm)" color="primary">Proceed</button>
             </div>
         </span>
     </form>

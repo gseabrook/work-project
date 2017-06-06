@@ -16,7 +16,7 @@ create table bank (id SERIAL UNIQUE, code varchar(255), name varchar(255), displ
 create table customer (id SERIAL UNIQUE, email_address varchar(255), id_type integer, id_value varchar(255), name varchar(255), phone_number varchar(255), principal_uid varchar(255), primary key (id));
 create table customer_bank_accounts (customer_id integer not null, bank_accounts_id integer not null);
 create table customer_bank_account (id SERIAL UNIQUE, account_number varchar(255), bank_id integer, customer_id integer, primary key (id));
-create table mandate (id SERIAL UNIQUE, amount decimal(19,2) not null, status integer, frequency integer, reference_number varchar(255), fpx_transaction_id varchar(255), registration_date timestamp, customer_id integer not null, merchant_id integer not null, customer_bank_account_id integer, node_id varchar(255), primary key (id));
+create table mandate (id SERIAL UNIQUE, amount decimal(19,2) not null, status integer, frequency integer, reference_number varchar(255), fpx_transaction_id varchar(255), purpose_of_payment varchar(255), maximum_frequency integer, registration_date timestamp, customer_id integer not null, merchant_id integer not null, customer_bank_account_id integer, node_id varchar(255), date_created timestamp, primary key (id));
 create table mandate_status (id SERIAL UNIQUE, code varchar(255), description varchar(255), primary key (id));
 create table merchant (id SERIAL UNIQUE, company_name varchar(255), company_registration_number varchar(255), primary key (id));
 create table merchant_merchant_bank_accounts (merchant_id integer not null, merchant_bank_accounts_id integer not null);

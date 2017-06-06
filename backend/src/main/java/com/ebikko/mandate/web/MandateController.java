@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -65,13 +67,18 @@ public class MandateController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{mandateId}")
-    public ResponseEntity<FpxADMessageDTO> update(@PathVariable Long mandateId, @RequestBody MandateDTO mandateDTO) throws EbikkoException, URISyntaxException {
+    public ResponseEntity<FpxADMessageDTO> update(@PathVariable Long mandateId, @RequestBody @Validated MandateDTO mandateDTO, BindingResult bindingResult) throws EbikkoException, URISyntaxException {
         if (!mandateId.equals(Long.valueOf(mandateDTO.getId()))) {
             throw new EbikkoException("IDs do not match");
         }
 
         if (mandateDTO.getId() == null) {
             throw new EbikkoException("Mandate ID cannot be null");
+        }
+
+        if (bindingResult.hasErrors()) {
+            ErrorResponse errorResponse = new ErrorResponse(bindingResult);
+            return new ResponseEntity(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         Mandate mandate = mandateDTOTranslator.translate(mandateDTO);

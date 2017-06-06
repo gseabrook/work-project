@@ -104,7 +104,7 @@ describe('MandateListComponent', () => {
 				fixture.detectChanges();
 
 				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(5);
-				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Quarterly');
+				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(4)')).nativeElement.textContent).toContain('Yearly');
 				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(5)')).nativeElement.textContent).toContain('Ag I Solutions');
 				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(6)')).nativeElement.textContent).toContain('Approved');
 			});
@@ -180,7 +180,7 @@ describe('MandateListComponent', () => {
 				fixture.detectChanges();
 
 				expect(fixture.debugElement.queryAll(By.css('tbody tr')).length).toEqual(5);
-				expect(fixture.debugElement.query(By.css('tbody tr:nth-child(1) td:nth-child(4)')).nativeElement.textContent).toContain('Quarterly');
+				expect(fixture.debugElement.query(By.css('tbody tr:nth-child(1) td:nth-child(4)')).nativeElement.textContent).toContain('Yearly');
 				expect(fixture.debugElement.query(By.css('tbody tr:nth-child(1) td:nth-child(6)')).nativeElement.textContent).toContain('Passport Number');
 				expect(fixture.debugElement.query(By.css('tbody tr td:nth-child(7)')).nativeElement.textContent).toContain('Approved');
 			});

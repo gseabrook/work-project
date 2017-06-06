@@ -1,14 +1,12 @@
 package com.ebikko.mandate.web;
 
-import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.CustomerBankAccount;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.MandateStatus;
+import com.ebikko.mandate.model.*;
 import com.ebikko.mandate.web.dto.MandateDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import static com.ebikko.mandate.builder.CustomerBankAccountBuilder.exampleCustomerBankAccount;
 import static com.ebikko.mandate.builder.MandateDTOBuilder.mandateDTO;
@@ -19,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,11 +45,15 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         MandateDTO mandateDTO = mandateDTO(mandate);
         mandateDTO.setStatus(AWAITING_FPX_AUTHORISATION.toString());
 
+        User user = new User("1", mandate.getCustomer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
+        super.setAuthenticationPrincipal(user);
+
         mockMvc
                 .perform(
                         put(MANDATE_URL + "/" + mandate.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(mandateDTO))
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
                 )
                 .andExpect(status().isOk())
                 .andExpect(header().string("Location", "http://fpx.admessage.com"));
@@ -88,11 +91,15 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         MandateDTO mandateDTO = mandateDTO(mandate);
         mandateDTO.setStatus(AWAITING_FPX_TERMINATION.toString());
 
+        User user = new User("1", mandate.getCustomer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
+        super.setAuthenticationPrincipal(user);
+
         mockMvc
                 .perform(
                         put(MANDATE_URL + "/" + mandate.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(new ObjectMapper().writeValueAsString(mandateDTO))
+                                .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
                 )
                 .andExpect(status().isOk());
 

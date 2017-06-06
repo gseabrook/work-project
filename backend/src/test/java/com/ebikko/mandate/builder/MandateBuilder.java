@@ -50,6 +50,7 @@ public class MandateBuilder {
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
                 .with("status", "-1")
+                .with("maximumFrequency", "1")
                 .with("merchant", 7l);
 
         Map<String, Object> customer = new HashMap<>();
@@ -74,6 +75,7 @@ public class MandateBuilder {
         mandate.setRegistrationDate(new Date());
         mandate.setAmount(BigDecimal.TEN);
         mandate.setFrequency(MONTHLY);
+        mandate.setMaximumFrequency(1);
         mandate.setCustomer(customer);
         mandate.setMerchant(merchant);
         if (!customer.getBankAccounts().isEmpty()) {

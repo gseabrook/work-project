@@ -24,6 +24,7 @@ public class MandateDTOBuilder {
         mandateDTO.setRegistrationDate(mandate.getRegistrationDate());
         mandateDTO.setAmount(valueOf(mandate.getAmount()));
         mandateDTO.setFrequency(mandate.getFrequency().toString());
+        mandateDTO.setMaximumFrequency(String.valueOf(mandate.getMaximumFrequency()));
         mandateDTO.setCustomer(customerDTO(mandate.getCustomer()));
         if (mandate.getCustomerBankAccount() != null) {
             mandateDTO.setCustomerBankAccount(bankAccountDTO(mandate.getCustomerBankAccount()));
@@ -39,6 +40,7 @@ public class MandateDTOBuilder {
         } catch (ParseException e) {}
         mandateDTO.setAmount("123.45");
         mandateDTO.setFrequency("MONTHLY");
+        mandateDTO.setMaximumFrequency("1");
         mandateDTO.setStatus(MandateStatus.NEW.getFpxId());
         mandateDTO.setCustomerBankAccount(exampleBankAccountDTO());
         mandateDTO.setCustomer(exampleCustomerDTO());
