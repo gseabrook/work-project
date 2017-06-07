@@ -5,7 +5,7 @@ import { Subject }    from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Mandate } from '../model/mandate';
-import { MandateFormService } from './mandate-form.service';
+import { MandateFormService } from '../form/mandate-form.service';
 
 @Injectable()
 export class MandateListResolver implements Resolve<Mandate> {

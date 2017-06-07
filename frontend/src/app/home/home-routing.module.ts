@@ -7,8 +7,9 @@ import { MandateListComponent } from '../mandate/list/mandate-list.component';
 import { MandateFormComponent } from '../mandate/form/mandate-form.component';
 import { MandateStatusComponent } from '../mandate/status/mandate-status.component';
 import { MandateFormResolver } from '../mandate/form/mandate-form-resolver.service';
-import { UserResolverService } from '../auth/user-resolver.service';
+import { UserResolver } from '../auth/user-resolver.service';
 import { MandateURLResolver } from '../mandate/status/mandate-url-resolver.service';
+import { MerchantSettingsComponent } from '../merchant/merchant-settings/merchant-settings.component';
 
 const homeRoutes: Routes = [
 	{
@@ -16,28 +17,34 @@ const homeRoutes: Routes = [
 		component: HomeComponent,
 		canActivate: [AuthGuard],
 		resolve: {
-			user: UserResolverService
+			user: UserResolver
 		},
 		children: [
 			{
 				path: 'mandate-list',
 				component: MandateListComponent,
 				resolve: {
-					user: UserResolverService
+					user: UserResolver
 				}
 			}, {
 				path: 'mandate-form',
 				component: MandateFormComponent,
 				resolve: {
 					mandate: MandateFormResolver,
-					user: UserResolverService
+					user: UserResolver
 				}
 			}, {
 				path: 'mandate-status/:id',
 				component: MandateStatusComponent,
 				resolve: {
 					mandate: MandateURLResolver,
-					user: UserResolverService
+					user: UserResolver
+				}
+			}, {
+				path: 'merchant-settings',
+				component: MerchantSettingsComponent,
+				resolve: {
+					user: UserResolver
 				}
 			}, {
 				path: '',

@@ -1,16 +1,15 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgForm } from '@angular/forms';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
 import { MandateService } from '../mandate.service';
 import { FpxService } from '../fpx.service';
-import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
 import { User } from '../../model/user';
@@ -41,14 +40,15 @@ export class MandateFormComponent implements OnInit {
 		private location: Location,
 		private router: Router,
 		private route: ActivatedRoute,
-		@Optional() private dialogRef: MdDialogRef<FpxAuthenticationComponent>
+		@Inject(MD_DIALOG_DATA) private data: any,
+		@Optional() private dialogRef: MdDialogRef<MandateFormComponent>
 	) { }
 
 	ngOnInit() {
 		if (this.dialogRef) {
-			this.model = this.dialogRef.config.data.mandate.clone();
+			this.model = this.data.mandate.clone();
 			this.mode = 'dialog';
-			this.user = this.dialogRef.config.data.user;
+			this.user = this.data.user;
 		} else {
 			this.route.data.subscribe((data: { user: User, mandate: Mandate, mode: string }) => {
 				this.model = data.mandate;

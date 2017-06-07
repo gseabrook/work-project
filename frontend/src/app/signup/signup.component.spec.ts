@@ -27,7 +27,7 @@ describe('SignUpComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [SignUpComponent],
-			imports: [FormsModule, MaterialModule.forRoot(), FlexLayoutModule],
+			imports: [FormsModule, MaterialModule, FlexLayoutModule],
 			providers: [AuthService, SignUpService,
 				{
 					provide: Http,

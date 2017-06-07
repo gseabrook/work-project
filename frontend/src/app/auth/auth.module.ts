@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
-import { UserResolverService } from './user-resolver.service';
+import { UserResolver } from './user-resolver.service';
 
 @NgModule({
   imports: [
@@ -11,7 +11,7 @@ import { UserResolverService } from './user-resolver.service';
    providers: [
     AuthGuard,
     AuthService,
-    UserResolverService
+    UserResolver
   ],
   declarations: []
 })

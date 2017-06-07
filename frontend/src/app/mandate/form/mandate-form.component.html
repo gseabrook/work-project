@@ -1,4 +1,7 @@
-<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'">New Mandate</h1>    
+<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'" fxLayout="row" fxLayoutAlign="space-between center">
+    New Mandate
+    <img src="merchant/logo"/>
+</h1>
 <div fxLayout="column" fxLayoutAlign="center center">
     <form #registrationForm="ngForm">
         <md-input-container>

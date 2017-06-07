@@ -50,3 +50,11 @@ div.buttonContainer button {
 /deep/ div.md2-datepicker-trigger {
     padding: 0px;
 }
+
+img {
+    position: absolute;
+    height: 150px;
+    width: auto;
+    right: 0px;
+    top: 0px;
+}

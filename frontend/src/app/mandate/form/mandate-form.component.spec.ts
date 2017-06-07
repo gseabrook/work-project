@@ -12,7 +12,6 @@ import { MandateService } from '../mandate.service';
 import { FpxService } from '../fpx.service';
 import { MandateFormService } from './mandate-form.service';
 import { MandateModule } from '../mandate.module';
-import { FpxAuthenticationComponent } from '../fpx-authentication/fpx-authentication.component';
 import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';

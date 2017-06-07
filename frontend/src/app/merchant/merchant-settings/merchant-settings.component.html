@@ -1,0 +1,14 @@
+<h1 class="subheader" color="primary">Merchant Settings</h1>    
+<form #merchantSettingsForm="ngForm" fxLayout="column">
+	<div>
+		<label>Logo</label>
+		<input type="file" (change)="fileSelected($event.target.files[0])" placeholder="Select logo" name="logo">
+	</div>
+	<div>
+		<label>Frequencies</label>
+		<md-checkbox [value]="Daily">Daily</md-checkbox>
+	</div>
+	{{frequencies}}
+</form>
+
+<button md-raised-button color="primary" type="button" (click)="save()">Save</button>

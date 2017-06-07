@@ -8,7 +8,6 @@ import { Md2Module } from 'md2';
 
 import { MandateFormComponent } from './form/mandate-form.component';
 import { MandateListComponent } from './list/mandate-list.component';
-import { FpxAuthenticationComponent } from './fpx-authentication/fpx-authentication.component';
 import { MandateService } from './mandate.service';
 import { FpxService } from './fpx.service';
 import { MandateFormService } from './form/mandate-form.service';
@@ -24,10 +23,7 @@ import { MandateStatusComponent } from './status/mandate-status.component';
 		CommonModule, FormsModule, MaterialModule, RouterModule, Md2Module.forRoot(), FlexLayoutModule
 	],
 	declarations: [
-		MandateFormComponent, MandateListComponent, FpxAuthenticationComponent, CompleteComponent, CustomerInformationComponent, MerchantInformationComponent, MandateStatusComponent
-	],
-	entryComponents: [
-		FpxAuthenticationComponent
+		MandateFormComponent, MandateListComponent, CompleteComponent, CustomerInformationComponent, MerchantInformationComponent, MandateStatusComponent
 	],
 	exports: [
 		MandateFormComponent, MandateListComponent, CompleteComponent
