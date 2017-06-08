@@ -6,9 +6,16 @@
 	</div>
 	<div>
 		<label>Frequencies</label>
-		<md-checkbox [value]="Daily">Daily</md-checkbox>
+		<md-checkbox 
+			*ngFor="let freq of allFrequencies" 
+			(change)="updateFrequencies($event)"
+			[checked]="selectedFrequencies.indexOf(freq.value) > -1"
+			[value]="freq.value">
+			{{freq.displayValue}}
+		</md-checkbox>
 	</div>
-	{{frequencies}}
 </form>
-
+<div class="alert alert-success" *ngIf="showSuccess">
+	Settings updated!
+</div>
 <button md-raised-button color="primary" type="button" (click)="save()">Save</button>

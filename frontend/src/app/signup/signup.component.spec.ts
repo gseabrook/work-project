@@ -1,6 +1,7 @@
 import { DebugElement, NgModule } from '@angular/core';
 import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { MaterialModule } from '@angular/material';
@@ -27,7 +28,7 @@ describe('SignUpComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [SignUpComponent],
-			imports: [FormsModule, MaterialModule, FlexLayoutModule],
+			imports: [FormsModule, MaterialModule, FlexLayoutModule, NoopAnimationsModule],
 			providers: [AuthService, SignUpService,
 				{
 					provide: Http,

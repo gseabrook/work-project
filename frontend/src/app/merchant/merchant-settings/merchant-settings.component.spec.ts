@@ -1,25 +1,85 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angular/core/testing';
+import { MockBackend, MockConnection } from '@angular/http/testing';
+import { Response, ResponseOptions, RequestMethod } from '@angular/http';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MerchantSettingsComponent } from './merchant-settings.component';
+import { MerchantModule } from '../merchant.module';
+import { TestModule } from '../../../test/test.module';
+import { TestHelpers } from '../../../test/test-helpers';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import * as frequencies from '../../../../fixtures/frequencies.json';
+import * as merchant from '../../../../fixtures/merchant.json';
 
 describe('MerchantSettingsComponent', () => {
-  let component: MerchantSettingsComponent;
-  let fixture: ComponentFixture<MerchantSettingsComponent>;
+	let component: MerchantSettingsComponent;
+	let fixture: ComponentFixture<MerchantSettingsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MerchantSettingsComponent ]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			imports: [MerchantModule, TestModule],
+			providers: [{
+				provide: ActivatedRoute,
+				useValue: {
+					data: {},
+					snapshot: {
+						data: {
+							user: {
+								id: '1'
+							}
+						}
+					}
+				}
+			}]
+		})
+			.compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MerchantSettingsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	function createComponent() {
+		fixture = TestBed.createComponent(MerchantSettingsComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	};
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	let connections = [];
+	let connection: MockConnection;
+
+	it('should check the selected frequencies', fakeAsync(inject([MockBackend], (mockBackend) => {
+		mockBackend.connections.subscribe((c: MockConnection) => connections.push(c));
+		createComponent();
+		
+		connections.pop().mockRespond(new Response(new ResponseOptions({ body: frequencies, status: 200 })));
+		connections.pop().mockRespond(new Response(new ResponseOptions({ body: merchant, status: 200})));
+		fixture.detectChanges();
+
+		expect(component.selectedFrequencies).toContain("WEEKLY");
+		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='WEEKLY'] input")).nativeElement.checked).toBeTruthy();
+
+		expect(component.selectedFrequencies).toContain("YEARLY");
+		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='YEARLY'] input")).nativeElement.checked).toBeTruthy();
+	})));
+
+	it('should save the selected frequencies', fakeAsync(inject([MockBackend], (mockBackend) => {
+		mockBackend.connections.subscribe((c: MockConnection) => connections.push(c));
+		createComponent();
+
+		connection = connections.pop();
+		connection.mockRespond(new Response(new ResponseOptions({ body: frequencies, status: 200 })));
+		fixture.detectChanges();
+		tick();
+
+		expect(fixture.debugElement.queryAll(By.css("md-checkbox")).length).toEqual(5);
+		TestHelpers.clickMdCheckbox("md-checkbox:nth-child(3)", fixture);
+		fixture.detectChanges();
+
+		fixture.debugElement.query(By.css("button")).triggerEventHandler('click', {});
+		fixture.detectChanges();
+
+		connection = connections.pop();
+		
+		let formData: FormData = connection.request.getBody();
+		expect(formData.getAll("frequency")).toEqual(["WEEKLY"]);
+
+		tick(1000);
+	})));
 });

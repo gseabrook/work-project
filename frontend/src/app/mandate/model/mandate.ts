@@ -2,7 +2,7 @@ import { Customer } from './customer';
 import { BankAccount } from './bankAccount';
 import { Merchant } from './merchant';
 import { Serializable } from '../../model/serializable';
-import { DisplayEnum } from './displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 
 export class Mandate implements Serializable<Mandate> {
 

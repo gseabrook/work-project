@@ -10,7 +10,7 @@ import { User } from '../../model/user';
 import { MandateService } from '../mandate.service';
 import { FpxService } from '../fpx.service';
 import { MandateFormComponent } from '../form/mandate-form.component';
-import { DisplayEnum } from '../model/displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
 
 @Component({

@@ -7,6 +7,7 @@ import { MockBackend } from '@angular/http/testing';
 import { MaterialModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { TestModule } from '../../test/test.module';
 
 import { LoginComponent } from './login.component';
 import { AuthService } from '../auth/auth.service';
@@ -22,7 +23,7 @@ describe('LoginComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [LoginComponent],
-			imports: [FormsModule, MaterialModule],
+			imports: [FormsModule, MaterialModule, TestModule],
 			providers: [AuthService,
 				{ provide: Router, useClass: RouterStub },
 				{

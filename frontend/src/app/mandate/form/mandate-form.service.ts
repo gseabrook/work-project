@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
-import { DisplayEnum } from '../model/displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -21,16 +21,17 @@ export class MandateFormService {
 			.map(this.extractData);
 	}
 
+	//TODO - Fix duplication with merchant settings
 	getFrequencies(): Observable<DisplayEnum[]> {
 		return this.http
 			.get('mandate/frequency', { headers: this.headers })
-			.map(this.extractDisplayEnum);
+			.map(DisplayEnum.extract);
 	}
 
 	getIdTypes(): Observable<DisplayEnum[]> {
 		return this.http
 			.get('mandate/idType', { headers: this.headers })
-			.map(this.extractDisplayEnum);
+			.map(DisplayEnum.extract);
 	}
 
 	getMandate(id: string): Observable<Mandate> {
@@ -42,11 +43,6 @@ export class MandateFormService {
 	email(mandate: Mandate) {
 		return this.http
 			.post('merchant/mandate?email=true', JSON.stringify(mandate), { headers: this.headers });
-	}
-
-	private extractDisplayEnum(res: Response) {
-		const body = res.json();
-		return body.map(displayEnum => new DisplayEnum().deserialize(displayEnum));		
 	}
 
 	private extractData(res: Response) {

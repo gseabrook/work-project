@@ -14,7 +14,7 @@ import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
 import { User } from '../../model/user';
 import { MandateFormService } from './mandate-form.service';
-import { DisplayEnum } from '../model/displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 
 @Component({
 	selector: 'mandate-form',
@@ -40,7 +40,7 @@ export class MandateFormComponent implements OnInit {
 		private location: Location,
 		private router: Router,
 		private route: ActivatedRoute,
-		@Inject(MD_DIALOG_DATA) private data: any,
+		@Optional() @Inject(MD_DIALOG_DATA) private data: any,
 		@Optional() private dialogRef: MdDialogRef<MandateFormComponent>
 	) { }
 

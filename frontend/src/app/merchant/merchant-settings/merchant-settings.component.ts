@@ -3,6 +3,10 @@ import { RequestOptions, Request, RequestMethod, Headers, Http } from '@angular/
 import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../model/user';
+import { Merchant } from '../../mandate/model/merchant';
+import { MerchantSettingsService } from './merchant-settings.service';
+import { MerchantService } from '../merchant.service';
+import { DisplayEnum } from '../../model/displayEnum';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -15,17 +19,25 @@ export class MerchantSettingsComponent implements OnInit {
 
 	user: User;
 	logo: any;
-	frequencies: string[];
-	daily: string = 'Daily';
-	monthly: string = 'Monthly';
+	selectedFrequencies: string[] = [];
+	allFrequencies: DisplayEnum[];
+	showSuccess: boolean = false;
+	merchant: Merchant;
 
 	constructor(
 		private http: Http, 		
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private merchantSettingsService: MerchantSettingsService,
+		private merchantService: MerchantService
 	) { }
 
 	ngOnInit() { 
   		this.user = this.route.snapshot.data['user'];
+  		this.merchantService.getMerchant(this.user.id).subscribe((merchant) => {
+  			this.merchant = merchant;
+  			this.selectedFrequencies = merchant.merchantSettings.selectedFrequencies.map((de) => de.value);
+  		});
+  		this.merchantSettingsService.getFrequencies().subscribe((frequencies) => this.allFrequencies = frequencies);
 	}
 
 	fileSelected(file) {
@@ -34,23 +46,30 @@ export class MerchantSettingsComponent implements OnInit {
 
 	save() {
 		let formData: FormData = new FormData();
-		formData.append('logo', this.logo, this.logo.name);
-		
+		if (this.logo) {
+			formData.append('logo', this.logo, this.logo.name);
+		}
+
+		this.selectedFrequencies.forEach((value) => formData.append('frequency', value));
+
 		let headers = new Headers();
 		headers.append('Accept', 'application/json');
 		
 		let options = new RequestOptions({ headers: headers });
 		
 		this.http.put("merchant/" + this.user.id + "/settings", formData, options)
-			.map(res => res.json())
-			.catch(error => Observable.throw(error))
 			.subscribe(
-				data => console.log('success'),
+				() => this.showSuccess = true,
 				error => console.log(error)
 			);
 	}
 
 	updateFrequencies(ev) {
-		console.log(ev);
+		var idx = this.selectedFrequencies.indexOf(ev.source.value);
+		if (idx > -1) {
+			this.selectedFrequencies.splice(idx, 1);
+		} else {
+			this.selectedFrequencies.push(ev.source.value);
+		}
 	}
 }

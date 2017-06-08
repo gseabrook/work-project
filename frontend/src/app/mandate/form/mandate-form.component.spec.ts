@@ -2,7 +2,7 @@ import { fakeAsync, async, ComponentFixture, TestBed, inject, tick } from '@angu
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions, HttpModule, Http, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { By } from '@angular/platform-browser';
-import { MaterialModule, MdDialogRef, MdDialog } from '@angular/material';
+import { MaterialModule, MdDialogRef, MdDialog, MD_DIALOG_DATA } from '@angular/material';
 import { Md2Module } from 'md2';
 import { FormsModule } from '@angular/forms';
 import { MandateFormComponent } from './mandate-form.component';
@@ -15,8 +15,9 @@ import { MandateModule } from '../mandate.module';
 import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
 import { TestHelpers } from '../../../test/test-helpers';
-import { DisplayEnum } from '../model/displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 import { RouterStub } from '../../../test/router-stub';
+import { TestModule } from '../../../test/test.module';
 
 import * as mandateNew from '../../../../fixtures/mandateNew.json';
 import * as mandatePendingAuthorisation from '../../../../fixtures/mandatePendingAuthorisation.json';
@@ -85,11 +86,15 @@ describe('MandateFormComponent', () => {
 				provide: MdDialogRef,
 				useValue: dialogMock
 			});
+			providers.push({
+				provide: MD_DIALOG_DATA, 
+				useValue: routeData
+			});
 		}
 
 		TestBed.configureTestingModule({
 			declarations: [],
-			imports: [MaterialModule, RouterTestingModule, Md2Module, FormsModule, MandateModule],
+			imports: [MaterialModule, RouterTestingModule, Md2Module, FormsModule, MandateModule, TestModule],
 			providers: providers
 		})
 			.compileComponents();

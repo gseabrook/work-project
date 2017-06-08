@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
@@ -14,18 +14,17 @@ import { LoginModule } from './login/login.module';
 import { MandateModule } from './mandate/mandate.module';
 import { SignUpModule } from './signup/signup.module';
 import { AuthModule } from './auth/auth.module';
+import { MerchantModule } from './merchant/merchant.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
-import { MerchantSettingsComponent } from './merchant/merchant-settings/merchant-settings.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		ConfirmationDialogComponent,
-		MerchantSettingsComponent
+		ConfirmationDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -39,7 +38,8 @@ import { MerchantSettingsComponent } from './merchant/merchant-settings/merchant
 		LoginModule,
 		MandateModule,
 		SignUpModule,
-		AppRoutingModule
+		AppRoutingModule,
+		MerchantModule
 	],
 	entryComponents: [
 		ConfirmationDialogComponent

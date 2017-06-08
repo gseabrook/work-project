@@ -1,0 +1,19 @@
+{
+  "companyName": "Ag-I Solutions",
+  "companyRegistrationNumber": "CRN12345678",
+  "id": 1,
+  "merchantBankAccounts": [],
+  "merchantSettings": {
+    "logoFileLocation": null,
+    "selectedFrequencies": [
+      {
+        "value": "WEEKLY",
+        "displayValue": "Weekly"
+      },
+      {
+        "value": "YEARLY",
+        "displayValue": "Yearly"
+      }
+    ]
+  }
+}

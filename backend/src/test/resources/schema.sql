@@ -10,7 +10,7 @@ drop table if exists merchant_merchant_bank_accounts CASCADE;
 drop table if exists merchant_bank_account CASCADE;
 drop table if exists user_verification_token CASCADE;
 
-create sequence hibernate_sequence;
+create sequence hibernate_sequence start 1 increment 1;
 
 create table bank (id SERIAL UNIQUE, code varchar(255), name varchar(255), display_name varchar(255), primary key (id));
 create table customer (id SERIAL UNIQUE, email_address varchar(255), id_type integer, id_value varchar(255), name varchar(255), phone_number varchar(255), principal_uid varchar(255), primary key (id));
@@ -18,8 +18,9 @@ create table customer_bank_accounts (customer_id integer not null, bank_accounts
 create table customer_bank_account (id SERIAL UNIQUE, account_number varchar(255), bank_id integer, customer_id integer, primary key (id));
 create table mandate (id SERIAL UNIQUE, amount decimal(19,2) not null, status integer, frequency integer, reference_number varchar(255), fpx_transaction_id varchar(255), purpose_of_payment varchar(255), maximum_frequency integer, registration_date timestamp, customer_id integer not null, merchant_id integer not null, customer_bank_account_id integer, node_id varchar(255), date_created timestamp, primary key (id));
 create table mandate_status (id SERIAL UNIQUE, code varchar(255), description varchar(255), primary key (id));
-create table merchant (id SERIAL UNIQUE, company_name varchar(255), company_registration_number varchar(255), primary key (id));
+create table merchant (id SERIAL UNIQUE, company_name varchar(255), company_registration_number varchar(255), logo_file_location varchar(255), primary key (id));
 create table merchant_merchant_bank_accounts (merchant_id integer not null, merchant_bank_accounts_id integer not null);
+create table merchant_selected_frequencies (merchant_id integer not null, selected_frequencies integer);
 create table merchant_bank_account (id SERIAL UNIQUE, account_number varchar(255), seller_id varchar(255), bank_id integer, primary key (id));
 create table user_verification_token (id SERIAL UNIQUE, token varchar(255) not null, principal_uid varchar(255) not null, expiry_date timestamp, primary key(id));
 
@@ -31,9 +32,10 @@ alter table customer_bank_account add constraint FKlwciy5lxq5eq5qqhvrsr5kwd4 for
 alter table customer_bank_account add constraint alwkndlawjdad foreign key (customer_id) references customer;
 alter table mandate add constraint FKrblr9jysrw4jmgs8it3s1rjq3 foreign key (customer_id) references customer;
 alter table mandate add constraint FK4x77j3hw2seixa474xtcvp55i foreign key (merchant_id) references merchant;
-alter table mandate add constraint pfosepfkapowdka foreign key (customer_bank_account_id) references customer_bank_account;
+alter table mandate add constraint FK1pouc06qks070iq6bsrnbb8h3 foreign key (customer_bank_account_id) references customer_bank_account;
 alter table merchant_merchant_bank_accounts add constraint FKknck2yatj3xa6gq14w4015lh2 foreign key (merchant_bank_accounts_id) references merchant_bank_account;
 alter table merchant_merchant_bank_accounts add constraint FKcl09v4n3qydtvw2axotoxek3x foreign key (merchant_id) references merchant;
+alter table merchant_selected_frequencies add constraint FKoprwnl22n5xd0k553owctw7tp foreign key (merchant_id) references merchant;
 alter table merchant_bank_account add constraint FKfux74odfqqlavtf9qdvrou85a foreign key (bank_id) references bank;
 
 -- Ebikko

@@ -31,4 +31,8 @@ export class TestHelpers {
 	  	fixture.detectChanges();
 	}
 
+	static clickMdCheckbox(cssSelector: string, fixture: ComponentFixture<any>) {
+		fixture.debugElement.query(By.css(cssSelector + ' div.mat-checkbox-inner-container')).nativeElement.click();
+		fixture.detectChanges();
+	}
 }

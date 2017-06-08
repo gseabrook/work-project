@@ -1,5 +1,6 @@
 package com.ebikko.mandate.model;
 
+import com.ebikko.merchant.model.MerchantSettings;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,6 +23,8 @@ public class Merchant {
     private String companyName;
     @OneToMany
     private List<MerchantBankAccount> merchantBankAccounts;
+    @Embedded
+    private MerchantSettings merchantSettings;
     @JsonIgnore
     @OneToMany(mappedBy = "merchant")
     private List<Mandate> mandates = newArrayList();
@@ -83,6 +86,14 @@ public class Merchant {
 
     public void setMandates(List<Mandate> mandates) {
         this.mandates = mandates;
+    }
+
+    public MerchantSettings getMerchantSettings() {
+        return merchantSettings;
+    }
+
+    public void setMerchantSettings(MerchantSettings merchantSettings) {
+        this.merchantSettings = merchantSettings;
     }
 
     @Override

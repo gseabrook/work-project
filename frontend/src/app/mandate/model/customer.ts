@@ -1,6 +1,6 @@
 import { BankAccount } from './bankAccount';
 import { Serializable } from '../../model/serializable';
-import { DisplayEnum } from './displayEnum';
+import { DisplayEnum } from '../../model/displayEnum';
 
 export class Customer implements Serializable<Customer> {
 	public name: string;

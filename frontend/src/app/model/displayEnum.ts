@@ -1,4 +1,5 @@
-import { Serializable } from '../../model/serializable';
+import { Serializable } from './serializable';
+import { Response } from '@angular/http';
 
 export class DisplayEnum implements Serializable<DisplayEnum> {
 
@@ -20,5 +21,10 @@ export class DisplayEnum implements Serializable<DisplayEnum> {
 		displayEnum.value = value;
 		displayEnum.displayValue = displayValue;
 		return displayEnum;
+	}
+
+	static extract(res: Response) {
+		const body = res.json();
+		return body.map(displayEnum => new DisplayEnum().deserialize(displayEnum));		
 	}
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Customer } from '../../model/customer';
 import { MandateFormService } from '../mandate-form.service';
-import { DisplayEnum } from '../../model/displayEnum';
+import { DisplayEnum } from '../../../model/displayEnum';
 import { NgForm } from '@angular/forms';
 
 @Component({
