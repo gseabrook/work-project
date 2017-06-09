@@ -1,0 +1,9 @@
+{
+  "errors": [
+    {
+      "field": "logo",
+      "value": "org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@39fce3a9",
+      "message": "Logo must be smaller than 320px x 320px"
+    }
+  ]
+}

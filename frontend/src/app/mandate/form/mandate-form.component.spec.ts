@@ -9,11 +9,13 @@ import { MandateFormComponent } from './mandate-form.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MandateService } from '../mandate.service';
+import { MerchantService } from '../../merchant/merchant.service';
 import { FpxService } from '../fpx.service';
 import { MandateFormService } from './mandate-form.service';
 import { MandateModule } from '../mandate.module';
 import { Observable } from 'rxjs/Observable';
 import { Mandate } from '../model/mandate';
+import { Merchant } from '../../merchant/model/merchant';
 import { TestHelpers } from '../../../test/test-helpers';
 import { DisplayEnum } from '../../model/displayEnum';
 import { RouterStub } from '../../../test/router-stub';
@@ -25,7 +27,7 @@ import * as mandateAuthorised from '../../../../fixtures/mandateAuthorised.json'
 import * as adMessageAuthorisation from '../../../../fixtures/adMessageAuthorisation.json';
 import * as banks from '../../../../fixtures/banks.json';
 import * as idTypes from '../../../../fixtures/idTypes.json';
-import * as frequencies from '../../../../fixtures/frequencies.json';
+import * as merchant from '../../../../fixtures/merchant.json';
 
 describe('MandateFormComponent', () => {
 	let component: MandateFormComponent;
@@ -78,7 +80,7 @@ describe('MandateFormComponent', () => {
 				return new Http(mockBackend, options);
 			},
 			deps: [MockBackend, BaseRequestOptions]
-		}, MockBackend, BaseRequestOptions, MandateService, MandateFormService];
+		}, MockBackend, BaseRequestOptions, MandateService, MandateFormService, MerchantService];
 
 		if (includeDialog) {
 			dialogMock.config.data = routeData;
@@ -108,13 +110,14 @@ describe('MandateFormComponent', () => {
 
 		createComponent();
 
+		expect(connections[0].request.url).toEqual("bank");
 		connections[0].mockRespond(new Response(new ResponseOptions({ body: banks, status: 200 })));
-		connections[1].mockRespond(new Response(new ResponseOptions({ body: frequencies, status: 200 })));
 		tick();
 		fixture.detectChanges();
 
-		if (connections.length === 3) {
-			connections[2].mockRespond(new Response(new ResponseOptions({ body: idTypes, status: 200 })));
+		if (connections.length === 2) {
+			expect(connections[1].request.url).toEqual("mandate/idType");
+			connections[1].mockRespond(new Response(new ResponseOptions({ body: idTypes, status: 200 })));
 			tick();
 			fixture.detectChanges();
 		}
@@ -124,10 +127,11 @@ describe('MandateFormComponent', () => {
 		beforeEach(async(() => {
 			spyOn(routerStub, 'navigate');
 			setupTestBed(Observable.of({
-				mandate: new Mandate(),
+				mandate: new Mandate(new Merchant().deserialize(merchant)),
 				mode: 'form',
 				user: {
-					type: "MERCHANT"
+					type: "MERCHANT",
+					id: "1"
 				}
 			}), false);
 		}));
@@ -151,7 +155,7 @@ describe('MandateFormComponent', () => {
 			TestHelpers.pickFromMdSelect('md-select[name="idType"]', '1', fixture);
 			TestHelpers.inputValue('input[name="idValue"]', '12341234', fixture);
 			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
-			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '3', fixture, '4');
+			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '1', fixture, '4');
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '2', fixture, '6');
 
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
@@ -162,6 +166,7 @@ describe('MandateFormComponent', () => {
 
 		it("should post the form and navigate after clicking email", fakeAsync(inject([MockBackend], (mockBackend) => {
 			initialiseComponentWithReferenceData(mockBackend);
+			fixture.detectChanges();
 
 			TestHelpers.inputValue('input[name="referenceNumber"]', 'TEST-1', fixture);
 			TestHelpers.inputValue('input[name="accountHolderName"]', 'Joe', fixture);
@@ -169,7 +174,7 @@ describe('MandateFormComponent', () => {
 			TestHelpers.pickFromMdSelect('md-select[name="idType"]', '1', fixture);
 			TestHelpers.inputValue('input[name="idValue"]', '12341234', fixture);
 			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
-			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '3', fixture, '4');
+			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '2', fixture, '4');
 
 			fixture.debugElement.query(By.css("div.buttonContainer button:nth-child(2)")).nativeElement.click();
 
@@ -193,7 +198,8 @@ describe('MandateFormComponent', () => {
 				mandate: mandate,
 				mode: 'dialog',
 				user: {
-					type: "MERCHANT"
+					type: "MERCHANT",
+					id: "1"
 				}
 			}, true);
 		}));
@@ -260,7 +266,11 @@ describe('MandateFormComponent', () => {
 
 			setupTestBed(Observable.of({
 				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
-				mode: 'standAlone'
+				mode: 'standAlone',
+				user: {
+					type: "CUSTOMER",
+					id: "1"
+				}
 			}), false);
 		}));
 
@@ -301,7 +311,8 @@ describe('MandateFormComponent', () => {
 				mandate: new Mandate().deserialize(mandateAuthorised),
 				mode: 'standAlone',
 				user: {
-					type: "MERCHANT"
+					type: "MERCHANT",
+					id: "1"
 				}
 			}), false);
 		}));

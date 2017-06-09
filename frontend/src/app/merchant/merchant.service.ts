@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Merchant } from '../mandate/model/merchant';
+import { Merchant } from './model/merchant';
 
 @Injectable()
 export class MerchantService {

@@ -10,6 +10,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import * as frequencies from '../../../../fixtures/frequencies.json';
 import * as merchant from '../../../../fixtures/merchant.json';
+import * as merchantSettingsInvalidResponse from '../../../../fixtures/merchantSettingsInvalidResponse.json';
 
 describe('MerchantSettingsComponent', () => {
 	let component: MerchantSettingsComponent;
@@ -41,7 +42,7 @@ describe('MerchantSettingsComponent', () => {
 		fixture.detectChanges();
 	};
 
-	let connections = [];
+	let connections: MockConnection[] = [];
 	let connection: MockConnection;
 
 	it('should check the selected frequencies', fakeAsync(inject([MockBackend], (mockBackend) => {
@@ -81,5 +82,19 @@ describe('MerchantSettingsComponent', () => {
 		expect(formData.getAll("frequency")).toEqual(["WEEKLY"]);
 
 		tick(1000);
+	})));
+
+	it('should display an error message when error returned', fakeAsync(inject([MockBackend], (mockBackend) => {
+		mockBackend.connections.subscribe((c: MockConnection) => connections.push(c));
+		createComponent();
+
+		fixture.debugElement.query(By.css("button")).triggerEventHandler('click', {});
+
+		let response: Response = new Response(new ResponseOptions({body: merchantSettingsInvalidResponse, status: 422}));
+		connections.pop().mockError(response as any as Error);
+		fixture.detectChanges();
+
+		expect(component.errors.length).toEqual(1);
+		expect(fixture.debugElement.query(By.css("div.alert-danger")).nativeElement.textContent).toContain("Logo must be smaller than 320px x 320px");
 	})));
 });

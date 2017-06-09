@@ -38,7 +38,20 @@
     "companyName": "Ag I Solutions",
     "companyRegistrationNumber": "WP010101334",
     "id": 1,
-    "merchantBankAccounts": []
+    "merchantBankAccounts": [],
+    "merchantSettings": {
+      "logoFileLocation": null,
+      "selectedFrequencies": [
+        {
+          "value": "WEEKLY",
+          "displayValue": "Weekly"
+        },
+        {
+          "value": "YEARLY",
+          "displayValue": "Yearly"
+        }
+      ]
+    }
   },
   "customerBankAccount": {
     "bank": {

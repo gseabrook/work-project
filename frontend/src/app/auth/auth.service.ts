@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class AuthService {
@@ -40,6 +41,12 @@ export class AuthService {
 			.get('user')
 			.toPromise()
 			.then(response => new User().deserialize(response.json()));
+	}
+
+	getUserDetailsObservable(): Observable<User> {
+		return this.http
+			.get('user')
+			.map(response => new User().deserialize(response.json()));
 	}
 
 	private handleError(error: any): Promise<any> {

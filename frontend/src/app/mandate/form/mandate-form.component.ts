@@ -9,6 +9,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { Bank } from '../model/bank';
 import { Mandate } from '../model/mandate';
 import { MandateService } from '../mandate.service';
+import { MerchantService } from '../../merchant/merchant.service';
 import { FpxService } from '../fpx.service';
 import { ErrorResponse } from '../../model/errorResponse';
 import { ValidationError } from '../../model/validationError';
@@ -25,7 +26,6 @@ export class MandateFormComponent implements OnInit {
 
 	banks: Bank[];
 	frequencyTypes: DisplayEnum[];
-	idTypes: DisplayEnum[];
 	model: Mandate;
 	user: User;
 	mode: string;
@@ -33,6 +33,7 @@ export class MandateFormComponent implements OnInit {
 	errors: ValidationError[] = [];
 
 	constructor(
+		private merchantService: MerchantService,
 		private mandateService: MandateService,
 		private mandateFormService: MandateFormService,
 		private fpxService: FpxService,
@@ -65,13 +66,10 @@ export class MandateFormComponent implements OnInit {
 			}
 		});
 
-		this.mandateFormService.getFrequencies().subscribe(frequencies => {
-			this.frequencyTypes = frequencies;
-
-			if (this.model.frequency) {
-				this.model.frequency = frequencies.filter(freq => freq.value === this.model.frequency.value)[0];
-			}
-		});
+		this.frequencyTypes = this.model.merchant.merchantSettings.selectedFrequencies;
+		if (this.model.frequency) {
+			this.model.frequency = this.frequencyTypes.filter(freq => freq.value === this.model.frequency.value)[0];
+		}
 	}
 
 	close(success) {

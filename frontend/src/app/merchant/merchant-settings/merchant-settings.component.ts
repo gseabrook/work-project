@@ -3,7 +3,8 @@ import { RequestOptions, Request, RequestMethod, Headers, Http } from '@angular/
 import { Observable } from 'rxjs/Observable';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../model/user';
-import { Merchant } from '../../mandate/model/merchant';
+import { ErrorResponse } from '../../model/errorResponse';
+import { Merchant } from '../model/merchant';
 import { MerchantSettingsService } from './merchant-settings.service';
 import { MerchantService } from '../merchant.service';
 import { DisplayEnum } from '../../model/displayEnum';
@@ -23,6 +24,7 @@ export class MerchantSettingsComponent implements OnInit {
 	allFrequencies: DisplayEnum[];
 	showSuccess: boolean = false;
 	merchant: Merchant;
+	errors: any = [];
 
 	constructor(
 		private http: Http, 		
@@ -45,6 +47,8 @@ export class MerchantSettingsComponent implements OnInit {
 	}
 
 	save() {
+		this.showSuccess = false;
+		this.errors = [];
 		let formData: FormData = new FormData();
 		if (this.logo) {
 			formData.append('logo', this.logo, this.logo.name);
@@ -60,7 +64,7 @@ export class MerchantSettingsComponent implements OnInit {
 		this.http.put("merchant/" + this.user.id + "/settings", formData, options)
 			.subscribe(
 				() => this.showSuccess = true,
-				error => console.log(error)
+				error => this.errors = new ErrorResponse().deserialize(error.json()).fieldErrors
 			);
 	}
 

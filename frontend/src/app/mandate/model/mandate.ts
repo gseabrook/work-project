@@ -1,6 +1,6 @@
 import { Customer } from './customer';
 import { BankAccount } from './bankAccount';
-import { Merchant } from './merchant';
+import { Merchant } from '../../merchant/model/merchant';
 import { Serializable } from '../../model/serializable';
 import { DisplayEnum } from '../../model/displayEnum';
 
@@ -21,10 +21,11 @@ export class Mandate implements Serializable<Mandate> {
 	public status: DisplayEnum;
 	public purposeOfPayment: string;
 
-	constructor() {
+	constructor(merchant?: Merchant) {
 		this.customer = new Customer();
 		this.customerBankAccount = new BankAccount();
 		this.status = DisplayEnum.of("NEW", "New");
+		this.merchant = merchant || null;
 	}
 
 	clone(): Mandate {

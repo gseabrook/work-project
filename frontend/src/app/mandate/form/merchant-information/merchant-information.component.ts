@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Merchant } from '../../model/merchant';
+import { Merchant } from '../../../merchant/model/merchant';
 import { MandateFormService } from '../mandate-form.service';
 
 @Component({

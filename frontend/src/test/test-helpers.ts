@@ -11,7 +11,13 @@ export class TestHelpers {
 	}
 
 	static pickFromMdSelect(cssSelector: string, itemIdx: string, fixture: ComponentFixture<any>, selectIdx?: string) {
-		fixture.debugElement.query(By.css(cssSelector + ' .mat-select-trigger')).nativeElement.click();
+		let el = fixture.debugElement.query(By.css(cssSelector + ' .mat-select-trigger'));
+		if (el == null) {
+			console.log("MdSelect Element does not exist - " + cssSelector + ' .mat-select-trigger');
+			console.log(fixture.debugElement.queryAll(By.css('md-select')));
+		}
+		el.nativeElement.click();
+
 	  	fixture.detectChanges();
 
 	  	let selector = 'md-option:nth-child(' + itemIdx + ')';
@@ -19,7 +25,11 @@ export class TestHelpers {
 	  		selector = 'div.cdk-overlay-pane:nth-child(' + selectIdx + ') ' + selector;
 	  	}
 
-	    fixture.debugElement.query(By.css(selector)).nativeElement.click();
+	    el = fixture.debugElement.query(By.css(selector));
+		if (el == null) {
+			console.log("MdOption element does not exist - " + selector + ' .mat-select-trigger');
+		}
+		el.nativeElement.click();
 	  	fixture.detectChanges();
 	}
 

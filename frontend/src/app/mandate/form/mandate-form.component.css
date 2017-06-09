@@ -51,10 +51,8 @@ div.buttonContainer button {
     padding: 0px;
 }
 
-img {
+object {
     position: absolute;
-    height: 150px;
-    width: auto;
     right: 0px;
     top: 0px;
 }

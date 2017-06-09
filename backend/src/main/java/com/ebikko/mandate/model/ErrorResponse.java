@@ -43,6 +43,10 @@ public class ErrorResponse {
         errors = newArrayList(validationError);
     }
 
+    public ErrorResponse(String field, Object value, String message) {
+        this(newArrayList(new ValidationError(field, value, message)));
+    }
+
     public List<ValidationError> getErrors() {
         return errors;
     }

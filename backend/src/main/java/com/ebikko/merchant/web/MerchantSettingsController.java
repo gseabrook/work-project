@@ -1,5 +1,6 @@
 package com.ebikko.merchant.web;
 
+import com.ebikko.mandate.model.ErrorResponse;
 import com.ebikko.mandate.model.MandateFrequency;
 import com.ebikko.mandate.model.Merchant;
 import com.ebikko.mandate.service.MerchantService;
@@ -12,14 +13,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
 
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static com.google.common.collect.Collections2.transform;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
+/**
+ * Usually all the request parameters are bound to an object, but because we are also sending a file,
+ * that isn't possible and we have to specify the parameters individually
+ */
 @RestController
 @RequestMapping(MERCHANT_URL + "/{merchantId}/settings")
 public class MerchantSettingsController {
@@ -44,6 +52,10 @@ public class MerchantSettingsController {
         merchant.getMerchantSettings().setSelectedFrequencies(newArrayList(frequencyList));
 
         if (logo != null) {
+            BufferedImage image = ImageIO.read(logo.getInputStream());
+            if (image.getHeight() > 320 || image.getWidth() > 320) {
+                return new ResponseEntity(new ErrorResponse("logo", logo, "Logo must be smaller than 320px x 320px"), UNPROCESSABLE_ENTITY);
+            }
             String logoFileLocation = storageService.replaceMerchantLogo(merchant, logo);
             if (merchant.getMerchantSettings() == null) {
                 merchant.setMerchantSettings(new MerchantSettings());
