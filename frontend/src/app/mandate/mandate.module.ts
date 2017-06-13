@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { Md2Module } from 'md2';
+import { DialogModule } from '../dialog/dialog.module';
 
 import { MandateFormComponent } from './form/mandate-form.component';
 import { MandateListComponent } from './list/mandate-list.component';
@@ -20,7 +21,7 @@ import { MandateStatusComponent } from './status/mandate-status.component';
 
 @NgModule({
 	imports: [
-		CommonModule, FormsModule, MaterialModule, RouterModule, Md2Module.forRoot(), FlexLayoutModule
+		CommonModule, FormsModule, MaterialModule, RouterModule, Md2Module.forRoot(), FlexLayoutModule, DialogModule
 	],
 	declarations: [
 		MandateFormComponent, MandateListComponent, CompleteComponent, CustomerInformationComponent, MerchantInformationComponent, MandateStatusComponent

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import java.util.List;
+import java.util.Set;
 
 @Embeddable
 public class MerchantSettings {
@@ -14,6 +15,8 @@ public class MerchantSettings {
     private String logoFileLocation;
     @ElementCollection
     private List<MandateFrequency> selectedFrequencies;
+    @ElementCollection
+    private Set<String> purposeOfPayments;
 
     public MerchantSettings() {}
 
@@ -31,5 +34,13 @@ public class MerchantSettings {
 
     public void setSelectedFrequencies(List<MandateFrequency> selectedFrequencies) {
         this.selectedFrequencies = selectedFrequencies;
+    }
+
+    public Set<String> getPurposeOfPayments() {
+        return purposeOfPayments;
+    }
+
+    public void setPurposeOfPayments(Set<String> purposeOfPayments) {
+        this.purposeOfPayments = purposeOfPayments;
     }
 }

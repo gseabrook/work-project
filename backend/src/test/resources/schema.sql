@@ -20,6 +20,7 @@ create table mandate (id SERIAL UNIQUE, amount decimal(19,2) not null, status in
 create table mandate_status (id SERIAL UNIQUE, code varchar(255), description varchar(255), primary key (id));
 create table merchant (id SERIAL UNIQUE, company_name varchar(255), company_registration_number varchar(255), logo_file_location varchar(255), primary key (id));
 create table merchant_merchant_bank_accounts (merchant_id integer not null, merchant_bank_accounts_id integer not null);
+create table merchant_purpose_of_payments (merchant_id integer not null, purpose_of_payments varchar(255));
 create table merchant_selected_frequencies (merchant_id integer not null, selected_frequencies integer);
 create table merchant_bank_account (id SERIAL UNIQUE, account_number varchar(255), seller_id varchar(255), bank_id integer, primary key (id));
 create table user_verification_token (id SERIAL UNIQUE, token varchar(255) not null, principal_uid varchar(255) not null, expiry_date timestamp, primary key(id));
@@ -35,6 +36,7 @@ alter table mandate add constraint FK4x77j3hw2seixa474xtcvp55i foreign key (merc
 alter table mandate add constraint FK1pouc06qks070iq6bsrnbb8h3 foreign key (customer_bank_account_id) references customer_bank_account;
 alter table merchant_merchant_bank_accounts add constraint FKknck2yatj3xa6gq14w4015lh2 foreign key (merchant_bank_accounts_id) references merchant_bank_account;
 alter table merchant_merchant_bank_accounts add constraint FKcl09v4n3qydtvw2axotoxek3x foreign key (merchant_id) references merchant;
+alter table merchant_purpose_of_payments add constraint FKdols9jeo0lctwvepn9ad9wtds foreign key (merchant_id) references merchant;
 alter table merchant_selected_frequencies add constraint FKoprwnl22n5xd0k553owctw7tp foreign key (merchant_id) references merchant;
 alter table merchant_bank_account add constraint FKfux74odfqqlavtf9qdvrou85a foreign key (bank_id) references bank;
 

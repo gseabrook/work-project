@@ -18,13 +18,10 @@ import { MerchantModule } from './merchant/merchant.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { ConfirmationDialogService } from './confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
 	declarations: [
-		AppComponent,
-		ConfirmationDialogComponent
+		AppComponent
 	],
 	imports: [
 		BrowserModule,
@@ -40,12 +37,6 @@ import { ConfirmationDialogService } from './confirmation-dialog/confirmation-di
 		SignUpModule,
 		AppRoutingModule,
 		MerchantModule
-	],
-	entryComponents: [
-		ConfirmationDialogComponent
-	],
-	providers: [
-		ConfirmationDialogService
 	],
 	bootstrap: [AppComponent]
 })

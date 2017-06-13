@@ -11,7 +11,7 @@ import { MandateService } from '../mandate.service';
 import { FpxService } from '../fpx.service';
 import { MandateFormComponent } from '../form/mandate-form.component';
 import { DisplayEnum } from '../../model/displayEnum';
-import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
+import { DialogService } from '../../dialog/dialog.service';
 
 @Component({
 	selector: 'app-mandate-list',
@@ -28,7 +28,7 @@ export class MandateListComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private dialog: MdDialog,
-		private confirmationDialogService: ConfirmationDialogService,
+		private dialogService: DialogService,
 		private fpxService: FpxService
 	) { }
 
@@ -60,7 +60,7 @@ export class MandateListComponent implements OnInit {
 	}
 
 	terminateMandate(mandate: Mandate) {
-		this.confirmationDialogService.openConfirmationDialog({
+		this.dialogService.openConfirmationDialog({
 			message: 'Are you sure you wish to terminate this mandate?'
 		})
 		.filter(mandate => !!mandate)

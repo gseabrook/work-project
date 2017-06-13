@@ -8,6 +8,7 @@ import com.ebikko.merchant.model.MerchantSettings;
 import com.ebikko.merchant.service.StorageService;
 import com.google.common.base.Function;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 
 import static com.ebikko.mandate.web.MerchantController.MERCHANT_URL;
 import static com.google.common.collect.Collections2.transform;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 /**
@@ -34,11 +37,16 @@ public class MerchantSettingsController {
 
     private final MerchantService merchantService;
     private final StorageService storageService;
+    private final int logoHeight;
+    private final int logoWidth;
 
     @Autowired
-    public MerchantSettingsController(MerchantService merchantService, StorageService storageService) {
+    public MerchantSettingsController(MerchantService merchantService, StorageService storageService,
+                                      @Value("${max.logo.height:320}") int logoHeight, @Value("${max.logo.width:320}") int logoWidth) {
         this.merchantService = merchantService;
         this.storageService = storageService;
+        this.logoHeight = logoHeight;
+        this.logoWidth = logoWidth;
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -51,9 +59,12 @@ public class MerchantSettingsController {
         Collection<MandateFrequency> frequencyList = getMandateFrequencies(request);
         merchant.getMerchantSettings().setSelectedFrequencies(newArrayList(frequencyList));
 
+        Set<String> purposesOfPayment = newHashSet(request.getParameterValues("purposeOfPayment"));
+        merchant.getMerchantSettings().setPurposeOfPayments(purposesOfPayment);
+
         if (logo != null) {
             BufferedImage image = ImageIO.read(logo.getInputStream());
-            if (image.getHeight() > 320 || image.getWidth() > 320) {
+            if (image.getHeight() > logoHeight || image.getWidth() > logoWidth) {
                 return new ResponseEntity(new ErrorResponse("logo", logo, "Logo must be smaller than 320px x 320px"), UNPROCESSABLE_ENTITY);
             }
             String logoFileLocation = storageService.replaceMerchantLogo(merchant, logo);

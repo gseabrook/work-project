@@ -7,11 +7,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { DialogModule } from '../dialog/dialog.module';
 import { MerchantService } from './merchant.service';
 
 @NgModule({
 	imports: [
-		CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule
+		CommonModule, FormsModule, MaterialModule, RouterModule, FlexLayoutModule, DialogModule
 	],
 	declarations: [
 		MerchantSettingsComponent

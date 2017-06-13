@@ -5,6 +5,7 @@
   "merchantBankAccounts": [],
   "merchantSettings": {
     "logoFileLocation": null,
+    "purposeOfPayments": [],
     "selectedFrequencies": [
       {
         "value": "WEEKLY",

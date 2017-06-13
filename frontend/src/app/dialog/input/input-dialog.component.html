@@ -1,0 +1,9 @@
+<div class="inputDialog" fxLayout='column'>
+	<md-input-container>
+	  <input mdInput placeholder="{{label}}" [(ngModel)]="value">
+	</md-input-container>
+	<div fxLayout='row' fxLayoutAlign='space-around center' fxFlex='50'>
+		<button md-raised-button type="button" (click)="cancel()">Cancel</button>
+	    <button md-raised-button color="primary" type="button" (click)="confirm()">OK</button>
+	</div>
+</div>

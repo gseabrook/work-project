@@ -10,7 +10,7 @@ import { MaterialModule, MdDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs/Observable';
-import { ConfirmationDialogService } from '../../confirmation-dialog/confirmation-dialog.service';
+import { DialogService } from '../../dialog/dialog.service';
 
 import * as Mandates from '../../../../fixtures/mandates.json';
 import * as AdMessageTermination from '../../../../fixtures/adMessageTermination.json';
@@ -52,7 +52,7 @@ describe('MandateListComponent', () => {
 				provide: MdDialog,
 				useValue: dialogMock
 			}, {
-				provide: ConfirmationDialogService,
+				provide: DialogService,
 				useValue: confirmationDialogMock
 			}, {
 				provide: FpxService,
