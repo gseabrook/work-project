@@ -59,7 +59,8 @@ public class MerchantSettingsController {
         Collection<MandateFrequency> frequencyList = getMandateFrequencies(request);
         merchant.getMerchantSettings().setSelectedFrequencies(newArrayList(frequencyList));
 
-        Set<String> purposesOfPayment = newHashSet(request.getParameterValues("purposeOfPayment"));
+        String[] purposeOfPayments = request.getParameterValues("purposeOfPayment");
+        Set<String> purposesOfPayment = newHashSet(purposeOfPayments == null ? new String[0] : purposeOfPayments);
         merchant.getMerchantSettings().setPurposeOfPayments(purposesOfPayment);
 
         if (logo != null) {

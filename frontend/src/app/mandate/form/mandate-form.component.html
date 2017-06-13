@@ -46,9 +46,16 @@
                 <input mdInput placeholder="Maximum Frequency" type="text" [(ngModel)]="model.maximumFrequency" name="maximumFrequency" #maximumFrequency="ngModel"/>
             </md-input-container>
         </div>
-        <md-input-container>
-            <input mdInput placeholder="Purpose of payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
+        <md-input-container *ngIf="model.merchant.merchantSettings.purposeOfPayments.length === 0">
+            <input mdInput placeholder="Purpose of Payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
         </md-input-container>
+        <div *ngIf="model.merchant.merchantSettings.purposeOfPayments.length > 0">
+            <md-select placeholder="Purpose of Payment" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment">
+                <md-option *ngFor="let purpose of model.merchant.merchantSettings.purposeOfPayments" [value]="purpose">
+                    {{purpose}}
+                </md-option>
+            </md-select>
+        </div>
         <div class="alert alert-danger fade" *ngIf="errors.length !== 0">
             <div *ngFor="let fieldError of errors">{{ fieldError.message}}</div>
         </div>

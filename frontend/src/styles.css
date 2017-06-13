@@ -16,7 +16,6 @@ app-root, app-home {
 }
 
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
-/* old -@import '~@angular/material/core/theming/prebuilt/indigo-pink.css';*/
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 div.container {
