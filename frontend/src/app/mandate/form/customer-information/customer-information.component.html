@@ -3,7 +3,8 @@
     <md-hint align="start" class="errorHint" *ngIf="!name.valid && name.touched">Please enter a name</md-hint>
 </md-input-container>
 <md-input-container>
-    <input mdInput placeholder="Email" type="email" required [(ngModel)]="customer.emailAddress" name="email" />
+    <input mdInput placeholder="Email" type="email" required [(ngModel)]="customer.emailAddress" name="email" #email="ngModel"/>
+    <md-hint align="start" class="errorHint" *ngIf="!email.valid && email.touched">Please enter your email address</md-hint>
 </md-input-container>
 <md-input-container>
     <input mdInput placeholder="Phone Number" type="text" [(ngModel)]="customer.phoneNumber" name="phoneNumber" />
@@ -16,6 +17,6 @@
     </md-select>
     <md-input-container>
         <input mdInput placeholder="ID Number" type="text" required [(ngModel)]="customer.idValue" name="idValue" #idValue="ngModel" />
-        <md-hint align="start" class="errorHint" *ngIf="!idValue.valid && idValue.touched">Please your ID number</md-hint>
+        <md-hint align="start" class="errorHint" *ngIf="!idValue.valid && idValue.touched">Please enter your ID number</md-hint>
     </md-input-container>
 </div>

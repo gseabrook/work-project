@@ -1,14 +1,16 @@
 form {
-    padding: 8px;
+    padding: 0px 8px 8px 8px;
     max-width: 500px;
+}
+
+h1 {
+    margin-top: 0px;
+    padding-top: 0px;
+    margin-bottom: 12px;
 }
 
 /deep/ form md-input-container {
     width: 100%;
-}
-
-md-card {
-    padding: 0px;
 }
 
 form > *:not(.alert) {
@@ -55,4 +57,6 @@ object {
     position: absolute;
     right: 0px;
     top: 0px;
+    height: 100px;
+    width: 100px;
 }

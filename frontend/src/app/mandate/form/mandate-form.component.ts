@@ -1,7 +1,7 @@
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl } from '@angular/forms';
 import { Response } from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
@@ -17,6 +17,9 @@ import { User } from '../../model/user';
 import { MandateFormService } from './mandate-form.service';
 import { DisplayEnum } from '../../model/displayEnum';
 
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
+
 @Component({
 	selector: 'mandate-form',
 	templateUrl: './mandate-form.component.html',
@@ -31,6 +34,8 @@ export class MandateFormComponent implements OnInit {
 	mode: string;
 	fpxData: any;
 	errors: ValidationError[] = [];
+	popCtrl: FormControl;
+	filteredPurposes: any;
 
 	constructor(
 		private merchantService: MerchantService,
@@ -43,7 +48,12 @@ export class MandateFormComponent implements OnInit {
 		private route: ActivatedRoute,
 		@Optional() @Inject(MD_DIALOG_DATA) private data: any,
 		@Optional() private dialogRef: MdDialogRef<MandateFormComponent>
-	) { }
+	) {
+		this.popCtrl = new FormControl();
+		this.filteredPurposes = this.popCtrl.valueChanges
+			.startWith(null)
+			.map(name => this.filterPurposes(name));
+	}
 
 	ngOnInit() {
 		if (this.dialogRef) {
@@ -72,6 +82,11 @@ export class MandateFormComponent implements OnInit {
 		}
 	}
 
+	filterPurposes(val: string) {
+		let allPurposes = this.model.merchant.merchantSettings.purposeOfPayments
+		return val ? allPurposes.filter(s => new RegExp(`^${val}`, 'gi').test(s)) : allPurposes;
+	}
+
 	close(success) {
 		this.dialogRef.close(success ? this.model : undefined);
 	}
@@ -91,7 +106,7 @@ export class MandateFormComponent implements OnInit {
 	}
 
 	authorise(mandateForm: NgForm) {
-		this.checkFormValidity(mandateForm, this.authoriseFormAndHandleResut);		
+		this.checkFormValidity(mandateForm, this.authoriseFormAndHandleResut);
 	}
 
 	email(mandateForm: NgForm) {

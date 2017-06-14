@@ -1,11 +1,11 @@
-<h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'" fxLayout="row" fxLayoutAlign="space-between center">
-    New Mandate
-    <!-- Using object here instead of img so that it will be hidden if the merchant does not have a logo.
-     See https://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js-->
-    <object data="merchant/logo" type="image/jpg"></object>
-</h1>
 <div fxLayout="column" fxLayoutAlign="center center">
     <form #registrationForm="ngForm">
+        <h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'" fxLayout="row" fxLayoutAlign="space-between center">
+            New Mandate
+            <!-- Using object here instead of img so that it will be hidden if the merchant does not have a logo.
+             See https://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js-->
+            <object data="merchant/logo" type="image/jpg"></object>
+        </h1>
         <md-input-container>
             <input mdInput placeholder="Reference Number" required [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
             <md-hint align="start" class="errorHint" *ngIf="!referenceNumber.valid && referenceNumber.touched">Please enter a reference number</md-hint>
@@ -27,9 +27,13 @@
                 </md-option>
             </md-select>
         </div>
-        <div>
-            <md2-datepicker placeholder="Registration Date" name="registrationDate" [(ngModel)]="model.registrationDate" [openOnFocus]="isOpenOnFocus" [type]="date"></md2-datepicker>
-        </div>
+
+        <md-input-container>
+            <input mdInput placeholder="Registration Date" [(ngModel)]="model.registrationDate" [mdDatepicker]="registrationDatePicker" name="registrationDate">
+            <button mdSuffix [mdDatepickerToggle]="registrationDatePicker"></button>
+        </md-input-container>
+        <md-datepicker #registrationDatePicker></md-datepicker>
+
         <div class="align-horizontally">
             <md-input-container>
                 <input mdInput placeholder="Amount" type="text" required [(ngModel)]="model.amount" name="amount" #amount="ngModel"/>
@@ -49,13 +53,16 @@
         <md-input-container *ngIf="model.merchant.merchantSettings.purposeOfPayments.length === 0">
             <input mdInput placeholder="Purpose of Payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
         </md-input-container>
-        <div *ngIf="model.merchant.merchantSettings.purposeOfPayments.length > 0">
-            <md-select placeholder="Purpose of Payment" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment">
-                <md-option *ngFor="let purpose of model.merchant.merchantSettings.purposeOfPayments" [value]="purpose">
+
+        <md-input-container *ngIf="model.merchant.merchantSettings.purposeOfPayments.length > 0">
+            <input mdInput placeholder="Purpose of Payment" type="text" [mdAutocomplete]="pop" [formControl]="popCtrl">
+            <md-autocomplete #pop="mdAutocomplete">
+                <md-option *ngFor="let purpose of filteredPurposes | async" [value]="purpose">
                     {{purpose}}
                 </md-option>
-            </md-select>
-        </div>
+            </md-autocomplete>
+        </md-input-container>
+
         <div class="alert alert-danger fade" *ngIf="errors.length !== 0">
             <div *ngFor="let fieldError of errors">{{ fieldError.message}}</div>
         </div>

@@ -18,7 +18,7 @@
             <a md-list-item routerLink="merchant-settings" (click)="sidenav.close()" *ngIf="user.type === 'MERCHANT'">Merchant Settings</a>
         </md-nav-list>
     </md-sidenav>
-    <div class="home-content" fxLayoutAlign="stretch" fxFlex>
+    <div class="home-content" fxFlex fxLayoutAlign="center stretch">
         <md-card>
             <router-outlet></router-outlet>
         </md-card>

@@ -24,6 +24,7 @@ md-toolbar div {
 }
 
 md-card {
-	width: 100%;
+	max-width: 100%;
 	overflow-y: scroll;
+	padding-top: 12px;
 }
