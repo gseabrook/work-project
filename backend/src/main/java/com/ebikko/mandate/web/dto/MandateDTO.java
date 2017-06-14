@@ -6,10 +6,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@UniqueReferenceNumber
 public class MandateDTO {
 
     private String id;
-    @UniqueReferenceNumber
     private String referenceNumber;
     private Date registrationDate;
     @ValidBigDecimal(min = "0.01", field = "Amount")

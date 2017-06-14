@@ -27,4 +27,5 @@ md-card {
 	max-width: 100%;
 	overflow-y: scroll;
 	padding-top: 12px;
+	padding-bottom: 12px;
 }

@@ -78,8 +78,8 @@ md-hint.errorHint {
     animation-timing-function: ease-in-out;
 }
 
-md-input-container.selectContainer div.mat-input-underline {
-    display: none;
+md-hint.infoHint {
+    color: rgba(0,0,0,.38);
 }
 
 @keyframes fadeIn {

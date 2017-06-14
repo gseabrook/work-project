@@ -19,7 +19,6 @@ import static com.ebikko.mandate.builder.MandateBuilder.exampleMandate;
 import static com.ebikko.mandate.builder.MerchantBankAccountBuilder.exampleMerchantBankAccount;
 import static com.ebikko.mandate.builder.MerchantBuilder.exampleMerchant;
 import static com.ebikko.mandate.model.MandateStatus.APPROVED;
-import static com.ebikko.mandate.model.MandateStatus.NEW;
 import static java.lang.String.format;
 
 @Service
@@ -140,7 +139,4 @@ public class TestDataService {
         return createMandate(customer);
     }
 
-    public Mandate createNewMandate() {
-        return createMandate(NEW);
-    }
 }

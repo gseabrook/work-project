@@ -49,7 +49,7 @@ public class MandateBuilder {
                 .with("registrationDate", "2017-03-25")
                 .with("amount", "123.45")
                 .with("frequency", "MONTHLY")
-                .with("status", "-1")
+                .with("status", MandateStatus.NEW.toString())
                 .with("maximumFrequency", "1")
                 .with("merchant", 7l);
 
@@ -71,6 +71,7 @@ public class MandateBuilder {
 
     public static Mandate exampleMandate(MandateStatus status, Customer customer, Merchant merchant) {
         Mandate mandate = new Mandate();
+        mandate.setNodeId("abcdef-123456");
         mandate.setReferenceNumber("ABC-123");
         mandate.setRegistrationDate(new Date());
         mandate.setAmount(BigDecimal.TEN);

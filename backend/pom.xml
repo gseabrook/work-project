@@ -6,7 +6,8 @@
 	<packaging>war</packaging>
 
 	<name>MyDirectDebit Backend</name>
-    <artifactId>backend</artifactId>
+    <artifactId>mydirectdebit</artifactId>
+    <version>0.13-SNAPSHOT</version>
     <scm>
         <connection>scm:svn:http://ebk.svn.cloudforge.com/ebikkoweb</connection>
     </scm>

@@ -74,7 +74,7 @@ public class Mandate {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column
+    @Column(nullable = false, updatable = false)
     private Date dateCreated;
 
     public Mandate() {

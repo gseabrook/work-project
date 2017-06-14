@@ -40,11 +40,6 @@ export class MandateFormService {
 			.map(x => new Mandate().deserialize(x.json()));
 	}
 
-	email(mandate: Mandate) {
-		return this.http
-			.post('merchant/mandate?email=true', JSON.stringify(mandate), { headers: this.headers });
-	}
-
 	private extractData(res: Response) {
 		const body = res.json();
 		return body.map(bank => new Bank().deserialize(bank));

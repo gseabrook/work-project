@@ -142,7 +142,7 @@ describe('MandateFormComponent', () => {
 			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
 			fixture.detectChanges();
 
-			expect(fixture.debugElement.query(By.css("div.alert")).nativeElement.textContent).toContain('referenceNumber is not valid');
+			expect(fixture.debugElement.query(By.css("div.alert")).nativeElement.textContent).toContain('amount is not valid');
 			expect(component.model.status.value).toEqual("NEW");
 		})));
 
@@ -175,11 +175,12 @@ describe('MandateFormComponent', () => {
 			TestHelpers.inputValue('input[name="idValue"]', '12341234', fixture);
 			TestHelpers.inputValue('input[name="amount"]', '100', fixture);
 			TestHelpers.pickFromMdSelect('md-select[name="frequency"]', '2', fixture, '4');
+			TestHelpers.inputValue('input[name="maximumFrequency"]', '1', fixture);
 
 			fixture.debugElement.query(By.css("div.buttonContainer button:nth-child(2)")).nativeElement.click();
 
 			let connection = connections.pop();
-			expect(connection.request.url).toEqual("merchant/mandate?email=true");
+			expect(connection.request.url).toEqual("merchant/mandate");
 
 			connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
 
@@ -235,18 +236,19 @@ describe('MandateFormComponent', () => {
 		it('should prevent authorising without bank details', () => {
 			createComponent();
 
-			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.disabled).toBeTruthy();
+			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[2].nativeElement.disabled).toBeTruthy();
 		});
 
 		it('should post details to FPX', fakeAsync(inject([MockBackend], (mockBackend) => {
 			initialiseComponentWithReferenceData(mockBackend);
 
+			TestHelpers.inputValue('input[name="maximumFrequency"]', '1', fixture);
 			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
 			tick();
 			fixture.detectChanges();
 
-			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.disabled).toBeFalsy();
-			fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[0].nativeElement.click();
+			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[2].nativeElement.disabled).toBeFalsy();
+			fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[2].nativeElement.click();
 			tick();
 			fixture.detectChanges();	
 
@@ -256,71 +258,6 @@ describe('MandateFormComponent', () => {
 
 			expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
 			tick(1000);
-		})));
-	});
-
-	describe("pending authorisation - standAlone", () => {
-
-		beforeEach(async(() => {
-			spyOn(fpxMock, 'processFpxRedirect');
-
-			setupTestBed(Observable.of({
-				mandate: new Mandate().deserialize(mandatePendingAuthorisation),
-				mode: 'standAlone',
-				user: {
-					type: "CUSTOMER",
-					id: "1"
-				}
-			}), false);
-		}));
-
-		it('should create', () => {
-			createComponent();
-			expect(component).toBeTruthy();
-		});
-
-		it('should hide some of the html in standalone mode', () => {
-			createComponent();
-			expect(fixture.debugElement.queryAll(By.css('div.buttonContainer button')).length).toEqual(1);
-			expect(fixture.debugElement.queryAll(By.css('h1.subheader')).length).toEqual(0);
-		});
-
-		it('should post to FPX when clicking authorise', fakeAsync(inject([MockBackend], (mockBackend) => {
-			initialiseComponentWithReferenceData(mockBackend);
-
-			TestHelpers.pickFromMdSelect('md-select[name="bank"]', '1', fixture);
-
-			fixture.detectChanges();
-			tick();
-
-			fixture.debugElement.query(By.css("div.buttonContainer button[color=primary]")).nativeElement.click();
-
-			let connection = connections.pop();
-			connection.mockRespond(new Response(new ResponseOptions({ body: adMessageAuthorisation, status: 200 })));
-			tick();
-
-			expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
-
-			tick(1000);
-		})));
-	});
-
-	describe("authorised - standAlone", () => {
-		beforeEach(async(() => {
-			setupTestBed(Observable.of({
-				mandate: new Mandate().deserialize(mandateAuthorised),
-				mode: 'standAlone',
-				user: {
-					type: "MERCHANT",
-					id: "1"
-				}
-			}), false);
-		}));
-
-		it("should update the mandate with the bank details from the rest call", fakeAsync(inject([MockBackend], (mockBackend) => {
-			initialiseComponentWithReferenceData(mockBackend);
-
-			expect(component.model.customerBankAccount.bank).toEqual(component.banks[3]);
 		})));
 	});
 });

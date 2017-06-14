@@ -29,28 +29,18 @@ form > *:not(.alert) {
 	width: 59%;
 }
 
-md-toolbar.mat-toolbar.mat-primary {
-    background-image: url(../../../assets/BMW-logo.png);
-    background-size: 100px;
-    background-repeat: no-repeat;
-    background-position-x: 100%;
-    background-position-y: 50%;
-}
-
 div.buttonContainer button {
     margin: 0px 5px 0px 5px;
 }
 
-/deep/ md-input-container.selectContainer md-select {
+md-select[name="bank"] {
+    width: 39%;
+    display: flex;
+    align-items: center;
+}
+
+/deep/ md-select[name="bank"] div {
     width: 100%;
-}
-
-/deep/ md-input-container.maxFreq > div {
-    transform: translateY(8px);
-}
-
-/deep/ div.md2-datepicker-trigger {
-    padding: 0px;
 }
 
 object {

@@ -3,6 +3,7 @@ package com.ebikko.mandate.web;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.User;
 import com.ebikko.mandate.service.MandateService;
+import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static com.ebikko.mandate.web.UserController.USER_URL;
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RequestMapping(USER_URL)
@@ -38,7 +42,16 @@ public class UserController {
 
     @RequestMapping(method = GET, path = "/mandate")
     public ResponseEntity getMandates(Authentication auth) {
-        List<Mandate> mandates = mandateService.getMandates((User) auth.getPrincipal());
+        User principal = (User) auth.getPrincipal();
+        List<Mandate> mandates = mandateService.getMandates(principal);
+        if (principal.isCustomer()) {
+            mandates = newArrayList(filter(mandates, new Predicate<Mandate>() {
+                public boolean apply(Mandate input) {
+                    return !isBlank(input.getReferenceNumber());
+                }
+            }));
+        }
+
         return new ResponseEntity(mandates, HttpStatus.OK);
     }
 

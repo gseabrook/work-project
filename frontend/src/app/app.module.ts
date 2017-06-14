@@ -7,8 +7,6 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule, MdNativeDateModule, MdDatepickerModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
-import { Md2Module } from 'md2';
-
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 import { MandateModule } from './mandate/mandate.module';
@@ -33,7 +31,6 @@ import { AppRoutingModule } from './app-routing.module';
 		MdDatepickerModule, 
 		MdNativeDateModule,
 		BrowserAnimationsModule,
-		Md2Module.forRoot(),
 		HomeModule,
 		LoginModule,
 		MandateModule,

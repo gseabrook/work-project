@@ -9,15 +9,6 @@ import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
 
 const routes: Routes = [{
-	path: 'mandate-form',
-	component: MandateFormComponent,
-	resolve: {
-		mandate: MandateFormResolver
-	},
-	data: {
-		mode: 'standAlone'
-	}
-},{
 	path: 'mandate-complete',
 	component: CompleteComponent
 },{

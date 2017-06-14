@@ -31,6 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -180,6 +181,18 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         Mandate mandate = mandateService.getMandates(merchant).get(0);
         assertThat(mandate.getStatus(), is(NEW));
+    }
+
+    @Test
+    public void shouldSupportMandatesWithoutReferenceNumber() throws Exception {
+        mockMvc.perform(
+                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
+                        .content(exampleMandateBuilder().with("referenceNumber", null).toJson())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
+        ).andExpect(status().isCreated());
+
+        verifyZeroInteractions(emailService);
     }
 
     @Test

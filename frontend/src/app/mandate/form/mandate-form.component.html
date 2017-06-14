@@ -1,14 +1,14 @@
 <div fxLayout="column" fxLayoutAlign="center center">
     <form #registrationForm="ngForm">
-        <h1 class="subheader" color="primary" *ngIf="mode != 'standAlone' && mode != 'dialog'" fxLayout="row" fxLayoutAlign="space-between center">
+        <h1 class="subheader" color="primary" *ngIf="mode != 'dialog'" fxLayout="row" fxLayoutAlign="space-between center">
             New Mandate
             <!-- Using object here instead of img so that it will be hidden if the merchant does not have a logo.
              See https://stackoverflow.com/questions/22051573/how-to-hide-image-broken-icon-using-only-css-html-without-js-->
             <object data="merchant/logo" type="image/jpg"></object>
         </h1>
         <md-input-container>
-            <input mdInput placeholder="Reference Number" required [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
-            <md-hint align="start" class="errorHint" *ngIf="!referenceNumber.valid && referenceNumber.touched">Please enter a reference number</md-hint>
+            <input mdInput placeholder="Reference Number" [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
+            <md-hint align="start" class="infoHint">The customer will not receive any communication until there is a reference number</md-hint>
         </md-input-container>
         
         <span *ngIf="user" [ngSwitch]="user.type">
@@ -20,13 +20,11 @@
             <merchant-information [merchant]="model.merchant"></merchant-information>
         </span>
 
-        <div>
-            <md-select placeholder="Bank Name" [(ngModel)]="model.customerBankAccount.bank" name="bank">
-                <md-option *ngFor="let bank of banks" [value]="bank">
-                    {{ bank.name }}
-                </md-option>
-            </md-select>
-        </div>
+        <md-select placeholder="Bank Name" [(ngModel)]="model.customerBankAccount.bank" name="bank">
+            <md-option *ngFor="let bank of banks" [value]="bank">
+                {{ bank.name }}
+            </md-option>
+        </md-select>
 
         <md-input-container>
             <input mdInput placeholder="Registration Date" [(ngModel)]="model.registrationDate" [mdDatepicker]="registrationDatePicker" name="registrationDate">
@@ -45,11 +43,10 @@
                 </md-option>
             </md-select>
         </div>
-        <div>
-            <md-input-container class="maxFreq">
-                <input mdInput placeholder="Maximum Frequency" type="text" [(ngModel)]="model.maximumFrequency" name="maximumFrequency" #maximumFrequency="ngModel"/>
-            </md-input-container>
-        </div>
+        <md-input-container>
+            <input mdInput placeholder="Maximum Frequency" type="number" required [(ngModel)]="model.maximumFrequency" name="maximumFrequency" #maximumFrequency="ngModel"/>
+            <md-hint align="start" class="errorHint" *ngIf="!maximumFrequency.valid && maximumFrequency.touched">Please enter a max frequency</md-hint>
+        </md-input-container>
         <md-input-container *ngIf="model.merchant.merchantSettings.purposeOfPayments.length === 0">
             <input mdInput placeholder="Purpose of Payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
         </md-input-container>
@@ -67,17 +64,15 @@
             <div *ngFor="let fieldError of errors">{{ fieldError.message}}</div>
         </div>
         <span [ngSwitch]="mode">
-            <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchCase="'standAlone'">
-                <button md-raised-button type="button" (click)="authorise(registrationForm)" color="primary">Authorise</button>
-            </div>
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchCase="'dialog'">
-                <button [disabled]="!model.hasBankInformation()" md-raised-button type="button" (click)="authorise(registrationForm)" *ngIf="model.status.value === 'NEW'">Authorise</button>
-                <button md-raised-button type="button" (click)="close()" color="primary">Close</button>
+                <button md-raised-button type="button" (click)="close()">Close</button>
+                <button md-raised-button type="button" (click)="save(registrationForm)">Save</button>
+                <button [disabled]="!model.hasBankInformation()" color="primary" md-raised-button type="button" (click)="authorise(registrationForm)" *ngIf="model.status.value === 'NEW'">Proceed to FPX</button>
             </div>
             <div class="buttonContainer" fxLayout="row" fxLayoutAlign="center center" *ngSwitchDefault>
-                <button md-raised-button type="button" routerLink="/registrations">Cancel</button>
-                <button md-raised-button type="button" (click)="email(registrationForm)">Email</button>
-                <button md-raised-button type="button" (click)="proceed(registrationForm)" color="primary">Proceed</button>
+                <button md-raised-button type="button" routerLink="../mandate-list">Cancel</button>
+                <button md-raised-button type="button" (click)="save(registrationForm)">Save</button>
+                <button md-raised-button type="button" (click)="proceed(registrationForm)" color="primary">Proceed to FPX</button>
             </div>
         </span>
     </form>

@@ -9,6 +9,7 @@ import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.UserVerificationTokenService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,9 @@ public class MandateUpdatedListener {
                     principalService.createPrincipal(customer);
                 }
 
-                emailService.sendPendingAuthorisationEmail(mandate);
+                if (!StringUtils.isBlank(mandate.getReferenceNumber())) {
+                    emailService.sendPendingAuthorisationEmail(mandate);
+                }
                 break;
 
             case AWAITING_FPX_TERMINATION:

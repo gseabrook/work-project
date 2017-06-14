@@ -109,12 +109,12 @@ export class MandateFormComponent implements OnInit {
 		this.checkFormValidity(mandateForm, this.authoriseFormAndHandleResut);
 	}
 
-	email(mandateForm: NgForm) {
-		this.checkFormValidity(mandateForm, this.emailFormAndHandleResult);
+	save(mandateForm: NgForm) {
+		this.checkFormValidity(mandateForm, this.saveOrUpdate);
 	}
 
 	proceed(mandateForm: NgForm) {
-		this.checkFormValidity(mandateForm, this.saveFormAndHandleResult);
+		this.checkFormValidity(mandateForm, this.requestAuthorisationAndSave);
 	}
 
 	private authoriseFormAndHandleResut() {
@@ -123,14 +123,21 @@ export class MandateFormComponent implements OnInit {
 			.subscribe(this.fpxService.processFpxRedirect);
 	}
 
-	private emailFormAndHandleResult() {
-		this.mandateFormService.email(this.model).subscribe(
-			result => this.handleSuccess(result),
-			error => this.handleError(error)
-		);
+	private saveOrUpdate() {
+		if (this.dialogRef) {
+			this.mandateService.update(this.model).subscribe(
+				() => this.dialogRef.close(),
+				error => this.handleError(error)
+			);
+		} else {
+			this.mandateService.save(this.model).subscribe(
+				() => this.forwardToMandateList(),
+				error => this.handleError(error)
+			);
+		}
 	}
 
-	private saveFormAndHandleResult() {
+	private requestAuthorisationAndSave() {
 		this.model.requestAuthorisation();
 		this.mandateService.save(this.model).subscribe(
 			result => this.fpxService.processFpxRedirect(result),
@@ -146,7 +153,7 @@ export class MandateFormComponent implements OnInit {
 		}
 	}
 
-	private handleSuccess(result) {
+	private forwardToMandateList() {
 		this.router.navigate(['../mandate-list'], { relativeTo: this.route });
 	}
 

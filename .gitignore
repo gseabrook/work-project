@@ -22,6 +22,7 @@ frontend/node_modules
 **/*.iml
 frontend/.project
 frontend/npm-debug.log
+frontend/target
 
 backend/performance.*.log
 backend/mydirectdebit.log
