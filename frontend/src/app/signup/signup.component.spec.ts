@@ -99,18 +99,17 @@ describe('SignUpComponent', () => {
 		}))
 	);
 
-	//Ignored until there is support for returning errors with a body
-	xit('should display validation errors', fakeAsync(inject([MockBackend], (mockBackend) => {
-		fixture.whenStable().then(() => {
-			let connection: MockConnection;
-			mockBackend.connections.subscribe((c: MockConnection) => connection = c);
+	it('should display validation errors', fakeAsync(inject([MockBackend], (mockBackend) => {
+		createComponent();
+		let connection: MockConnection;
+		mockBackend.connections.subscribe((c: MockConnection) => connection = c);
 
-			fixture.debugElement.query(By.css('button[type=submit]')).nativeElement.click();
+		fixture.debugElement.query(By.css('button[type=submit]')).nativeElement.click();
 
-			connection.mockError(new Error(JSON.stringify(SignupErrorResponse)));
-			tick();
+		connection.mockError(new Response(new ResponseOptions({status: 422, body: SignupErrorResponse})) as any as Error);
+		tick();
+		fixture.detectChanges();
 
-			expect(fixture.debugElement.query(By.css('div.alert')).nativeElement.textContent).toContain('!!!');
-		});
+		expect(fixture.debugElement.query(By.css('div.alert')).nativeElement.textContent).toContain('Please enter an email address');
 	})));
 });

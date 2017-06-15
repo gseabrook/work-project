@@ -48,6 +48,10 @@ public class MerchantLogoController {
 
     private ResponseEntity<byte[]> getResponseEntity(Merchant merchant) throws IOException {
         File merchantLogo = storageService.getMerchantLogo(merchant);
-        return ok().contentType(MediaType.IMAGE_PNG).body(readAllBytes(merchantLogo.toPath()));
+        if (merchantLogo == null || !merchantLogo.exists()) {
+            return ok().contentType(MediaType.IMAGE_PNG).body(new byte[0]);
+        } else {
+            return ok().contentType(MediaType.IMAGE_PNG).body(readAllBytes(merchantLogo.toPath()));
+        }
     }
 }

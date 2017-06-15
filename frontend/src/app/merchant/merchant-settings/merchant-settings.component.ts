@@ -55,7 +55,7 @@ export class MerchantSettingsComponent implements OnInit {
 	}
 
 	frequencySelected(frequency: DisplayEnum) {
-		return this.merchant.merchantSettings.selectedFrequencies.filter(freq => freq.value === frequency.value).length > -1;
+		return this.merchant.merchantSettings.selectedFrequencies.filter(freq => freq.value === frequency.value).length > 0;
 	}
 
 	removePurpose(purpose: string) {
@@ -89,7 +89,7 @@ export class MerchantSettingsComponent implements OnInit {
 
 	updateFrequencies(ev) {
 		let selectedFrequencies = this.merchant.merchantSettings.selectedFrequencies;
-		let frequencyClicked = this.allFrequencies.filter(freq => freq.value = ev.source.value)[0];
+		let frequencyClicked = this.allFrequencies.filter(freq => freq.value === ev.source.value)[0];
 
 		var idx = selectedFrequencies.indexOf(frequencyClicked);
 		if (idx > -1) {

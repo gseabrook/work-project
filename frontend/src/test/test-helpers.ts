@@ -13,8 +13,7 @@ export class TestHelpers {
 	static pickFromMdSelect(cssSelector: string, itemIdx: string, fixture: ComponentFixture<any>, selectIdx?: string) {
 		let el = fixture.debugElement.query(By.css(cssSelector + ' .mat-select-trigger'));
 		if (el == null) {
-			console.log("MdSelect Element does not exist - " + cssSelector + ' .mat-select-trigger');
-			console.log(fixture.debugElement.queryAll(By.css('md-select')));
+			fail("MdSelect Element does not exist - " + cssSelector + ' .mat-select-trigger');
 		}
 		el.nativeElement.click();
 
@@ -27,7 +26,7 @@ export class TestHelpers {
 
 	    el = fixture.debugElement.query(By.css(selector));
 		if (el == null) {
-			console.log("MdOption element does not exist - " + selector + ' .mat-select-trigger');
+			fail("MdOption element does not exist - " + selector + ' .mat-select-trigger');
 		}
 		el.nativeElement.click();
 	  	fixture.detectChanges();
@@ -42,7 +41,12 @@ export class TestHelpers {
 	}
 
 	static clickMdCheckbox(cssSelector: string, fixture: ComponentFixture<any>) {
-		fixture.debugElement.query(By.css(cssSelector + ' div.mat-checkbox-inner-container')).nativeElement.click();
+		let el = fixture.debugElement.query(By.css(cssSelector + ' div.mat-checkbox-inner-container'));
+		if (el == null) {
+			fail("MdCheckbox does not exist - " + cssSelector + ' div.mat-checkbox-inner-container');
+		}
+
+		el.nativeElement.click();
 		fixture.detectChanges();
 	}
 }

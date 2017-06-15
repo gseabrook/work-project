@@ -5,8 +5,10 @@ drop table if exists customer CASCADE;
 drop table if exists customer_bank_accounts CASCADE;
 drop table if exists customer_bank_account CASCADE;
 drop table if exists mandate CASCADE;
+drop table if exists mandate_status CASCADE;
 drop table if exists merchant CASCADE;
 drop table if exists merchant_merchant_bank_accounts CASCADE;
+drop table if exists merchant_selected_frequencies CASCADE;
 drop table if exists merchant_bank_account CASCADE;
 drop table if exists user_verification_token CASCADE;
 
