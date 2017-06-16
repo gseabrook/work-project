@@ -1,5 +1,6 @@
 package com.ebikko.mandate.service;
 
+import com.ebikko.SessionService;
 import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.User;
@@ -7,7 +8,6 @@ import com.ebikko.signup.UserVerificationToken;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -27,9 +27,9 @@ public class EmailService {
     private final static Log logger = LogFactory.getLog(EmailService.class);
 
     @Autowired
-    public EmailService(MailSender mailSender, @Value("${app.url}") String appUrl) {
+    public EmailService(MailSender mailSender, SessionService sessionService) {
         this.mailSender = (JavaMailSenderImpl) mailSender;
-        this.appUrl = appUrl;
+        this.appUrl = sessionService.loadRepositoryProperty("mdd.app.url");
     }
 
     public void sendSignUpConfirmationEmail(User user, String token) {
@@ -82,9 +82,9 @@ public class EmailService {
     public void sendPendingAuthorisationEmail(Mandate mandate) {
         String recipientAddress = mandate.getCustomer().getEmailAddress();
         String subject = "MyDirectDebit - Transaction pending authorisation";
-        String message = "A new mandate is pending your authorisation, please follow the link to enter your bank details";
+        String message = "A new mandate is pending your authorisation, please login and review";
         message = addMandateDetails(mandate, message);
-        message += "<br/>" + appUrl + "/mandate-form?id=" + mandate.getId();
+        message += "<br/>" + appUrl;
         sendEmail(recipientAddress, subject, message);
     }
 

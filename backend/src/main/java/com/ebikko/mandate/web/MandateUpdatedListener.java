@@ -38,12 +38,19 @@ public class MandateUpdatedListener {
 
         switch (mandate.getStatus()) {
             case NEW:
+                Principal principal;
                 if (customer.getPrincipalUid() == null) {
-                    principalService.createPrincipal(customer);
+                    principal = principalService.createPrincipal(customer);
+                } else {
+                    principal = principalService.findById(customer.getPrincipalUid());
                 }
 
                 if (!StringUtils.isBlank(mandate.getReferenceNumber())) {
-                    emailService.sendPendingAuthorisationEmail(mandate);
+                    if (principal.isCanLogin()) {
+                        emailService.sendPendingAuthorisationEmail(mandate);
+                    } else {
+                        sendSignUpEmail(customer, principal);
+                    }
                 }
                 break;
 
@@ -53,10 +60,10 @@ public class MandateUpdatedListener {
 
             case AWAITING_FPX_AUTHORISATION:
                 if (customer.getPrincipalUid() == null) {
-                    Principal principal = principalService.createPrincipal(customer);
+                    principal = principalService.createPrincipal(customer);
                     sendSignUpEmail(customer, principal);
                 } else {
-                    Principal principal = principalService.findById(customer.getPrincipalUid());
+                    principal = principalService.findById(customer.getPrincipalUid());
 
                     if (principal.isCanLogin()) {
                         emailService.sendCustomerMandateAuthorisationRequestedEmail(mandate);

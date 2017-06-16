@@ -18,8 +18,21 @@
 	            <artifactId>exec-maven-plugin</artifactId>
 	            <executions>
 	                <execution>
+	                	<id>exec-npm-install</id>
+	                	<phase>compile</phase>
+	                	<configuration>
+	                        <executable>npm</executable>
+	                        <arguments>
+	                            <argument>install</argument>
+	                        </arguments>
+	                    </configuration>
+	                    <goals>
+	                        <goal>exec</goal>
+	                    </goals>
+	                </execution>
+	                <execution>
 	                    <id>exec-npm-ng-build</id>
-	                    <phase>compile</phase>
+	                    <phase>package</phase>
 	                    <configuration>
 	                        <executable>ng</executable>
 	                        <arguments>
