@@ -42,7 +42,7 @@ alter table merchant_purpose_of_payments add constraint FKdols9jeo0lctwvepn9ad9w
 alter table merchant_selected_frequencies add constraint FKoprwnl22n5xd0k553owctw7tp foreign key (merchant_id) references merchant;
 alter table merchant_bank_account add constraint FKfux74odfqqlavtf9qdvrou85a foreign key (bank_id) references bank;
 
--- Ebikko
+-- Ebikko -- These are just for the automated tests
 
 CREATE TABLE property (
     uid varchar(32) NOT NULL,

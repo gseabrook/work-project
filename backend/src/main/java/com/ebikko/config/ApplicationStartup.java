@@ -18,6 +18,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     private String userName;
     @Value("${hazelcast.config:}")
     private String hazelcastConfig;
+    @Value("${app.url:}")
+    private String appUrl;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -25,6 +27,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         logger.info("spring.datasource.url: " + jdbcUrl);
         logger.info("spring.datasource.username: " + userName);
         logger.info("hazelcast.config: " + hazelcastConfig);
+        logger.info("app.url: " + appUrl);
         logger.info("---------------------------------");
 
     }
