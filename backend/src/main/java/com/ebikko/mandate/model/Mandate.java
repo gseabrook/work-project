@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * The mandate is the agreement that the seller is able to take money from the buyer's bank account.
+ * The mandate is the agreement that the merchant is able to take money from the buyer's bank account.
  * <br/><br/>
  * The status is driven by the FPX system, as any change to the agreement (including the initial authorisation) happens
  * via the buyer logging into their online banking. This will trigger an AC message sent to our system, which we will
@@ -20,7 +20,7 @@ import java.util.Date;
  * <table>
  *     <tr>
  *         <td>Reference Number</td>
- *         <td>Merchant's reference number for their information, in future we would like automatically populate this from the seller's system</td>
+ *         <td>Merchant's reference number for their information, in future we would like automatically populate this from the merchant's system</td>
  *     </tr>
  *     <tr>
  *         <td>Customer Bank Account</td>
@@ -62,7 +62,7 @@ public class Mandate {
     @ManyToOne(cascade = CascadeType.ALL)
     private MandateParty buyer;
     @ManyToOne
-    private Merchant seller;
+    private Merchant merchant;
     @ManyToOne(cascade = CascadeType.ALL)
     private CustomerBankAccount customerBankAccount;
     @Column
@@ -124,12 +124,12 @@ public class Mandate {
         this.buyer = buyer;
     }
 
-    public void setSeller(Merchant seller) {
-        this.seller = seller;
+    public Merchant getMerchant() {
+        return merchant;
     }
 
-    public Merchant getSeller() {
-        return seller;
+    public void setMerchant(Merchant merchant) {
+        this.merchant = merchant;
     }
 
     public CustomerBankAccount getCustomerBankAccount() {
@@ -206,7 +206,7 @@ public class Mandate {
         if (amount != null ? !amount.equals(mandate.amount) : mandate.amount != null) return false;
         if (frequency != mandate.frequency) return false;
         if (buyer != null ? !buyer.equals(mandate.buyer) : mandate.buyer != null) return false;
-        return seller != null ? seller.equals(mandate.seller) : mandate.seller == null;
+        return merchant != null ? merchant.equals(mandate.merchant) : mandate.merchant == null;
     }
 
     @Override
@@ -216,7 +216,7 @@ public class Mandate {
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (frequency != null ? frequency.hashCode() : 0);
         result = 31 * result + (buyer != null ? buyer.hashCode() : 0);
-        result = 31 * result + (seller != null ? seller.hashCode() : 0);
+        result = 31 * result + (merchant != null ? merchant.hashCode() : 0);
         return result;
     }
 }

@@ -106,7 +106,7 @@ public class EmailService {
     }
 
     private String addMandateDetails(Mandate mandate, String message) {
-        message += "<br/><br/>Merchant: " + mandate.getSeller().getCompanyName();
+        message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
         message += "<br/>Amount: " + mandate.getAmount();
         message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
         return message;

@@ -9,7 +9,6 @@ import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.UserVerificationTokenService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -30,11 +29,10 @@ public class CustomerEmailSender {
         this.emailService = emailService;
     }
 
-    @EventListener(condition = "#mandateUpdatedEvent.mandate.buyer instanceof T(Customer)")
+    @EventListener(condition = "#mandateUpdatedEvent.mandate.buyer instanceof T(com.ebikko.mandate.model.Customer)")
     public void handleMandateUpdatedEvent(MandateUpdatedEvent mandateUpdatedEvent) throws EbikkoException {
         Mandate mandate = mandateUpdatedEvent.getMandate();
         Customer buyer = (Customer) mandate.getBuyer();
-
 
         switch (mandate.getStatus()) {
             case NEW:
@@ -45,12 +43,10 @@ public class CustomerEmailSender {
                     principal = principalService.findById(buyer.getPrincipalUid());
                 }
 
-                if (!StringUtils.isBlank(mandate.getReferenceNumber())) {
-                    if (principal.isCanLogin()) {
-                        emailService.sendPendingAuthorisationEmail(mandate);
-                    } else {
-                        sendSignUpEmail(buyer, principal);
-                    }
+                if (principal.isCanLogin()) {
+                    emailService.sendPendingAuthorisationEmail(mandate);
+                } else {
+                    sendSignUpEmail(buyer, principal);
                 }
                 break;
 

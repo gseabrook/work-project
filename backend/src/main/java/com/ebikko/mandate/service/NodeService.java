@@ -58,9 +58,9 @@ public class NodeService {
                     mandateNode.setValue("Effective Date", new Date());
                     mandateNode.setValue("Reference Number", mandate.getReferenceNumber());
 
-                    Merchant merchant = mandate.getSeller();
-                    mandateNode.setValue("Company Name", merchant.getCompanyName());
-                    mandateNode.setValue("Company Registration No", merchant.getCompanyRegistrationNumber());
+                    Merchant seller = mandate.getMerchant();
+                    mandateNode.setValue("Company Name", seller.getCompanyName());
+                    mandateNode.setValue("Company Registration No", seller.getCompanyRegistrationNumber());
 
                     mandateNode.save();
                     mandate.setNodeId(mandateNode.getUid());

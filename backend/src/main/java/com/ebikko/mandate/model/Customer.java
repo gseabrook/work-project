@@ -20,6 +20,10 @@ public class Customer extends MandateParty {
     @Column
     private IDType idType;
     @Column
+    private String emailAddress;
+    @Column
+    private String phoneNumber;
+    @Column
     private String principalUid;
     @OneToMany(cascade = CascadeType.ALL)
     private List<CustomerBankAccount> bankAccounts = newArrayList();
@@ -55,6 +59,16 @@ public class Customer extends MandateParty {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    @Override
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {

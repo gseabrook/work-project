@@ -31,7 +31,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,7 +73,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         Mandate mandate = testDataService.createMandate();
 
         String contentAsString = mockMvc
-                .perform(get(MERCHANT_URL + "/" + mandate.getSeller().getId() + MERCHANT_MANDATE_URL).with(user("Bob")))
+                .perform(get(MERCHANT_URL + "/" + mandate.getMerchant().getId() + MERCHANT_MANDATE_URL).with(user("Bob")))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -154,7 +153,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
     @Test
     public void shouldRejectMandateWithDuplicateReferenceNumber() throws Exception {
         Mandate mandate = testDataService.createMandate();
-        Merchant merchant = mandate.getSeller();
+        Merchant merchant = mandate.getMerchant();
 
         User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
         super.setAuthenticationPrincipal(user);
@@ -181,18 +180,6 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         Mandate mandate = mandateService.getMandates(merchant).get(0);
         assertThat(mandate.getStatus(), is(NEW));
-    }
-
-    @Test
-    public void shouldSupportMandatesWithoutReferenceNumber() throws Exception {
-        mockMvc.perform(
-                post(MERCHANT_URL + MERCHANT_MANDATE_URL)
-                        .content(exampleMandateBuilder().with("referenceNumber", null).toJson())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(authentication(new UsernamePasswordAuthenticationToken(user, "")))
-        ).andExpect(status().isCreated());
-
-        verifyZeroInteractions(emailService);
     }
 
     @Test

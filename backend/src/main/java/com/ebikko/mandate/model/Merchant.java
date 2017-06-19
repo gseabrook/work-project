@@ -21,12 +21,16 @@ public class Merchant extends MandateParty {
     private String companyRegistrationNumber;
     @Column
     private String companyName;
+    @Column
+    private String emailAddress;
+    @Column
+    private String phoneNumber;
     @OneToMany
     private List<MerchantBankAccount> merchantBankAccounts;
     @Embedded
     private MerchantSettings merchantSettings;
     @JsonIgnore
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "merchant")
     private List<Mandate> mandates = newArrayList();
 
     public Merchant() {}
@@ -88,19 +92,20 @@ public class Merchant extends MandateParty {
         return merchantSettings;
     }
 
-
-
     @Override
+    @JsonIgnore
     public IDType getIdType() {
         return IDType.BUSINESS_REGISTRATION_NUMBER;
     }
 
     @Override
+    @JsonIgnore
     public String getIdValue() {
         return companyRegistrationNumber;
     }
 
     @Override
+    @JsonIgnore
     public String getName() {
         return companyName;
     }
@@ -108,6 +113,16 @@ public class Merchant extends MandateParty {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setEmailAddress(String emailAddress) {

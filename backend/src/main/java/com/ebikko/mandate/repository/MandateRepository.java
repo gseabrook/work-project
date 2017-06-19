@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface MandateRepository extends CrudRepository<Mandate, Long> {
 
-    List<Mandate> findBySeller(Merchant seller);
+    List<Mandate> findByMerchant(Merchant merchant);
 
     List<Mandate> findByBuyer(Customer customer);
 
-    Mandate findBySellerAndReferenceNumber(Merchant seller, String referenceNumber);
+    Mandate findByMerchantAndReferenceNumber(Merchant merchant, String referenceNumber);
 }

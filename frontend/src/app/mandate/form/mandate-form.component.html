@@ -7,8 +7,7 @@
             <object data="merchant/logo" type="image/jpg"></object>
         </h1>
         <md-input-container>
-            <input mdInput placeholder="Reference Number" [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
-            <md-hint align="start" class="infoHint">The customer will not receive any communication until there is a reference number</md-hint>
+            <input mdInput placeholder="Reference Number" type="text" required [(ngModel)]="model.referenceNumber" name="referenceNumber" #referenceNumber="ngModel"/>
         </md-input-container>
         
         <span *ngIf="user" [ngSwitch]="user.type">

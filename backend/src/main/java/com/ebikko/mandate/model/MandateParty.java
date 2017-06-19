@@ -2,8 +2,8 @@ package com.ebikko.mandate.model;
 
 import javax.persistence.*;
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class MandateParty {
 
     @Id
