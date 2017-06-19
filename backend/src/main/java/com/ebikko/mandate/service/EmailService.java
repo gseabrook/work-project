@@ -53,7 +53,7 @@ public class EmailService {
     }
 
     public void sendCustomerMandateAuthorisedEmail(Mandate mandate) {
-        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String recipientAddress = mandate.getBuyer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate authorised";
         String message = "A new mandate has been authorised for you";
         message = addMandateDetails(mandate, message);
@@ -80,7 +80,7 @@ public class EmailService {
     }
 
     public void sendPendingAuthorisationEmail(Mandate mandate) {
-        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String recipientAddress = mandate.getBuyer().getEmailAddress();
         String subject = "MyDirectDebit - Transaction pending authorisation";
         String message = "A new mandate is pending your authorisation, please login and review";
         message = addMandateDetails(mandate, message);
@@ -89,7 +89,7 @@ public class EmailService {
     }
 
     public void sendCustomerMandateTerminationRequested(Mandate mandate) {
-        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String recipientAddress = mandate.getBuyer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate termination has been requested";
         String message = "We are processing a request to terminate one of your mandates";
         message = addMandateDetails(mandate, message);
@@ -97,7 +97,7 @@ public class EmailService {
     }
 
     public void sendCustomerMandateTerminatedEmail(Mandate mandate) {
-        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String recipientAddress = mandate.getBuyer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate has been terminated";
         String message = "One of your mandates has been terminated";
         message = addMandateDetails(mandate, message);
@@ -106,14 +106,14 @@ public class EmailService {
     }
 
     private String addMandateDetails(Mandate mandate, String message) {
-        message += "<br/><br/>Merchant: " + mandate.getMerchant().getCompanyName();
+        message += "<br/><br/>Merchant: " + mandate.getSeller().getCompanyName();
         message += "<br/>Amount: " + mandate.getAmount();
         message += "<br/>Frequency: " + mandate.getFrequency().getDisplayValue();
         return message;
     }
 
     public void sendCustomerMandateAuthorisationRequestedEmail(Mandate mandate) {
-        String recipientAddress = mandate.getCustomer().getEmailAddress();
+        String recipientAddress = mandate.getBuyer().getEmailAddress();
         String subject = "MyDirectDebit - Mandate authorisation has been requested";
         String message = "We are processing a request to authorise a mandate";
         message = addMandateDetails(mandate, message);

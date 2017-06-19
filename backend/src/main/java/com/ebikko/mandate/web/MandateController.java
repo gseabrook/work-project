@@ -83,7 +83,7 @@ public class MandateController {
 
         Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
         Mandate savedMandate = service.getMandate(mandateId);
-        mandate.setMerchant(savedMandate.getMerchant());
+        mandate.setSeller(savedMandate.getSeller());
 
         service.save(mandate);
         applicationEventPublisher.publishEvent(new MandateUpdatedEvent(mandate));

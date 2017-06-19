@@ -45,7 +45,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         MandateDTO mandateDTO = mandateDTO(mandate);
         mandateDTO.setStatus(AWAITING_FPX_AUTHORISATION.toString());
 
-        User user = new User("1", mandate.getCustomer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
+        User user = new User("1", mandate.getBuyer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
         super.setAuthenticationPrincipal(user);
 
         mockMvc
@@ -64,7 +64,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
 
         assertThat(Iterables.size(mandateRepository.findAll()), is(1));
 
-        Customer savedCustomer = customerService.getCustomerById(mandate.getCustomer().getId());
+        Customer savedCustomer = customerService.getCustomerById(mandate.getBuyer().getId());
         assertThat(savedCustomer.getBankAccounts().size(), is(1));
 
         verify(emailService).sendCustomerMandateAuthorisationRequestedEmail(any(Mandate.class));
@@ -91,7 +91,7 @@ public class MandateControllerDBTest extends AbstractEmbeddedDBControllerTest {
         MandateDTO mandateDTO = mandateDTO(mandate);
         mandateDTO.setStatus(AWAITING_FPX_TERMINATION.toString());
 
-        User user = new User("1", mandate.getCustomer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
+        User user = new User("1", mandate.getBuyer().getId().toString(), "user", "Name", User.UserType.CUSTOMER, "name@customer.com");
         super.setAuthenticationPrincipal(user);
 
         mockMvc

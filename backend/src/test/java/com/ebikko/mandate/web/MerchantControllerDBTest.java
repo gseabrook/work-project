@@ -74,7 +74,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
         Mandate mandate = testDataService.createMandate();
 
         String contentAsString = mockMvc
-                .perform(get(MERCHANT_URL + "/" + mandate.getMerchant().getId() + MERCHANT_MANDATE_URL).with(user("Bob")))
+                .perform(get(MERCHANT_URL + "/" + mandate.getSeller().getId() + MERCHANT_MANDATE_URL).with(user("Bob")))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -154,7 +154,7 @@ public class MerchantControllerDBTest extends AbstractEmbeddedDBControllerTest {
     @Test
     public void shouldRejectMandateWithDuplicateReferenceNumber() throws Exception {
         Mandate mandate = testDataService.createMandate();
-        Merchant merchant = mandate.getMerchant();
+        Merchant merchant = mandate.getSeller();
 
         User user = new User("1", merchant.getId().toString(), "user", "Name", User.UserType.MERCHANT, "name@merchant.com");
         super.setAuthenticationPrincipal(user);

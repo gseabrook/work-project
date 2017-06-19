@@ -7,10 +7,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * The mandate is the agreement that the merchant is able to take money from the customer's bank account.
+ * The mandate is the agreement that the seller is able to take money from the buyer's bank account.
  * <br/><br/>
  * The status is driven by the FPX system, as any change to the agreement (including the initial authorisation) happens
- * via the customer logging into their online banking. This will trigger an AC message sent to our system, which we will
+ * via the buyer logging into their online banking. This will trigger an AC message sent to our system, which we will
  * use to update the status of the mandate.
  * <br/><br/>
  * FPX currently assumes that the same amount will be taken at regular intervals (hence the amount & frequency fields),
@@ -20,11 +20,11 @@ import java.util.Date;
  * <table>
  *     <tr>
  *         <td>Reference Number</td>
- *         <td>Merchant's reference number for their information, in future we would like automatically populate this from the merchant's system</td>
+ *         <td>Merchant's reference number for their information, in future we would like automatically populate this from the seller's system</td>
  *     </tr>
  *     <tr>
  *         <td>Customer Bank Account</td>
- *         <td>We need a direct reference to the customer bank account so that if the customer has multiple bank accounts, we know
+ *         <td>We need a direct reference to the buyer bank account so that if the buyer has multiple bank accounts, we know
  *         which one was authorised</td>
  *     </tr>
  *     <tr>
@@ -60,9 +60,9 @@ public class Mandate {
     @Column
     private MandateStatus status;
     @ManyToOne(cascade = CascadeType.ALL)
-    private Customer customer;
+    private MandateParty buyer;
     @ManyToOne
-    private Merchant merchant;
+    private Merchant seller;
     @ManyToOne(cascade = CascadeType.ALL)
     private CustomerBankAccount customerBankAccount;
     @Column
@@ -116,20 +116,20 @@ public class Mandate {
         this.frequency = frequency;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public MandateParty getBuyer() {
+        return buyer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setBuyer(MandateParty buyer) {
+        this.buyer = buyer;
     }
 
-    public Merchant getMerchant() {
-        return merchant;
+    public void setSeller(Merchant seller) {
+        this.seller = seller;
     }
 
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
+    public Merchant getSeller() {
+        return seller;
     }
 
     public CustomerBankAccount getCustomerBankAccount() {
@@ -205,8 +205,8 @@ public class Mandate {
             return false;
         if (amount != null ? !amount.equals(mandate.amount) : mandate.amount != null) return false;
         if (frequency != mandate.frequency) return false;
-        if (customer != null ? !customer.equals(mandate.customer) : mandate.customer != null) return false;
-        return merchant != null ? merchant.equals(mandate.merchant) : mandate.merchant == null;
+        if (buyer != null ? !buyer.equals(mandate.buyer) : mandate.buyer != null) return false;
+        return seller != null ? seller.equals(mandate.seller) : mandate.seller == null;
     }
 
     @Override
@@ -215,8 +215,8 @@ public class Mandate {
         result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (frequency != null ? frequency.hashCode() : 0);
-        result = 31 * result + (customer != null ? customer.hashCode() : 0);
-        result = 31 * result + (merchant != null ? merchant.hashCode() : 0);
+        result = 31 * result + (buyer != null ? buyer.hashCode() : 0);
+        result = 31 * result + (seller != null ? seller.hashCode() : 0);
         return result;
     }
 }

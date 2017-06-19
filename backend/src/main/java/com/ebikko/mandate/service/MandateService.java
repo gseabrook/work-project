@@ -32,7 +32,7 @@ public class MandateService {
     }
 
     public List<Mandate> getMandates(Merchant merchant) {
-        return mandateRepository.findByMerchant(merchant);
+        return mandateRepository.findBySeller(merchant);
     }
 
     public Mandate getMandate(Long id) {
@@ -52,10 +52,10 @@ public class MandateService {
     }
 
     private List<Mandate> getMandates(Customer customer) {
-        return mandateRepository.findByCustomer(customer);
+        return mandateRepository.findByBuyer(customer);
     }
 
     public Mandate findByMerchantAndReferenceNumber(Merchant merchant, String value) {
-        return mandateRepository.findByMerchantAndReferenceNumber(merchant, value);
+        return mandateRepository.findBySellerAndReferenceNumber(merchant, value);
     }
 }

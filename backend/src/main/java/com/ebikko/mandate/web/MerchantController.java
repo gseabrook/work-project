@@ -89,7 +89,7 @@ public class MerchantController {
         } else {
             Mandate mandate = mandateDTOTranslator.translate(mandateDTO);
             Merchant merchant = userService.getMerchant((User) auth.getPrincipal());
-            mandate.setMerchant(merchant);
+            mandate.setSeller(merchant);
             merchant.addMandate(mandate);
             mandateService.save(mandate);
 

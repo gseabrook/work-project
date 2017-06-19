@@ -12,7 +12,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 @Entity
-public class Merchant {
+public class Merchant extends MandateParty {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
@@ -26,7 +26,7 @@ public class Merchant {
     @Embedded
     private MerchantSettings merchantSettings;
     @JsonIgnore
-    @OneToMany(mappedBy = "merchant")
+    @OneToMany(mappedBy = "seller")
     private List<Mandate> mandates = newArrayList();
 
     public Merchant() {}
@@ -76,10 +76,6 @@ public class Merchant {
         this.merchantBankAccounts = merchantBankAccounts;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public List<Mandate> getMandates() {
         return mandates;
     }
@@ -90,6 +86,32 @@ public class Merchant {
 
     public MerchantSettings getMerchantSettings() {
         return merchantSettings;
+    }
+
+
+
+    @Override
+    public IDType getIdType() {
+        return IDType.BUSINESS_REGISTRATION_NUMBER;
+    }
+
+    @Override
+    public String getIdValue() {
+        return companyRegistrationNumber;
+    }
+
+    @Override
+    public String getName() {
+        return companyName;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public void setMerchantSettings(MerchantSettings merchantSettings) {

@@ -77,8 +77,8 @@ public class MandateBuilder {
         mandate.setAmount(BigDecimal.TEN);
         mandate.setFrequency(MONTHLY);
         mandate.setMaximumFrequency(1);
-        mandate.setCustomer(customer);
-        mandate.setMerchant(merchant);
+        mandate.setBuyer(customer);
+        mandate.setSeller(merchant);
         if (!customer.getBankAccounts().isEmpty()) {
             mandate.setCustomerBankAccount(customer.getBankAccounts().get(0));
         }
