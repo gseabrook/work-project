@@ -2,10 +2,7 @@ package com.ebikko.mandate.service;
 
 import com.ebikko.SessionAction;
 import com.ebikko.SessionService;
-import com.ebikko.mandate.model.Customer;
-import com.ebikko.mandate.model.CustomerBankAccount;
-import com.ebikko.mandate.model.Mandate;
-import com.ebikko.mandate.model.Merchant;
+import com.ebikko.mandate.model.*;
 import ebikko.EbikkoException;
 import ebikko.Node;
 import ebikko.Session;
@@ -41,12 +38,12 @@ public class NodeService {
                         mandateNode = session.getNode(mandate.getNodeId());
                     }
 
-                    Customer customer = mandate.getCustomer();
-                    mandateNode.setValue("Name", customer.getName());
-                    mandateNode.setValue("Email", customer.getEmailAddress());
-                    mandateNode.setValue("Phone Number", customer.getPhoneNumber());
-                    mandateNode.setValue("ID Type", customer.getIdType().getDisplayValue());
-                    mandateNode.setValue("ID Number", customer.getIdValue());
+                    MandateParty buyer = mandate.getBuyer();
+                    mandateNode.setValue("Name", buyer.getName());
+                    mandateNode.setValue("Email", buyer.getEmailAddress());
+                    mandateNode.setValue("Phone Number", buyer.getPhoneNumber());
+                    mandateNode.setValue("ID Type", buyer.getIdType().getDisplayValue());
+                    mandateNode.setValue("ID Number", buyer.getIdValue());
                     mandateNode.setValue("Status", mandate.getStatus().toString());
 
                     CustomerBankAccount customerBankAccount = mandate.getCustomerBankAccount();
@@ -61,9 +58,9 @@ public class NodeService {
                     mandateNode.setValue("Effective Date", new Date());
                     mandateNode.setValue("Reference Number", mandate.getReferenceNumber());
 
-                    Merchant merchant = mandate.getMerchant();
-                    mandateNode.setValue("Company Name", merchant.getCompanyName());
-                    mandateNode.setValue("Company Registration No", merchant.getCompanyRegistrationNumber());
+                    Merchant seller = mandate.getMerchant();
+                    mandateNode.setValue("Company Name", seller.getCompanyName());
+                    mandateNode.setValue("Company Registration No", seller.getCompanyRegistrationNumber());
 
                     mandateNode.save();
                     mandate.setNodeId(mandateNode.getUid());

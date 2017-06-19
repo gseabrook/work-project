@@ -1,6 +1,7 @@
 package com.ebikko.mandate.web.dto;
 
 import com.ebikko.mandate.web.UniqueReferenceNumber;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.util.Date;
 public class MandateDTO {
 
     private String id;
+    @NotBlank(message = "Reference number cannot be blank")
     private String referenceNumber;
     private Date registrationDate;
     @ValidBigDecimal(min = "0.01", field = "Amount")

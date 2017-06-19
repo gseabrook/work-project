@@ -9,48 +9,44 @@ import com.ebikko.signup.UserVerificationToken;
 import com.ebikko.signup.UserVerificationTokenService;
 import ebikko.EbikkoException;
 import ebikko.Principal;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MandateUpdatedListener {
+public class CustomerEmailSender {
 
     private final PrincipalService principalService;
     private final UserVerificationTokenService userVerificationTokenService;
     private final EmailService emailService;
 
     @Autowired
-    public MandateUpdatedListener(PrincipalService principalService,
-                                  UserVerificationTokenService userVerificationTokenService,
-                                  EmailService emailService) {
+    public CustomerEmailSender(PrincipalService principalService,
+                               UserVerificationTokenService userVerificationTokenService,
+                               EmailService emailService) {
         this.principalService = principalService;
         this.userVerificationTokenService = userVerificationTokenService;
         this.emailService = emailService;
     }
 
-    @EventListener
+    @EventListener(condition = "#mandateUpdatedEvent.mandate.buyer instanceof T(com.ebikko.mandate.model.Customer)")
     public void handleMandateUpdatedEvent(MandateUpdatedEvent mandateUpdatedEvent) throws EbikkoException {
         Mandate mandate = mandateUpdatedEvent.getMandate();
-        Customer customer = mandate.getCustomer();
-
+        Customer buyer = (Customer) mandate.getBuyer();
 
         switch (mandate.getStatus()) {
             case NEW:
                 Principal principal;
-                if (customer.getPrincipalUid() == null) {
-                    principal = principalService.createPrincipal(customer);
+                if (buyer.getPrincipalUid() == null) {
+                    principal = principalService.createPrincipal(buyer);
                 } else {
-                    principal = principalService.findById(customer.getPrincipalUid());
+                    principal = principalService.findById(buyer.getPrincipalUid());
                 }
 
-                if (!StringUtils.isBlank(mandate.getReferenceNumber())) {
-                    if (principal.isCanLogin()) {
-                        emailService.sendPendingAuthorisationEmail(mandate);
-                    } else {
-                        sendSignUpEmail(customer, principal);
-                    }
+                if (principal.isCanLogin()) {
+                    emailService.sendPendingAuthorisationEmail(mandate);
+                } else {
+                    sendSignUpEmail(buyer, principal);
                 }
                 break;
 
@@ -59,16 +55,16 @@ public class MandateUpdatedListener {
                 break;
 
             case AWAITING_FPX_AUTHORISATION:
-                if (customer.getPrincipalUid() == null) {
-                    principal = principalService.createPrincipal(customer);
-                    sendSignUpEmail(customer, principal);
+                if (buyer.getPrincipalUid() == null) {
+                    principal = principalService.createPrincipal(buyer);
+                    sendSignUpEmail(buyer, principal);
                 } else {
-                    principal = principalService.findById(customer.getPrincipalUid());
+                    principal = principalService.findById(buyer.getPrincipalUid());
 
                     if (principal.isCanLogin()) {
                         emailService.sendCustomerMandateAuthorisationRequestedEmail(mandate);
                     } else {
-                        sendSignUpEmail(customer, principal);
+                        sendSignUpEmail(buyer, principal);
                     }
                 }
                 break;

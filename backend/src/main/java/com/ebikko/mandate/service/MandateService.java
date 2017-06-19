@@ -52,7 +52,7 @@ public class MandateService {
     }
 
     private List<Mandate> getMandates(Customer customer) {
-        return mandateRepository.findByCustomer(customer);
+        return mandateRepository.findByBuyer(customer);
     }
 
     public Mandate findByMerchantAndReferenceNumber(Merchant merchant, String value) {

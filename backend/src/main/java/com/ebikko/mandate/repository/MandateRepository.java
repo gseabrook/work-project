@@ -11,7 +11,7 @@ public interface MandateRepository extends CrudRepository<Mandate, Long> {
 
     List<Mandate> findByMerchant(Merchant merchant);
 
-    List<Mandate> findByCustomer(Customer customer);
+    List<Mandate> findByBuyer(Customer customer);
 
     Mandate findByMerchantAndReferenceNumber(Merchant merchant, String referenceNumber);
 }

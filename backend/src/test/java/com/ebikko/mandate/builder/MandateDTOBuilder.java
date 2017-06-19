@@ -1,5 +1,6 @@
 package com.ebikko.mandate.builder;
 
+import com.ebikko.mandate.model.Customer;
 import com.ebikko.mandate.model.Mandate;
 import com.ebikko.mandate.model.MandateStatus;
 import com.ebikko.mandate.web.dto.MandateDTO;
@@ -25,7 +26,7 @@ public class MandateDTOBuilder {
         mandateDTO.setAmount(valueOf(mandate.getAmount()));
         mandateDTO.setFrequency(mandate.getFrequency().toString());
         mandateDTO.setMaximumFrequency(String.valueOf(mandate.getMaximumFrequency()));
-        mandateDTO.setCustomer(customerDTO(mandate.getCustomer()));
+        mandateDTO.setCustomer(customerDTO((Customer) mandate.getBuyer()));
         if (mandate.getCustomerBankAccount() != null) {
             mandateDTO.setCustomerBankAccount(bankAccountDTO(mandate.getCustomerBankAccount()));
         }

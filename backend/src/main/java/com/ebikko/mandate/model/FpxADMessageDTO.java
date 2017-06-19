@@ -71,16 +71,16 @@ public class FpxADMessageDTO {
         this.fpx_txnCurrency = "MYR";
         this.fpx_txnAmount = mandate.getAmount().toString();
 
-        Customer customer = mandate.getCustomer();
-        this.fpx_buyerEmail = customer.getEmailAddress();
+        MandateParty buyer = mandate.getBuyer();
+        this.fpx_buyerEmail = buyer.getEmailAddress();
         if (mandate.getCustomerBankAccount() != null) {
             this.fpx_buyerBankId = mandate.getCustomerBankAccount().getBank().getCode();
         }
-        this.fpx_buyerId = customer.getIdValue() + "," + customer.getIdType().getFpxId();
+        this.fpx_buyerId = buyer.getIdValue() + "," + buyer.getIdType().getFpxId();
 
         // Max Freq
         // Expiry Date
-        String iBan = getMsgType(mandate) + "," + defaultIfBlank(customer.getPhoneNumber(), "") + "," + mandate.getFrequency().getFpxId();
+        String iBan = getMsgType(mandate) + "," + defaultIfBlank(buyer.getPhoneNumber(), "") + "," + mandate.getFrequency().getFpxId();
         iBan += "," + registrationDateString + ",";
         this.fpx_buyerIBan = iBan;
         this.fpx_version = "7.0";

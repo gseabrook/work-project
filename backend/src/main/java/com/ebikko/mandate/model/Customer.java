@@ -8,7 +8,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 @Entity
-public class Customer {
+public class Customer extends MandateParty {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
@@ -16,19 +16,19 @@ public class Customer {
     @Column
     private String name;
     @Column
-    private String emailAddress;
-    @Column
-    private String phoneNumber;
-    @Column
     private String idValue;
     @Column
     private IDType idType;
+    @Column
+    private String emailAddress;
+    @Column
+    private String phoneNumber;
     @Column
     private String principalUid;
     @OneToMany(cascade = CascadeType.ALL)
     private List<CustomerBankAccount> bankAccounts = newArrayList();
     @JsonIgnore
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "buyer")
     private List<Mandate> mandates = newArrayList();
 
     public Customer() {
@@ -44,6 +44,7 @@ public class Customer {
         this.bankAccounts = bankAccounts;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -56,14 +57,16 @@ public class Customer {
         this.name = name;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
+    @Override
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    @Override
     public String getPhoneNumber() {
         return phoneNumber;
     }

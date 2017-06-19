@@ -51,7 +51,7 @@ public class MandateDTOTranslator {
             mandate.setCustomerBankAccount(customerBankAccount);
         }
 
-        mandate.setCustomer(customer);
+        mandate.setBuyer(customer);
         customer.addMandate(mandate);
         return mandate;
     }

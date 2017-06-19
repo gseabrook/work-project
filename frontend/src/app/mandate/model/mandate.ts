@@ -46,7 +46,7 @@ export class Mandate implements Serializable<Mandate> {
     	this.amount = input.amount;
     	this.frequency = new DisplayEnum().deserialize(input.frequency);
     	this.maximumFrequency = input.maximumFrequency;
-    	this.customer = new Customer().deserialize(input.customer);
+    	this.customer = new Customer().deserialize(input.buyer);
     	this.merchant = new Merchant().deserialize(input.merchant);
     	this.status = new DisplayEnum().deserialize(input.status);
     	if (input.customerBankAccount) {
