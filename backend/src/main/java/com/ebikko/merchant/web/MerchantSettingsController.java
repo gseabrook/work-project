@@ -57,7 +57,7 @@ public class MerchantSettingsController {
         Merchant merchant = merchantService.getMerchant(merchantId);
 
         Collection<MandateFrequency> frequencyList = getMandateFrequencies(request);
-        merchant.getMerchantSettings().setSelectedFrequencies(newArrayList(frequencyList));
+        merchant.getMerchantSettings().setSelectedFrequencies(newHashSet(frequencyList));
 
         String[] purposeOfPayments = request.getParameterValues("purposeOfPayment");
         Set<String> purposesOfPayment = newHashSet(purposeOfPayments == null ? new String[0] : purposeOfPayments);

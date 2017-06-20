@@ -12,7 +12,7 @@
       "value": "APPROVED",
       "displayValue": "Approved"
     },
-    "customer": {
+    "buyer": {
       "id": 1370,
       "name": "Graham",
       "emailAddress": "graham.seabrook@ag-isolutions.com",
@@ -77,7 +77,7 @@
       "value": "APPROVED",
       "displayValue": "Approved"
     },
-    "customer": {
+    "buyer": {
       "id": 1370,
       "name": "Graham",
       "emailAddress": "graham.seabrook@ag-isolutions.com",
@@ -133,7 +133,7 @@
       "value": "APPROVED",
       "displayValue": "Approved"
     },
-    "customer": {
+    "buyer": {
       "id": 1410,
       "name": "Graham",
       "emailAddress": null,
@@ -168,7 +168,7 @@
       "value": "APPROVED",
       "displayValue": "Approved"
     },
-    "customer": {
+    "buyer": {
       "id": 1370,
       "name": "Graham",
       "emailAddress": "graham.seabrook@ag-isolutions.com",
@@ -224,7 +224,7 @@
       "value": "APPROVED",
       "displayValue": "Approved"
     },
-    "customer": {
+    "buyer": {
       "id": 1370,
       "name": "Graham",
       "emailAddress": "graham.seabrook@ag-isolutions.com",

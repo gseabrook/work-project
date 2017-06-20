@@ -5,7 +5,6 @@ import com.ebikko.mandate.model.MandateFrequency;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import java.util.List;
 import java.util.Set;
 
 @Embeddable
@@ -14,7 +13,7 @@ public class MerchantSettings {
     @Column
     private String logoFileLocation;
     @ElementCollection
-    private List<MandateFrequency> selectedFrequencies;
+    private Set<MandateFrequency> selectedFrequencies;
     @ElementCollection
     private Set<String> purposeOfPayments;
 
@@ -28,11 +27,11 @@ public class MerchantSettings {
         this.logoFileLocation = logoFileLocation;
     }
 
-    public List<MandateFrequency> getSelectedFrequencies() {
+    public Set<MandateFrequency> getSelectedFrequencies() {
         return selectedFrequencies;
     }
 
-    public void setSelectedFrequencies(List<MandateFrequency> selectedFrequencies) {
+    public void setSelectedFrequencies(Set<MandateFrequency> selectedFrequencies) {
         this.selectedFrequencies = selectedFrequencies;
     }
 

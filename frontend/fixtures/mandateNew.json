@@ -11,7 +11,7 @@
     "value": "NEW",
     "displayValue": "New"
   },
-  "customer": {
+  "buyer": {
     "id": 10,
     "name": "Fred",
     "emailAddress": "fred.bloggs@example.com",

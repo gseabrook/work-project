@@ -239,6 +239,15 @@ describe('MandateFormComponent', () => {
 			expect(fixture.debugElement.queryAll(By.css("div.buttonContainer button"))[2].nativeElement.disabled).toBeTruthy();
 		});
 
+		// The material2 select component only supports object equality for decided which item is selected, so its important
+		// that we change the frequency to be the exact object from the array it is looping over (the selected frequencies)
+		// otherwise the frequency drop down won't be selected when we view a saved mandate
+		it('should use the exact object from the available frequencies for the available frequncies', () => {
+			createComponent();
+
+			expect(component.model.frequency).toBe(component.model.merchant.merchantSettings.selectedFrequencies[0]);
+		});
+
 		it('should post details to FPX', fakeAsync(inject([MockBackend], (mockBackend) => {
 			initialiseComponentWithReferenceData(mockBackend);
 
@@ -259,5 +268,22 @@ describe('MandateFormComponent', () => {
 			expect(fpxMock.processFpxRedirect).toHaveBeenCalled();
 			tick(1000);
 		})));
+	});
+
+	it("should add the mandate frequency to the list of available frequencies if it isn't there", () => {
+		let mandate = new Mandate().deserialize(mandateNew);
+		mandate.frequency = DisplayEnum.of("MONTHLY", "Monthly");
+
+		setupTestBed({
+			mandate: mandate,
+			mode: 'dialog',
+			user: {
+				type: "CUSTOMER"
+			}
+		}, true);
+
+		createComponent();
+
+		expect(component.frequencyTypes).toContain(mandate.frequency);
 	});
 });

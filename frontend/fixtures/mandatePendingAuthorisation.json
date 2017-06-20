@@ -11,7 +11,7 @@
     "value": "PENDING_AUTHORISATION",
     "displayValue": "Pending Authorisation"
   },
-  "customer": {
+  "buyer": {
     "id": 10,
     "name": "Fred",
     "emailAddress": "fred.bloggs@example.com",

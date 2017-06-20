@@ -16,15 +16,21 @@ export class DisplayEnum implements Serializable<DisplayEnum> {
 		return this.value;
 	}
 
+	static extract(res: Response) {
+		const body = res.json();
+		return body.map(displayEnum => new DisplayEnum().deserialize(displayEnum));		
+	}
+
+	static matchByValue(target: DisplayEnum) {
+		return function(element: DisplayEnum) {
+			return element.value === target.value;
+		};
+	}
+
 	static of(value: string, displayValue: string): DisplayEnum {
 		let displayEnum = new DisplayEnum();
 		displayEnum.value = value;
 		displayEnum.displayValue = displayValue;
 		return displayEnum;
-	}
-
-	static extract(res: Response) {
-		const body = res.json();
-		return body.map(displayEnum => new DisplayEnum().deserialize(displayEnum));		
 	}
 }

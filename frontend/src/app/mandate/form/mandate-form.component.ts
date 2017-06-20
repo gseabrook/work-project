@@ -78,7 +78,12 @@ export class MandateFormComponent implements OnInit {
 
 		this.frequencyTypes = this.model.merchant.merchantSettings.selectedFrequencies;
 		if (this.model.frequency) {
-			this.model.frequency = this.frequencyTypes.filter(freq => freq.value === this.model.frequency.value)[0];
+
+			if (this.frequencyTypes.findIndex(DisplayEnum.matchByValue(this.model.frequency)) === -1) {
+				this.frequencyTypes.push(this.model.frequency);
+			}
+
+			this.model.frequency = this.frequencyTypes.filter(DisplayEnum.matchByValue(this.model.frequency))[0];
 		}
 	}
 

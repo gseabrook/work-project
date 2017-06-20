@@ -57,6 +57,8 @@ describe('MerchantSettingsComponent', () => {
 		connections.pop().mockRespond(new Response(new ResponseOptions({ body: merchant, status: 200})));
 		fixture.detectChanges();
 
+		expect(component.merchant.merchantSettings.selectedFrequencies.length).toEqual(2);
+
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='DAILY'] input")).nativeElement.checked).toBeFalsy();
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='WEEKLY'] input")).nativeElement.checked).toBeTruthy();
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='MONTHLY'] input")).nativeElement.checked).toBeFalsy();
@@ -64,12 +66,17 @@ describe('MerchantSettingsComponent', () => {
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='YEARLY'] input")).nativeElement.checked).toBeTruthy();
 	
 		TestHelpers.clickMdCheckbox("md-checkbox[ng-reflect-value='DAILY']", fixture);
+		TestHelpers.clickMdCheckbox("md-checkbox[ng-reflect-value='WEEKLY']", fixture);
 
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='DAILY'] input")).nativeElement.checked).toBeTruthy();
-		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='WEEKLY'] input")).nativeElement.checked).toBeTruthy();
+		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='WEEKLY'] input")).nativeElement.checked).toBeFalsy();
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='MONTHLY'] input")).nativeElement.checked).toBeFalsy();
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='QUARTERLY'] input")).nativeElement.checked).toBeFalsy();
 		expect(fixture.debugElement.query(By.css("md-checkbox[ng-reflect-value='YEARLY'] input")).nativeElement.checked).toBeTruthy();
+	
+		expect(component.merchant.merchantSettings.selectedFrequencies.length).toEqual(2);
+
+		tick(1000);
 	}));
 
 	it('should save the selected frequencies', fakeAsync(() => {

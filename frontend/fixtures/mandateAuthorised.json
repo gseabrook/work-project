@@ -11,7 +11,7 @@
     "value": "APPROVED",
     "displayValue": "Approved"
   },
-  "customer": {
+  "buyer": {
     "id": 430,
     "name": "Graham",
     "emailAddress": "graham.seabrook@ag-isolutions.com",

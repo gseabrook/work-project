@@ -42,10 +42,12 @@
                 </md-option>
             </md-select>
         </div>
+
         <md-input-container>
             <input mdInput placeholder="Maximum Frequency" type="number" required [(ngModel)]="model.maximumFrequency" name="maximumFrequency" #maximumFrequency="ngModel"/>
             <md-hint align="start" class="errorHint" *ngIf="!maximumFrequency.valid && maximumFrequency.touched">Please enter a max frequency</md-hint>
         </md-input-container>
+
         <md-input-container *ngIf="model.merchant.merchantSettings.purposeOfPayments.length === 0">
             <input mdInput placeholder="Purpose of Payment" type="text" [(ngModel)]="model.purposeOfPayment" name="purposeOfPayment" />
         </md-input-container>

@@ -91,7 +91,7 @@ export class MerchantSettingsComponent implements OnInit {
 		let selectedFrequencies = this.merchant.merchantSettings.selectedFrequencies;
 		let frequencyClicked = this.allFrequencies.filter(freq => freq.value === ev.source.value)[0];
 
-		var idx = selectedFrequencies.indexOf(frequencyClicked);
+		let idx = selectedFrequencies.findIndex(DisplayEnum.matchByValue(frequencyClicked));
 		if (idx > -1) {
 			selectedFrequencies.splice(idx, 1);
 		} else {
